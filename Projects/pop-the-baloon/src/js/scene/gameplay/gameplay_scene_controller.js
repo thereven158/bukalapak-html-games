@@ -23,9 +23,19 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.view = new GameplaySceneView(this);
         this.view.create();
 
+        this.timerEvent = this.time.delayedCall(90000, this.onEvent, [], this);
+        
     }
 
     update(){
+        this.countDown = 90 - this.timerEvent.getElapsedSeconds();
+        console.log(this.countDown);
+        this.view.textTimer.setText('' + this.countDown.toString().substr(0, 5));
+    }
 
+    onEvent = () => {
+        console.log("onEvent called");
+        this.timerEvent.remove();
+        console.log("timer removed");
     }
 }

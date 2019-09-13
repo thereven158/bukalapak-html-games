@@ -1,0 +1,45 @@
+body 
+{
+    margin: 0px 0px 1px 0px;
+
+    height: 100%;
+
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    background-image: linear-gradient(#211963,#180D2C);
+}
+
+.fontPreload {
+    position: absolute;
+    left: -100px;
+}
+
+canvas 
+{  
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;    
+}
+
+.ppat-text { position: absolute; left: 0; top: 0; margin: 0; font: 24px/1 Consolas,Menlo,Monaco,monospace; }
+
+@font-face
+{
+    font-family: "Panton-Regular";
+	src: url("/Assets/Fonts/Panton-Regular.otf") format("opentype");
+}
+
+@font-face
+{
+    font-family: "Panton-Bold";
+	src: url("/Assets/Fonts/Panton-Bold.otf") format("opentype");
+}
+
+/* @font-face
+{
+    font-family: "NunitoSansExtraBold";
+	src: url("../assets/fonts/NunitoSans-ExtraBold.ttf") format("truetype");
+} */

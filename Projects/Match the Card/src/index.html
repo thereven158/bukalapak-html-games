@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Match The Card | Phaser v.2.12 </title>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="js/phaser.min.js"></script>
+    <script src="js/preboot.js"></script>
+    <script src="js/boot.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/postGame.js"></script>
+    <script src="js/highestScore.js"></script>
+    <style>
+        body 
+        {
+            margin: 0px 0px 1px 0px;
+
+            height: 100%;
+
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        .fontPreload {
+            position: absolute;
+            left: -100px;
+        }
+
+        canvas 
+        {  
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;    
+        }
+        @font-face
+        {
+            font-family: "Panton-Regular";
+            src: url("../assets/font/Panton-Regular.otf") format("opentype");
+        }
+
+        @font-face
+        {
+            font-family: "Panton-Bold";
+            src: url("../assets/font/Panton-Bold.otf") format("opentype");
+        }
+        #matchPic {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="matchPic"></div>
+
+</body>
+<script type="text/javascript">
+    let poinArray = [];
+
+	var AssetUrl = "../assets/"
+	
+    var game;
+    var isDevelop = false;
+    var showConsole = false;
+    var enableAnalytics = true;
+
+    var androidTrackingId = 'UA-x';
+    var iosTrackingId = 'UA-x';
+    var appName = 'Match The Card';
+    var appVersion = '1.0';
+    
+    let gameWidth = 1080 ;
+    let gameHeight = 1920;
+    var isDevice = false;
+    
+    let defaultGameWidth	= gameWidth;
+    let defaultGameHeight	= gameHeight;
+
+    if(window.innerWidth > window.innerHeight)
+    {   
+        gameWidth *= window.innerHeight / gameHeight ;
+        gameHeight = window.innerHeight ; 
+        isDevice = false;                   
+    }
+    else
+    {
+        isDevice = true;
+        gameWidth = window.innerWidth * window.devicePixelRatio;
+        gameHeight = window.innerHeight * window.devicePixelRatio;
+    }
+
+    game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, 'matchPic');
+
+    window.onload = function (){
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        game.scale.pageAlignHorizontally = true;
+        game.scale.pageAlignVertically = true;
+        game.input.maxPointers = 1;
+        game.state.add('boot', boot);
+        game.state.add('preboot', preboot);
+        game.state.add('mainMenu', mainMenu);
+        game.state.add('gameplay', gameplay);
+        game.state.add('postGame', postGame);
+        game.state.add('highestScore', highestScore);
+        //if(isDevelop)
+        game.state.start('preboot');
+		
+		/*
+        if(( /(ipad|iphone|ipod|android|windows phone)/i.test(navigator.userAgent) )) {
+            var strNav = navigator.userAgent.toLocaleLowerCase();
+            enableAnalytics = true;
+            if(strNav.includes("blios") || strNav.includes("blandroid")){
+                game.state.start('preboot');
+                console.log("TRUE", strNav);
+            }else{
+                let t = game.add.text(game.world.centerX, game.world.centerY, 'You need to open this game \non bukalapak apps!', {
+                    fill:'#ffffff',
+                    fontSize: 65 * game.width / defaultGameWidth,
+                    align: 'center'
+                });
+                t.anchor.setTo(0.5);
+                console.log("FALSE", strNav);
+            }
+        } else {
+            enableAnalytics = false;
+            let t = game.add.text(game.world.centerX, game.world.centerY, 'You need to open this game \non bukalapak apps!', {
+                fill:'#ffffff',
+                fontSize: 65 * game.width / defaultGameWidth,
+                align: 'center'
+            });
+            t.anchor.setTo(0.5);
+        }*/
+    }
+
+    function trackEvent (type, category = null, action = null, value = null)
+    {
+        if (!enableAnalytics) return;
+        if (isDevelop) return;
+        console.log("send");
+        if (type == 'screenview'){
+            ga ('send', 'screenview', { 'appName': appName, 'appVersion': appVersion, 'screenName': action });
+        }
+
+        else if (type == 'event'){
+            ga ('send', 'event', category, action, value);
+        }
+        
+        else if (type == 'exception'){
+            ga ('send', 'exception', {
+                'exDescription' : category,
+                'exFatal' : false
+            });
+        }
+    }
+    let bgSoundTitle = false;
+
+    function playSound(sound, setTo){
+        if(!bgSoundTitle && setTo){
+            sound.loopFull(1);
+            bgSoundTitle = true;
+        }else if(!setTo){
+            game.sound.stopAll();
+            bgSoundTitle = false;
+        }
+    }
+    
+	function scalingObject(obj, myWidth, myHeight, anchorX = null, anchorY = null){
+        let is = false;
+        let deviceratio = innerWidth / innerHeight;
+        if(obj.key == "btmImg" || obj.key == "topUI" || obj.key =="timesUp"){
+            is = true;
+        }
+        if(deviceratio >= 0.74 && deviceratio < 0.8 && !is && isDevice){
+            obj.width = myWidth * game.width / defaultGameWidth * (deviceratio);
+            obj.height = myHeight * game.width / defaultGameWidth * (deviceratio);
+        }else if(deviceratio >= 0.65 && deviceratio < 0.74 && !is && isDevice){
+            obj.width = myWidth * game.width / defaultGameWidth * (0.9);
+            obj.height = myHeight * game.width / defaultGameWidth * (0.9);
+        }else if(deviceratio >= 0.8 && !is && isDevice){
+            obj.width = myWidth * game.width / defaultGameWidth * (0.7);
+            obj.height = myHeight * game.width / defaultGameWidth * (0.7);
+        }else{
+            obj.width = myWidth * game.width / defaultGameWidth;
+            obj.height = myHeight * game.width / defaultGameWidth;
+        }
+        if(anchorX != null || anchorY != null) obj.anchor.setTo(anchorX, anchorY);
+	}
+	function fittingObject(obj){
+		obj.width = game.width;
+        obj.height = game.height;  
+	}
+    
+</script>
+</html>

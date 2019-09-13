@@ -1,5 +1,10 @@
 import Phaser from 'phaser';
 
+import BootScene from '../src/Js/Scene/boot/boot_scene_controller';
+import LoadingScene from '../src/Js/scene/loading/loading_scene_controller';
+import TitleScene from '../src/Js/Scene/title/title_scene_controller';
+import GameplayScene from '../src/Js/Scene/gameplay/gameplay_scene_controller';
+
 var config = {
 	type: Phaser.CANVAS,
 	canvas: document.getElementById('game'),
@@ -7,10 +12,15 @@ var config = {
 	scale: {
 		mode: Phaser.Scale.PORTRAIT,
 		autoCenter: Phaser.Scale.CENTER_BOTH,
-		width: '100%',
-		height: '100%'
+		width: window.innerWidth,
+		height: window.innerHeight
 	},
-	scene: [],
+	scene: [
+		BootScene,
+		LoadingScene, 
+		TitleScene,
+		GameplayScene
+	],
 	dom: {
 		createContainer: true
 	},

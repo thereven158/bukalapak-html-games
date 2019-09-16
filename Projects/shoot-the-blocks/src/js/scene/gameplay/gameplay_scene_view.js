@@ -9,7 +9,11 @@ export default class GameplaySceneView {
      }
 
      create(){
+      this.paddle = this.scene.physics.add.image(this.ScreenUtility.CenterX, 
+        this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight / 2.5, 
+        'paddle')
+        .setImmovable();
 
-
+      
      }
 };

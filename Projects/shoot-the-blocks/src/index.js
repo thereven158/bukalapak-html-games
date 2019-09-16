@@ -29,6 +29,9 @@ var config = {
 		pixelArt: false,
 		roundPixels: false
 	},
+	physics: {
+        default: 'arcade'
+    },
 	autoRound: false
 };
 

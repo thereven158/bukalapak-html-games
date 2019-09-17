@@ -46,6 +46,7 @@ export default class LoadingSceneController extends Phaser.Scene{
         this.load.image('logo',this.CreatePath('/images/Logo-BL.png'));
         this.load.image('paddle',this.CreatePath('/images/paddle.png'));
         this.load.image('block',this.CreatePath('/images/block.png'));
+        this.load.image('ball',this.CreatePath('/images/ball.png'));
     }
 
     CreatePath(path){

@@ -53,6 +53,7 @@ mainMenu.prototype = {
         btn.events.onInputDown.add(()=>this.tap(btn, bg, btnP, titleText, panel1, panel2, char));
         
         let btnP = game.add.sprite(game.width / 2 - (game.width * 2), btn.y + (btn.height),'btnPoin');
+		btnP.visible = false;
         btnP.anchor.setTo(0.5);
         scalingObject(btnP, 408,141);
         btnP.inputEnabled = true;

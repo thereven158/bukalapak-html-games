@@ -102,6 +102,21 @@ boot.prototype = {
 
         game.load.image('scPanel',AssetUrl+'img/Result & Score/Skor_notext.png');
 
+		// VOUCHERS
+		
+        this.game.load.image('box_voucher',AssetUrl+'img/vouchers/box_voucher.png');
+		
+		this.game.load.image('box_white', AssetUrl+'img/vouchers/box_white.png');
+		this.game.load.image('btn_close', AssetUrl+'img/vouchers/btn_close.png');
+		this.game.load.image('btn_copy', AssetUrl+'img/vouchers/btn_copy.png');
+		this.game.load.image('btn_download', AssetUrl+'img/vouchers/btn_download.png');
+		
+		this.game.load.image('btn_main', AssetUrl+'img/vouchers/btn_main.png');
+		this.game.load.image('header_card1', AssetUrl+'img/vouchers/header_card1.png');
+		this.game.load.image('header_card2', AssetUrl+'img/vouchers/header_card2.png');		
+		
+		//
+		
         game.load.start();
     },
     loadStart(){

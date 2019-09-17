@@ -1,3 +1,8 @@
+const TIME_LIMIT = 90;
+const VOUCHER_CODE = "TANPAONGKIR";
+const ROUND_TO_WIN = 1;
+
+///////////////////
 
 var gameplay = function(){};
 
@@ -97,7 +102,7 @@ gameplay.prototype = {
 			prevClickItem 	= null;
 			curClickItem 	= null;
 			comboLength 	= 0;
-			lifeTime 		= 30;
+			lifeTime 		= TIME_LIMIT;
 			isGameOver 		= false;
 			score 			= 0;
 			
@@ -231,6 +236,7 @@ gameplay.prototype = {
 				}
 			}
 			round ++;
+			/*
 			switch(true){
 				case (round <= 3):
 					baseBonusTime = 4;
@@ -240,34 +246,23 @@ gameplay.prototype = {
 					break;
 				case (round >= 7):
 					baseBonusTime = 2;
+			}*/
+			
+			if (round > ROUND_TO_WIN)
+			{
+				this.endGame(true);
 			}
+			
 			txt.setText('ROUND ' + round);
 		}catch(err){
 			trackEvent('exception', err.message);
 		}
 	},
+	
 	update(){
 		if(!isGameOver){
 			if(lifeTime <= 0 && timeCommaShow <= 0){
-				isGameOver = true;
-				let timesUp = game.add.sprite(game.width, game.height/2, 'timesUp');
-				scalingObject(timesUp, 1080,266, 0, 0);
-				console.log("Game IS Over");
-				
-				this.sfxBgSound.stop();
-				this.sfxTimesUp.play();
-
-				let tween1 = game.add.tween(timesUp.position).to({x : 0},100, Phaser.Easing.Linear.Out, this);
-				tween1.onComplete.add(()=>{
-					setTimeout(()=>{
-						let tween = game.add.tween(timesUp.position).to({
-							x : 0 - timesUp.width
-						},100, Phaser.Easing.Linear.Out, this);
-						tween.onComplete.add(()=>{
-							setTimeout(()=>this.toPostGame(), 500);
-						});
-					}, 1500);
-				});
+				this.endGame();
 			}
 			if(isInit == false){
 				deltaTime = game.time.elapsed/1000;
@@ -543,5 +538,55 @@ gameplay.prototype = {
 			game.state.start('postGame');
 
 		});
+	},
+	endGame(isVictory = false)
+	{
+		isGameOver = true;
+		
+		this.showVoucherGameOver(isVictory);
+		
+		/*
+		let timesUp = game.add.sprite(game.width, game.height/2, 'timesUp');
+		scalingObject(timesUp, 1080,266, 0, 0);
+		console.log("Game IS Over");
+
+		this.sfxBgSound.stop();
+		this.sfxTimesUp.play();
+
+		let tween1 = game.add.tween(timesUp.position).to({x : 0},100, Phaser.Easing.Linear.Out, this);
+		tween1.onComplete.add(()=>{
+			setTimeout(()=>{
+				let tween = game.add.tween(timesUp.position).to({
+					x : 0 - timesUp.width
+				},100, Phaser.Easing.Linear.Out, this);
+				tween.onComplete.add(()=>{
+					setTimeout(()=>this.toPostGame(), 500);
+				});
+			}, 1500);
+		});		
+		*/
+	},
+	showVoucherGameOver(isVictory = false)
+	{
+		console.log("rabbit");
+		
+		this.voucherGameOverScreen = new VoucherController(this.game);
+		
+		this.voucherGameOverScreen.setEvents(() => {
+			this.game.state.start('gameplay');
+		}, () => {
+			this.game.state.start('gameplay');
+		}, () => {
+			this.game.state.start('gameplay');
+		})	
+		
+		if (isVictory)
+		{
+			this.voucherGameOverScreen.popUpWin(VOUCHER_CODE);
+		}
+		else
+		{
+			this.voucherGameOverScreen.popUpLose();
+		}
 	}
 }

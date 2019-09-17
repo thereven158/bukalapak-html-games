@@ -74,6 +74,16 @@ export default class BoardController  extends Phaser.GameObjects.Container{
         }
     }
 
+    Reset(){
+        for(let i=0; i<this.TargetGroup.list.length; i++){
+            /** @type {TargetObjectController}  */
+            let target = this.TargetGroup.list[i];
+            
+           target.Reset();
+
+        }
+    }
+
     GetTargetsData(){
         /** @type {(TargetObjectController|Array)}  */
         var activeTargets = [];

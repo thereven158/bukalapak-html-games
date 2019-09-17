@@ -12,6 +12,8 @@ export default class TitleSceneView {
 
      create(){
         this.logo = new Button(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'logo');
+        this.logo.setScale(10)
+        
         
      }
 

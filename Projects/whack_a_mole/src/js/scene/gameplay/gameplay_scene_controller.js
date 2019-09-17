@@ -10,6 +10,13 @@ export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'GameScene'});
 
+    }
+
+    init(){
+        console.log('game screen')
+    }
+
+    InitGameData(){
         this.TotalHit = 0;
         this.Score = 0;
         this.Timer = gameplaydata.GameTime;
@@ -22,14 +29,11 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         this.CurrentPhaseIdx = 0;
         this.CurrentPhase = gameplaydata.Phases[this.CurrentPhaseIdx];
-        console.log(this.CurrentPhase)
-    }
-
-    init(){
-        console.log('game screen')
     }
 
     preload(){
+        this.InitGameData();
+
         this.ScreenUtility = ScreenUtility.getInstance();
         this.ScreenUtility.Init(this)
         
@@ -44,8 +48,15 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         this.Board.OnTargetHit(this.OnTargetHit);
 
-        this.InitiateGame();
+        this.StartGame();
+    }
 
+    InitiateGame(){
+        this.StartGame();
+    }
+
+    StartGame(){
+        this.IsGameStarted = true;
     }
     
     update(timestep, dt){
@@ -103,14 +114,6 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
     }
 
-    InitiateGame(){
-        this.StartGame();
-    }
-
-    StartGame(){
-        this.IsGameStarted = true;
-    }
-
     OnTargetHit = ()=>{ 
         if(!this.IsGameStarted)
             return;
@@ -123,6 +126,16 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.IsGameStarted = false;
         this.Board.Disable();
         
+    }
+
+    Restart(){
+        this.Reset();
+        this.InitGameData();
+        this.InitiateGame();
+    }
+
+    Reset(){
+        this.Board.Reset();
     }
 
 }

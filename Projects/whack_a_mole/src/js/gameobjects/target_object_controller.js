@@ -7,15 +7,19 @@ export default class TargetObjectController extends Phaser.GameObjects.Sprite{
         
         this.scene = scene;
 
+        this.InitData();
+
+        this.scene.add.existing(this);
+
+        this.setInteractive();
+    }
+
+    InitData(){
         this.IsShowing = false;
         this.setAlpha(0.5);
 
         this.Duration = 3;
         this.Timer = 0;
-
-        this.scene.add.existing(this);
-
-        this.setInteractive();
     }
 
     preUpdate(timestep, dt){
@@ -42,6 +46,10 @@ export default class TargetObjectController extends Phaser.GameObjects.Sprite{
 
     Disable(){
         
+    }
+
+    Reset(){
+        this.InitData();
     }
 
     OnClickTarget(event){

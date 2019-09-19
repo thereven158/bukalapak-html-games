@@ -20,7 +20,8 @@ VoucherController.prototype =
 		this.view.minionPanelLose.visible = true;	
 		
 		this.view.copyButton.visible = false;
-		this.view.copyText.visible = false;
+		this.view.copyText.visible = false;		
+		this.view.helpButton.visible = false;
 		
 		this.view.descText.text = "Coba lagi yuk";
 		this.view.subDescText.text = "Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak.";
@@ -50,7 +51,27 @@ VoucherController.prototype =
 			{
 				closeButtonEvent();
 			});				
-		}		
+		}
+		
+		this.view.helpButton.onInputDown.add(() => 
+		{
+		 	this.view.downloadButton.input.enabled = false;
+			this.view.playAgainButton.input.enabled = false;
+			this.view.closeButton.input.enabled = false;
+			this.view.helpButton.input.enabled = false;
+			
+			this.displayGuide(true);
+		});
+		
+		this.view.closeGuideButton.onInputDown.add(() => 
+		{
+		 	this.view.downloadButton.input.enabled = true;
+			this.view.playAgainButton.input.enabled = true;
+			this.view.closeButton.input.enabled = true;
+			this.view.helpButton.input.enabled = true;
+			
+			this.displayGuide(false);
+		});		
 	},
 	
 	popUpWin(newCode)
@@ -63,6 +84,7 @@ VoucherController.prototype =
 		
 		this.view.copyButton.onInputDown.add(() => 
 		{
+			this.view.footerGroup.visible = true;
 			this.copyVoucherCode(newCode);
 		});
 	},
@@ -79,7 +101,12 @@ VoucherController.prototype =
 		
 		document.execCommand("copy");
 		document.body.removeChild(inputCopy);
-		
-		console.log("Copy End");
+	}, 
+	
+	displayGuide(isDisplay)
+	{
+		this.view.helpButton.visible = !isDisplay;
+		this.view.guideGroup.visible = isDisplay;
+		this.view.closeButton.visible = !isDisplay;
 	}
 }

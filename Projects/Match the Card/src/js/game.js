@@ -1,9 +1,3 @@
-const TIME_LIMIT = 90;
-const VOUCHER_CODE = "TANPAONGKIR";
-const ROUND_TO_WIN = 1;
-
-///////////////////
-
 var gameplay = function(){};
 
 let itemKey 	= [];
@@ -23,6 +17,8 @@ let scaleRad	= 1; // scoreUI
 
 gameplay.prototype = {
 	create(){
+		this.voucherGameOverScreen = null;
+		
 		itemKey 		= ['Card_1','Card_2','Card_3','Card_4','Card_5','Card_6'];
 		this.panels 	= [];
 		this.uiTop 		= [];
@@ -102,7 +98,7 @@ gameplay.prototype = {
 			prevClickItem 	= null;
 			curClickItem 	= null;
 			comboLength 	= 0;
-			lifeTime 		= TIME_LIMIT;
+			lifeTime 		= CONFIG.TIME_LIMIT;
 			isGameOver 		= false;
 			score 			= 0;
 			
@@ -248,7 +244,7 @@ gameplay.prototype = {
 					baseBonusTime = 2;
 			}*/
 			
-			if (round > ROUND_TO_WIN)
+			if (round > CONFIG.ROUND_TO_WIN)
 			{
 				this.endGame(true);
 			}
@@ -260,6 +256,12 @@ gameplay.prototype = {
 	},
 	
 	update(){
+		
+		if(!isGameOver && !isInit && CONFIG.IS_INSTANT_WIN)
+		{
+			this.endGame(true);
+		}
+			
 		if(!isGameOver){
 			if(lifeTime <= 0 && timeCommaShow <= 0){
 				this.endGame();
@@ -543,6 +545,8 @@ gameplay.prototype = {
 	{
 		isGameOver = true;
 		
+		console.log("AAAAAAAAAA");
+		
 		this.showVoucherGameOver(isVictory);
 		
 		/*
@@ -568,21 +572,23 @@ gameplay.prototype = {
 	},
 	showVoucherGameOver(isVictory = false)
 	{
-		console.log("rabbit");
-		
 		this.voucherGameOverScreen = new VoucherController(this.game);
 		
 		this.voucherGameOverScreen.setEvents(() => {
+			this.sfxBgSound.stop();
+			window.open(CONFIG.URL_DOWNLOAD, '_blank');
+			
+		}, () => {
+			this.sfxBgSound.stop();
 			this.game.state.start('gameplay');
 		}, () => {
-			this.game.state.start('gameplay');
-		}, () => {
+			this.sfxBgSound.stop();
 			this.game.state.start('gameplay');
 		})	
 		
 		if (isVictory)
 		{
-			this.voucherGameOverScreen.popUpWin(VOUCHER_CODE);
+			this.voucherGameOverScreen.popUpWin(CONFIG.VOUCHER_CODE);
 		}
 		else
 		{

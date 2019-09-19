@@ -111,6 +111,9 @@ boot.prototype = {
 		this.game.load.image('btn_copy', AssetUrl+'img/vouchers/btn_copy.png');
 		this.game.load.image('btn_download', AssetUrl+'img/vouchers/btn_download.png');
 		
+		this.game.load.image('btn_info1', AssetUrl+'img/vouchers/btn_info1.png');
+		this.game.load.image('btn_info2', AssetUrl+'img/vouchers/btn_info2.png');
+		
 		this.game.load.image('btn_main', AssetUrl+'img/vouchers/btn_main.png');
 		this.game.load.image('header_card1', AssetUrl+'img/vouchers/header_card1.png');
 		this.game.load.image('header_card2', AssetUrl+'img/vouchers/header_card2.png');		

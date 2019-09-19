@@ -47,4 +47,9 @@ export default class BootSceneController extends Phaser.Scene{
                 this.sound.mute = false;
         },this)
     }
+
+    SetAudioOn(on){
+        this.IsAudioOn = on;
+        this.sound.mute = !on;
+    }
 };

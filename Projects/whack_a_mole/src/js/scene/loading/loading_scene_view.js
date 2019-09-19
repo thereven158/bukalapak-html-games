@@ -43,15 +43,6 @@ export default class LoadingSceneView{
         .setFontSize(40).setAlign('center').setFontFamily('panton').setColor('#f9d023');
       this.LoadingText.setOrigin(0.5,0.5);
       this.LoadingText.setScale(this.ScreenUtility.ScalePercentage);
-
-      // this.scene.tweens.add({
-      //     targets:  this.LoadingText,
-      //     alpha: 0.8,
-      //     duration: 1000,
-      //     ease: Phaser.Math.Easing.Linear.Linear,
-      //     loop:-1,
-      //     yoyo:true
-      // });	
     }
     
     SetProgressText(value){

@@ -10,6 +10,7 @@ export default class Button extends Phaser.GameObjects.Container{
         this.ScreenUtility = scene.ScreenUtility;
 
         this.IsEnabled = true;
+        this.IsAudioActive = true;
 
         this.NormalTexture = texture;
         this.DisabledTexture = null;
@@ -38,6 +39,10 @@ export default class Button extends Phaser.GameObjects.Container{
 			if(this.IsClicked){
                 this.IsClicked = false;
                 this.Image.emit(this.EventList.onClick);
+
+                if(this.IsAudioActive){
+                    this.scene.game.sound.play('click');
+                }
             }
         }, this);
         
@@ -49,6 +54,10 @@ export default class Button extends Phaser.GameObjects.Container{
 			onPointerDown: "onPointerDown",
 			onPointerUp: "onPointerUp",
 		}
+    }
+
+    setAudioActive(isActive = true){
+        this.IsAudioActive = isActive;
     }
 
     SetEnable(active){

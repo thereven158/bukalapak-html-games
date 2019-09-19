@@ -7,7 +7,7 @@ import VoucherView from '../../view/popup_voucher_view';
 export default class TitleSceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'TitleScene'});
-        
+        this.Bgm = null;
     }
 
     init(data){
@@ -59,8 +59,19 @@ export default class TitleSceneController extends Phaser.Scene {
                 
             });
             this.VoucherView.OnClickMainLagi(this.OnClickPlay);
+
+            this.sound.play('transition');
         }
 
+       
+        if(this.Bgm == null){
+            this.Bgm = this.sound.add('bgm_title',{
+                loop:-1,
+                volume: 1
+            });
+            
+        }
+        this.Bgm.play();
     }
 
     update(){
@@ -68,6 +79,9 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     OnClickPlay = ()=>{
+
+        this.Bgm.stop();
+        this.game.sound.play('click_start');
         this.scene.start('GameScene')
         this.scene.stop();
     }

@@ -1,6 +1,6 @@
 
 export default {
-    GameTime : 90,
+    GameTime : 20,
     ScorePoint :1,
     VoucherWinPoint : 10,
     MaxTargetPooled : 4,

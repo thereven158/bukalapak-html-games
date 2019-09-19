@@ -12,5 +12,8 @@ export default class LoadingTitleController {
         this.scene.load.image('logo_game', this.scene.CreatePath('/images/Logo_Game.png'));
         this.scene.load.image('bg_title', this.scene.CreatePath('/images/bg_Title.png'));
         this.scene.load.image('btn_play', this.scene.CreatePath('/images/buttons/Button_Main.png'));
+
+        this.scene.load.image('bg_moon', this.scene.CreatePath('/images/bg_titlemoon.png'));
+        this.scene.load.image('bg_titleland', this.scene.CreatePath('/images/bg_titleland.png'));
      }
 }

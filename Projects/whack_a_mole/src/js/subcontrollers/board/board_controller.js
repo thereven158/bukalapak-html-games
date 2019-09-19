@@ -119,7 +119,7 @@ export default class BoardController  extends Phaser.GameObjects.Container{
         unusedHole.SetTarget(minion);
 
         minion.Jump(unusedHole.x, unusedHole.y)
-        
+    
     }
 
     TargetHit = ()=>{

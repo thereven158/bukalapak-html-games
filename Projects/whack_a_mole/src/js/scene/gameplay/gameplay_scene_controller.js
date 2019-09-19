@@ -11,6 +11,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'GameScene'});
 
+        this.Bgm = null;
     }
 
     init(){
@@ -18,6 +19,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         this.InitGameData();
         this.InitAnimationData();
+        this.InitAudio();
     }
 
     InitGameData(){
@@ -32,10 +34,25 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         this.CurrentPhaseIdx = 0;
         this.CurrentPhase = gameplaydata.Phases[this.CurrentPhaseIdx];
+
+
+        
     }
 
     InitAnimationData(){
         Minion.InitAnimationData(this);
+    }
+
+    InitAudio(){
+        if(this.Bgm == null){
+            this.Bgm = this.sound.add('bgm_ingame',{
+                loop:-1,
+                volume: 1
+            });
+            
+        }
+
+        this.Bgm.play();
     }
 
     preload(){
@@ -130,6 +147,8 @@ export default class GameplaySceneController extends Phaser.Scene {
             callbackScope: this, 
             loop: false 
         });
+
+        this.game.sound.play('timeout');
         //this.BackToTitle();
     }
 
@@ -144,6 +163,7 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
     
     BackToTitle = ()=>{
+        this.Bgm.stop();
         this.scene.launch('TitleScene', {
             isAfterGame: true,
             isGameWin: this.IsWinning

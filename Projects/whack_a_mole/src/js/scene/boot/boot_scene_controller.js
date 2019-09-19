@@ -3,10 +3,14 @@ import LoaderController from '../../module/loader/loader_controller'
 export default class BootSceneController extends Phaser.Scene{
     constructor(){
         super({key:'BootScene'});
+
+        this.IsAudioOn = false;
     }
 
     init(){
         console.log('boot screen');
+
+        this.initAudio();
     }
 
     preload(){
@@ -29,8 +33,18 @@ export default class BootSceneController extends Phaser.Scene{
             console.log(err);
         })
     }
-    
-    create(){   
-        //this.scene.start('LoadingScene');   
+
+    initAudio(){
+        this.sound.mute = !this.IsAudioOn;
+
+        this.game.events.on('hidden', () =>{
+            this.sound.mute = true;
+            console.log("test")
+        },this)
+
+        this.game.events.on('visible', () =>{
+            if(this.IsAudioOn)
+                this.sound.mute = false;
+        },this)
     }
 };

@@ -16,7 +16,7 @@ export default class LoadingGameplayController {
         this.scene.load.image('ui_timesup', this.scene.CreatePath('/images/ui/TimesUp.png'));
 
         this.scene.load.image('hole', this.scene.CreatePath('/images/hole.png'));
-        this.scene.load.spritesheet('minion', this.scene.CreatePath('/images/minion.png'), {frameWidth:1450/5, frameHeight:1130/4});
+        this.scene.load.spritesheet('minion', this.scene.CreatePath('/images/minion.png'), {frameWidth:1500/5, frameHeight:1200/4});
      
      }
 }

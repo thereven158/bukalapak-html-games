@@ -21,11 +21,10 @@ export default class GameplaySceneView {
 
         this.Planet = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight, 'bg_land');
 
-    
-        let planetMaxHeight = this.ScreenUtility.GameWidth * (this.Planet.height / this.Planet.width);
-        let planetHeight = (this.ScreenUtility.GameHeight < (planetMaxHeight * 1.1) ) ? this.ScreenUtility.GameHeight * 0.9: planetMaxHeight;
+        let planetMaxHeight = (this.ScreenUtility.GameWidth * 1.4) * (this.Planet.height / this.Planet.width);
+        let planetHeight = (this.ScreenUtility.GameHeight < (planetMaxHeight * 1.1) ) ? this.ScreenUtility.GameHeight * 1: planetMaxHeight * 1.1;
 
-        this.Planet.displayWidth = this.ScreenUtility.GameWidth;
+        this.Planet.displayWidth = this.ScreenUtility.GameWidth * 1.4;
         this.Planet.displayHeight = planetHeight;
         this.Planet.setOrigin(0.5,1);
 
@@ -60,5 +59,6 @@ export default class GameplaySceneView {
         this.TimesUpBar = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'ui_timesup');
         this.TimesUpBar.displayWidth = this.ScreenUtility.GameWidth;
         this.TimesUpBar.displayHeight = this.TimesUpBar.displayWidth * (this.TimesUpBar.height / this.TimesUpBar.width);
+        this.TimesUpBar.setDepth(1);
      }
 };

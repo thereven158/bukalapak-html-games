@@ -93,21 +93,24 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         this.BtnCopy.OnClick(this.ClickCopy);
         this.VoucherCodeGroup.add(this.BtnCopy);
 
-        var el = document.createElement('input');
-        el.id = "vouchercode"
-        el.value = 'CODE'
-        el.type = 'text'
-        
-        el.disabled = true
-        el.style = `
-            font-size: 40px;
-            color: black;
-            font-family: 'panton_bold';
-            text-align:center;
-            border: none; 
-            box-shadow: none;
-            background: none;
-        `;
+        let el = document.getElementById("vouchercode");
+        if(el == undefined){
+            el = document.createElement('input');
+            el.id = "vouchercode"
+            el.value = 'CODE'
+            el.type = 'text'
+            
+            el.disabled = true
+            el.style = `
+                font-size: 40px;
+                color: black;
+                font-family: 'panton_bold';
+                text-align:center;
+                border: none; 
+                box-shadow: none;
+                background: none;
+            `;
+        }
 
         this.DomElement = this.scene.add.dom(this.ScreenUtility.CenterX - (this.VoucherBox.displayWidth * 0.1), innerContentStartPosY + (innerContentHeight * 0.5), el);
         this.DomElement.setScale(this.ScreenUtility.ScalePercentage)
@@ -119,15 +122,15 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         this.BtnDownload.OnClick(this.ClickDownload);
         this.MainGroup.add(this.BtnDownload);
 
-        this.btnMainLagi = new Button(this.scene, this.ScreenUtility.CenterX, innerContentStartPosY + (innerContentHeight * 0.9), 'voucher_btnMainLagi');
-        this.btnMainLagi.Image.displayWidth = this.Background.displayWidth * 0.7;
-        this.btnMainLagi.Image.displayHeight = this.btnMainLagi.Image.displayWidth * (this.btnMainLagi.Image.height / this.btnMainLagi.Image.width);
-        this.MainGroup.add(this.btnMainLagi);
+        this.BtnMainLagi = new Button(this.scene, this.ScreenUtility.CenterX, innerContentStartPosY + (innerContentHeight * 0.9), 'voucher_btnMainLagi');
+        this.BtnMainLagi.Image.displayWidth = this.Background.displayWidth * 0.7;
+        this.BtnMainLagi.Image.displayHeight = this.BtnMainLagi.Image.displayWidth * (this.BtnMainLagi.Image.height / this.BtnMainLagi.Image.width);
+        this.MainGroup.add(this.BtnMainLagi);
         
-        this.btnClose = new Button(this.scene, 0,0, 'voucher_btnClose');
-        this.btnClose.setPosition(this.ScreenUtility.CenterX - (this.Background.displayWidth * 0.5) + (this.btnClose.Image.displayWidth * 0.4), this.Header.y - (this.btnClose.Image.displayHeight * 0.5));
-        this.btnClose.OnClick(this.Close);
-        this.MainGroup.add(this.btnClose);
+        this.BtnClose = new Button(this.scene, 0,0, 'voucher_btnClose');
+        this.BtnClose.setPosition(this.ScreenUtility.CenterX - (this.Background.displayWidth * 0.5) + (this.BtnClose.Image.displayWidth * 0.4), this.Header.y - (this.BtnClose.Image.displayHeight * 0.5));
+        this.BtnClose.OnClick(this.Close);
+        this.MainGroup.add(this.BtnClose);
         
 		this.MessageGroup = this.scene.add.container(0,0);
         this.add(this.MessageGroup);
@@ -235,11 +238,11 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     }
 
     ClickDownload = ()=>{
-
+        window.history.back();
     }
     
     OnClickClose(event){
-        this.btnClose.OnClick(event);
+        this.BtnClose.OnClick(event);
     }
 
     OnClickDownload(event){
@@ -247,10 +250,10 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     }
 
     OnClickMainLagi(event){
-        this.btnMainLagi.OnClick(event);
+        this.BtnMainLagi.OnClick(event);
     }
 
     OnClickClose(event){
-        this.btnClose.OnClick(event);
+        this.BtnClose.OnClick(event);
     }
 }

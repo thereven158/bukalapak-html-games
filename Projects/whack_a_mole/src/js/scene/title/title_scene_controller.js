@@ -10,8 +10,18 @@ export default class TitleSceneController extends Phaser.Scene {
         
     }
 
-    init(){
+    init(data){
         console.log('title screen')
+
+        this.IniTitleData();
+        this.IsAfterGame = data.isAfterGame;
+        this.IsGameWin = data.isGameWin;
+        
+    }
+
+    IniTitleData(){
+        this.IsAfterGame = false;
+        this.IsGameWin = false;
     }
 
     preload(){
@@ -23,28 +33,34 @@ export default class TitleSceneController extends Phaser.Scene {
     create(){
         this.view = new TitleSceneView(this);
         this.view.create();
-
-        this.VoucherView = new VoucherView(this);
-        this.VoucherView.ShowVoucherCode("7749vcx")
-        this.VoucherView.SetDescription('voucher_headerwin', 
-            "Voucher", 
-            "Yuk, Pakai Vouchernya!", 
-            "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak");
         
-        // this.VoucherView.DisableVoucherCode()
-        // this.VoucherView.SetDescription('voucher_headertimeout', 
-        //     "Timeout", 
-        //     "Coba lagi yuk", 
-        //     "Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak.");
-        
-        this.VoucherView.Open();
-
-        this.VoucherView.OnClickClose(()=>{
-            console.log("test")
-        });
-        this.VoucherView.OnClickMainLagi(this.OnClickPlay);
-
         this.view.onClickPlay(this.OnClickPlay);
+
+        if(this.IsAfterGame){
+            this.VoucherView = new VoucherView(this);
+
+            if(this.IsGameWin){
+                this.VoucherView.ShowVoucherCode(CONFIG.VOUCHER_CODE)
+                this.VoucherView.SetDescription('voucher_headerwin', 
+                    "Voucher", 
+                    "Yuk, Pakai Vouchernya!", 
+                    "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak");
+            }else{
+                this.VoucherView.DisableVoucherCode()
+                this.VoucherView.SetDescription('voucher_headertimeout', 
+                    "Timeout", 
+                    "Coba lagi yuk", 
+                    "Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak.");
+            }
+            
+            this.VoucherView.Open();
+    
+            this.VoucherView.OnClickClose(()=>{
+                
+            });
+            this.VoucherView.OnClickMainLagi(this.OnClickPlay);
+        }
+
     }
 
     update(){
@@ -53,7 +69,6 @@ export default class TitleSceneController extends Phaser.Scene {
 
     OnClickPlay = ()=>{
         this.scene.start('GameScene')
+        this.scene.stop();
     }
-
-    onClick
 }

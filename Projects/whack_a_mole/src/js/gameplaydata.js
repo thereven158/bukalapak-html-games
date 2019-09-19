@@ -1,57 +1,58 @@
 
 export default {
-    GameTime : 60,
-    HitPoint : 3,
-    VoucherHitPoint : 10,
+    GameTime : 90,
+    ScorePoint :1,
+    VoucherWinPoint : 10,
+    MaxTargetPooled : 4,
 
     Phases:[
         {
-            MaxEnemy : 1,
+            MaxTarget : 1,
             MaxTotalHit : 10,
             MaxTime : 10, 
             ShowChance : 100, //percentage 100%
-            MinCheckTime : 1, //second
-            MaxCheckTime : 1, //second
+            MinShowTime : 1, //second
+            MaxShowTime : 1, //second
         },
         {
-            MaxEnemy : 2,
+            MaxTarget : 2,
             MaxTotalHit : 10,
-            MaxTime : 10,
-            ShowChance : 80,
-            MinCheckTime : 0.5, 
-            MaxCheckTime : 0.8,
-        },
-        {
-            MaxEnemy : 3,
-            MaxTotalHit : 20,
-            MaxTime : 15,
-            ShowChance : 80,
-            MinCheckTime : 0.5,
-            MaxCheckTime : 0.8,
-        },
-        {
-            MaxEnemy : 4,
-            MaxTotalHit : 25,
-            MaxTime : 15,
+            MaxTime : 20,
             ShowChance : 50,
-            MinCheckTime : 0.2,
-            MaxCheckTime : 0.6,
+            MinShowTime : 0.5, 
+            MaxShowTime : 1,
         },
         {
-            MaxEnemy : 4,
+            MaxTarget : 3,
+            MaxTotalHit : 20,
+            MaxTime : 35,
+            ShowChance : 55,
+            MinShowTime : 0.5,
+            MaxShowTime : 1,
+        },
+        {
+            MaxTarget : 4,
+            MaxTotalHit : 25,
+            MaxTime : 50,
+            ShowChance : 50,
+            MinShowTime : 0.5,
+            MaxShowTime : 1,
+        },
+        {
+            MaxTarget : 4,
             MaxTotalHit : 30,
-            MaxTime : 20,
+            MaxTime : 70,
             ShowChance : 65,
-            MinCheckTime : 0.2,
-            MaxCheckTime : 0.6,
+            MinShowTime : 0.2,
+            MaxShowTime : 0.8,
         },
         {
-            MaxEnemy : 4,
+            MaxTarget : 4,
             MaxTotalHit : 40,
-            MaxTime : 20,
-            ShowChance : 80,
-            MinCheckTime : 0.2,
-            MaxCheckTime : 0.6,
+            MaxTime : 90,
+            ShowChance : 65,
+            MinShowTime : 0.2,
+            MaxShowTime : 0.8,
         },
     ],
 

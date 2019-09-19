@@ -29,6 +29,6 @@
 		"webpack-obfuscator": "^0.18.3"
 	},
 	"dependencies": {
-		"phaser": "^3.18"
+		"phaser": "^3.19.0"
 	}
 }

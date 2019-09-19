@@ -1,5 +1,7 @@
 import ScreenUtility from "../../module/screen/screen_utility";
-import TargetObjectController from "../../gameobjects/target_object_controller";
+import Hole from "../../gameobjects/hole";
+import Minion from "../../gameobjects/minion";
+import gameplaydata from "../../gameplaydata";
 
 export default class BoardController  extends Phaser.GameObjects.Container{
 
@@ -13,113 +15,159 @@ export default class BoardController  extends Phaser.GameObjects.Container{
         this.TotalColumn = 3;
         this.TotalRow = 3;
 
+        this.Event = new Phaser.Events.EventEmitter();
         this.EventList = {
             OnTargetHit: "OnTargetHit",
         }
+
+        /** @type {(Hole|Array)}  */
+        this.Holes = [];
+        /** @type {(Minion|Array)}  */
+        this.Minions = [];
         
         scene.add.existing(this);  
     }
 
-    create(){
-        this.InitiateBoard();
+    InitData(){
+
     }
 
-    update(){
-       
+    create(){
+        this.InitiateBoard();
+
+
+    }
+
+    update(timestep, dt){
+        
     }
 
     InitiateBoard(){
         this.TargetGroup = this.scene.add.container(0,0);
         this.add(this.TargetGroup);
 
-        let boardWidth = this.ScreenUtility.GameWidth * 0.75;
+        let hole1 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.2, this.ScreenUtility.GameHeight * 0.45, 0);
+        this.Holes.push(hole1)
 
-        let objDistance = boardWidth / this.TotalColumn;
-        let offset = objDistance * 0.5;
-        let posY = offset + (-boardWidth * 0.5);
-        let objSize = objDistance * 0.7;
-        
-        for(let i = 0; i< this.TotalRow; i++){
-            let posX = offset + (-boardWidth * 0.5);
+        let hole2 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.5, this.ScreenUtility.GameHeight * 0.45, 0);
+        this.Holes.push(hole2)
 
-            for(let j = 0; j< this.TotalColumn; j++){
-                let obj = new TargetObjectController(this.scene, posX, posY, 'logo');
-                obj.displayWidth = objSize;
-                obj.displayHeight = obj.displayWidth * (obj.height / obj.width);
-                obj.OnClickTarget(()=>{
-                    this.emit(this.EventList.OnTargetHit);
-                });
+        let hole3 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.82, this.ScreenUtility.GameHeight * 0.45, 0);
+        this.Holes.push(hole3)
 
-                this.TargetGroup.add(obj);
-                posX += objDistance;
-            }
+        let hole4 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.18, this.ScreenUtility.GameHeight * 0.6, 0.1);
+        this.Holes.push(hole4)
 
-            posY += objDistance;
+        let hole5 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.48, this.ScreenUtility.GameHeight * 0.6, 0.1);
+        this.Holes.push(hole5)
+
+        let hole6 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.77, this.ScreenUtility.GameHeight * 0.6, 0.1);
+        this.Holes.push(hole6)
+
+        let hole7 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.2, this.ScreenUtility.GameHeight * 0.76, 0.2);
+        this.Holes.push(hole7)
+
+        let hole8 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.5, this.ScreenUtility.GameHeight * 0.76, 0.2);
+        this.Holes.push(hole8)
+
+        let hole9 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.8, this.ScreenUtility.GameHeight * 0.76, 0.2);
+        this.Holes.push(hole9)
+
+
+        for(let i = 0; i < gameplaydata.MaxTargetPooled; i++){
+            let minion = new Minion(this.scene, 0, 0);
+            this.Minions.push(minion);
         }
-
-        console.log(this.TargetGroup.list)
+        
     }
 
     OnTargetHit(event){
-        this.on(this.EventList.OnTargetHit, event, this);
+        this.Event.on(this.EventList.OnTargetHit, event, this);
     }
 
     Disable(){
-        for(let i=0; i<this.TargetGroup.list.length; i++){
-            /** @type {TargetObjectController}  */
-            let target = this.TargetGroup.list[i];
-            
-           target.Disable();
+        for(let i=0; i < this.Minions.length; i++){
 
+            /** @type {Minion}  */
+            let minion = this.Minions[i];
+            minion.Disable();
         }
+    }
+
+    Show(){
+        /** @type {(Minion|Array)}  */
+        let inactiveTargets = this.GetInactiveTargets();
+        /** @type {(Hole|Array)}  */
+        let unusedHoles = [];
+
+        for(let i = 0; i < this.Holes.length; i++){
+            let hole = this.Holes[i];
+            if(!hole.IsUsed){
+                unusedHoles.push(hole);
+            }
+        }
+
+        if(inactiveTargets.length <= 0 || unusedHoles <= 0)
+            return;
+        
+        let randomHoleIdx = Phaser.Math.Between(0, unusedHoles.length - 1)
+        let unusedHole = unusedHoles[randomHoleIdx];
+        let minion = inactiveTargets[0];
+
+        minion.OnceHit(this.TargetHit);
+
+        unusedHole.SetTarget(minion);
+
+        minion.Jump(unusedHole.x, unusedHole.y)
+        
+    }
+
+    TargetHit = ()=>{
+        this.Event.emit(this.EventList.OnTargetHit);
+    }
+
+    JumpFinish(){
+
     }
 
     Reset(){
-        for(let i=0; i<this.TargetGroup.list.length; i++){
-            /** @type {TargetObjectController}  */
-            let target = this.TargetGroup.list[i];
-            
-           target.Reset();
 
-        }
     }
 
-    GetTargetsData(){
-        /** @type {(TargetObjectController|Array)}  */
+    /** @return {(Minion|Array)}  */
+    GetActiveTargets(){
+        /** @type {(Minion|Array)}  */
         var activeTargets = [];
-        /** @type {(TargetObjectController|Array)}  */
+
+        for(let i=0; i < this.Minions.length; i++){
+
+            /** @type {Minion}  */
+            let minion = this.Minions[i];
+            
+            if(minion.IsJumping){
+                activeTargets.push(minion);
+            }
+        }
+
+        return activeTargets;
+    }
+
+    /** @return {(Minion|Array)}  */
+    GetInactiveTargets(){
+        /** @type {(Minion|Array)}  */
         var inactiveTargets = [];
 
-        for(let i=0; i<this.TargetGroup.list.length; i++){
+        for(let i=0; i < this.Minions.length; i++){
 
-            /** @type {TargetObjectController}  */
-            let target = this.TargetGroup.list[i];
+            /** @type {Minion}  */
+            let minion = this.Minions[i];
             
-            if(target.IsShowing){
-                activeTargets.push(target);
-            }else{
-                inactiveTargets.push(target);
+            if(!minion.IsJumping){
+                
+                inactiveTargets.push(minion);
             }
-
         }
 
-        return {
-            total : this.TargetGroup.list.length,
-            targets : this.TargetGroup.list,
-            totalActive :  activeTargets.length,
-            activeTargets : activeTargets,
-            totalInactive : inactiveTargets.length,
-            inactiveTargets : inactiveTargets,
-        };
-    }
-
-    /** @return {number)}  */
-    GetTotalTargets(){
-        return this.TargetGroup.list.length;
-    }
-
-    /** @return {(TargetObjectController|Array)}  */
-    GetAllTargets(){
-        return this.TargetGroup.list;
+        return inactiveTargets;
     }
 }

@@ -3,7 +3,8 @@ import gameplaydata from '../../gameplaydata';
 
 import GameplaySceneView from './gameplay_scene_view';
 import BoardController from '../../subcontrollers/board/board_controller';
-import TargetObjectController from '../../gameobjects/target_object_controller';
+import TargetObjectController from '../../gameobjects/hole';
+import Minion from '../../gameobjects/minion';
 
 
 export default class GameplaySceneController extends Phaser.Scene {
@@ -14,6 +15,9 @@ export default class GameplaySceneController extends Phaser.Scene {
 
     init(){
         console.log('game screen')
+
+        this.InitGameData();
+        this.InitAnimationData();
     }
 
     InitGameData(){
@@ -21,22 +25,22 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.Score = 0;
         this.Timer = gameplaydata.GameTime;
         this.IsGameStarted = false;
-        this.VoucherShowed = false;
-        this.HasVoucher = false;
+        this.IsWinning = false;
 
-        this.CheckTimer = 0;
-        this.NextCheckTime = 0;
+        this.ShowTimer = 0;
+        this.NextShowTime = 0;
 
         this.CurrentPhaseIdx = 0;
         this.CurrentPhase = gameplaydata.Phases[this.CurrentPhaseIdx];
     }
 
-    preload(){
-        this.InitGameData();
+    InitAnimationData(){
+        Minion.InitAnimationData(this);
+    }
 
+    preload(){
         this.ScreenUtility = ScreenUtility.getInstance();
         this.ScreenUtility.Init(this)
-        
     }
 
     create(){
@@ -64,13 +68,13 @@ export default class GameplaySceneController extends Phaser.Scene {
             this.GameUpdate(timestep, dt);
         }
 
-        this.Board.update();
+        this.Board.update(timestep, dt);
         this.view.update();
     }
 
     GameUpdate(timestep, dt){
         this.Timer -= (1 * dt) / 1000;
-        this.CheckTimer += (1 * dt) / 1000;
+        this.ShowTimer += (1 * dt) / 1000;
 
         //validate phase
         if(this.CurrentPhaseIdx < gameplaydata.Phases.length - 1){
@@ -83,12 +87,17 @@ export default class GameplaySceneController extends Phaser.Scene {
                 this.CurrentPhase = gameplaydata.Phases[this.CurrentPhaseIdx];
             }
         }
-        console.log(this.CurrentPhaseIdx);
-        let checkTimeInterval = Phaser.Math.Between(this.CurrentPhase.MinCheckTime, this.CurrentPhase.MaxCheckTime);
 
-        if(this.CheckTimer >= this.NextCheckTime){
-            this.Check();
-            this.NextCheckTime = this.CheckTimer + checkTimeInterval;
+        let showTimeInterval = Phaser.Math.Between(this.CurrentPhase.MinShowTime, this.CurrentPhase.MaxShowTime);
+
+        let chance = Phaser.Math.Between(0, 100);
+        let isShowChanceSuccess = chance <= this.CurrentPhase.ShowChance;
+        let isShowTime = this.ShowTimer >= this.NextShowTime;
+        let isNotReachMaxShowTargets = this.Board.GetActiveTargets().length < this.CurrentPhase.MaxTarget;
+
+        if(isShowTime && isShowChanceSuccess && isNotReachMaxShowTargets){
+            this.Board.Show();
+            this.NextShowTime = this.ShowTimer + showTimeInterval;
         }
 
         //Isgameover
@@ -99,33 +108,29 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
     }
 
-    Check(){
-        let targetsData = this.Board.GetTargetsData();
-
-        let chance = Phaser.Math.Between(0, 100);
-        let isSuccess = chance <= this.CurrentPhase.ShowChance;
-
-        if(targetsData.totalActive < this.CurrentPhase.MaxEnemy && isSuccess){
-            let randomTargetIdx = Phaser.Math.Between(0, targetsData.totalInactive - 1)
-            /** @type {TargetObjectController}  */
-            let target = targetsData.inactiveTargets[randomTargetIdx];
-            target.Show();
-
-        }
-    }
-
     OnTargetHit = ()=>{ 
         if(!this.IsGameStarted)
             return;
 
         this.TotalHit += 1;
-        this.Score += gameplaydata.HitPoint;
+        this.Score += gameplaydata.ScorePoint;
+
+        this.IsWinning = this.TotalHit >= gameplaydata.VoucherWinPoint;
     }
 
     GameOver(){
         this.IsGameStarted = false;
         this.Board.Disable();
         
+        this.view.TimesUp();
+
+        this.time.addEvent({ 
+            delay: 3000, 
+            callback: this.BackToTitle, 
+            callbackScope: this, 
+            loop: false 
+        });
+        //this.BackToTitle();
     }
 
     Restart(){
@@ -137,5 +142,14 @@ export default class GameplaySceneController extends Phaser.Scene {
     Reset(){
         this.Board.Reset();
     }
+    
+    BackToTitle = ()=>{
+        this.scene.launch('TitleScene', {
+            isAfterGame: true,
+            isGameWin: this.IsWinning
 
+        });
+
+        this.scene.stop();
+    }
 }

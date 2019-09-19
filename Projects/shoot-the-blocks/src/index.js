@@ -40,7 +40,7 @@ var config = {
 	},
 	physics: {
         default: 'arcade'
-    },
+	},
 	autoRound: false
 };
 

@@ -21,7 +21,8 @@ var Title = function()
 
     this.BtnScore = GlobalObject.Game.make.sprite(0,this.BtnPlay.y+this.BtnPlay.height*1.1,'atlas1','Button-Poin');
     this.BtnScore.anchor.set(0.5,0.5);
-    this.BtnScore.inputEnabled = true;   
+    this.BtnScore.inputEnabled = true; 
+	this.BtnScore.visible = false;
 
     this.addChild(this.TextTitle);
     this.addChild(this.BtnPlay);

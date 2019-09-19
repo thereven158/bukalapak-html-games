@@ -9,7 +9,8 @@ var TopUi = function()
 
     this.Score = new Score();
     //this.Timer = new Timer();
-    this.LivesManager = new LivesManager();  
+    this.LivesManager = new LivesManager(CONFIG.MAX_LIVES);  
+	this.TimerManager = new TimerManager(CONFIG.TIME_LIMIT);  
 
     this.TopPanelFront = GlobalObject.Game.make.sprite(this.LivesManager.x-this.LivesManager.width,0,'atlas1','Score-UI-Behind-ornament');
     this.TopPanelFront.anchor.set(1,0);
@@ -17,8 +18,8 @@ var TopUi = function()
     this.addChild(this.TopPanel);
     this.addChild(this.TopPanelFront);
     this.addChild(this.Score);
-    //this.addChild(this.Timer);
-    this.addChild(this.LivesManager);
+    this.addChild(this.LivesManager);	
+    this.addChild(this.TimerManager);
 }
 
 TopUi.prototype = Object.create(Phaser.Sprite.prototype);
@@ -29,6 +30,7 @@ TopUi.prototype.Scale = function()
     this.Score.Scale();
     //this.Timer.Scale();
     this.LivesManager.Scale();
+	this.TimerManager.Scale();
     ScaleScreen.ScaleNormalObject(this.TopPanel,1083,158);
     ScaleScreen.ScaleNormalObject(this.TopPanelFront,661,125);
     this.TopPanelFront.x = this.LivesManager.x-this.LivesManager.width;
@@ -40,6 +42,7 @@ TopUi.prototype.Show = function()
 {
     //this.Timer.Init();
     this.LivesManager.Init();
+	this.TimerManager.Init();
     this.Score.Init();
 
     var tween = GlobalObject.Game.add.tween(this).to( { y: 0 }, 500, Phaser.Easing.Quadratic.Out, true);

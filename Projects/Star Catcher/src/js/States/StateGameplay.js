@@ -20,7 +20,7 @@ var StateGameplay = function()
     this.InputManager;
     this.LivesManager;
     this.DropItemManager;
-    this.SoundManager;
+    this.SoundManager;	
 }
 
 StateGameplay.prototype =
@@ -28,11 +28,16 @@ StateGameplay.prototype =
     preload:function()
     {
         //ga ('send', 'screenview', { 'appName': 'Catch Star', 'appVersion': '1.0', 'screenName': 'Main Menu' });
-        GlobalFunction.SetGAEvent('open stc');
+        //GlobalFunction.SetGAEvent('open stc');
     },
 
     create:function()
     {
+		this.star = 0;
+		this.isGameOver = false;
+		
+		this.screenUtility = new ScreenUtility(this.game, 1080, 1920, 1080/1920);
+		
         // var h = GlobalObject.Game.height;
         // var myBitmap = GlobalObject.Game.add.bitmapData(GlobalObject.Game.width, h);
         // var grd=myBitmap.context.createLinearGradient(0,0,0,h);
@@ -75,7 +80,7 @@ StateGameplay.prototype =
             this.SoundManager.FadeBmgTitle();
             this.SoundManager.PlaySfx(GlobalConst.SfxChangeScene);
 
-            GlobalFunction.SetGAEvent('stc start playing');
+            //GlobalFunction.SetGAEvent('stc start playing');
         }
 
         this.Title.OnTitleDoneHiding = ()=>
@@ -111,13 +116,31 @@ StateGameplay.prototype =
             {
                 this.TopUi.LivesManager.AddLives();
                 this.ScoreGetStar.ShowPlusHeart(this.Basket);
+				this.DropItemManager.CheckForNewSpawn();
             }
             else
             {
                 this.ScoreGetStar.ShowScore(this.Basket, this.TopUi.Score.IncreaseScore);
-            }
 
-            this.DropItemManager.CheckForNewSpawn();
+				if (this.DropItemManager.Star.IsStarMode)
+				{
+					this.star++;
+				}
+				
+				if (this.star >= CONFIG.TARGET_STAR)
+				{
+					//this.Basket.Die();            
+					this.TopUi.Hide();
+            		this.DropItemManager.Init();
+					
+					this.endGame(true);
+				}
+				else
+				{
+					this.DropItemManager.CheckForNewSpawn();
+				}
+            }
+            
             this.SoundManager.PlaySfx(GlobalConst.SfxGetStar);
         }
 
@@ -194,12 +217,13 @@ StateGameplay.prototype =
             this.SoundManager.PlaySfx(GlobalConst.SfxGameover);
 
             GlobalConst.IsZero = this.TopUi.Score.CurrentScore == 0;
-            GlobalFunction.SetGAEvent('stc finish playing');            
+            //GlobalFunction.SetGAEvent('stc finish playing');            
         }
 
         this.Basket.OnOutScreen = ()=>
         {
-            this.GameOver.Show(this.TopUi.Score.CurrentScore);
+            //this.GameOver.Show(this.TopUi.Score.CurrentScore);
+			this.endGame(false);
         }
 
         // this.TopUi.Timer.OnTimesUp = ()=>
@@ -216,7 +240,7 @@ StateGameplay.prototype =
         {
             if(this.TopUi.Score.CurrentScore > 0)
             {
-                this.SoundManager.PlaySfx(GlobalConst.SfxScoreRolling);
+                //this.SoundManager.PlaySfx(GlobalConst.SfxScoreRolling);
             }
         }
 
@@ -224,35 +248,41 @@ StateGameplay.prototype =
         {
             if(GlobalConst.IsHighscore)
             {
-                this.SoundManager.PlaySfx(GlobalConst.SfxHighscore);
+                //this.SoundManager.PlaySfx(GlobalConst.SfxHighscore);
             }
         }
 
         this.GameOver.OnHideReplay = ()=>
         {
+			/*
             GlobalConst.SpeedMultiplier = 1;
-            GlobalFunction.SetGAEvent('stc click main lagi')
+            //GlobalFunction.SetGAEvent('stc click main lagi')
 
             this.TopUi.Show(); 
             this.Basket.Show();
 
             this.SoundManager.PlayBgm(GlobalConst.BgmGame);
+			*/
         }
 
         this.GameOver.OnHideExit = ()=>
         {
+			/*
             GlobalConst.SpeedMultiplier = 1;
-            GlobalFunction.SetGAEvent('stc to main menu');
+            //GlobalFunction.SetGAEvent('stc to main menu');
 
             this.Title.Show();
             this.Basket.Hide();
 
             this.SoundManager.PlayBgm(GlobalConst.BgmTitle);
             this.SoundManager.PlaySfx(GlobalConst.SfxChangeSceneExit);
+			*/
 
         }
         this.GameOver.RegisterEvent();
-
+		
+		this.initTimer();
+		
         //GlobalObject.Game.add.existing(this.Bg);
         GlobalObject.Game.add.existing(this.Planet1);
         GlobalObject.Game.add.existing(this.Planet2);
@@ -268,12 +298,22 @@ StateGameplay.prototype =
         GlobalObject.Game.add.existing(this.GameOver);
         GlobalObject.Game.add.existing(this.HighScore);
         GlobalObject.Game.add.existing(this.TopUi);        
-
+		//GlobalObject.Game.add.existing(this.timerHUDGroup); 
+		
+		
+		
         this.ScaleAll();
     },
 
     update:function()
     {
+		if (this.isGameOver)
+		{
+			return;
+		}
+		
+		this.updateTimer();
+		
         this.InputManager.CheckingMouseInput();
     },
 
@@ -294,5 +334,45 @@ StateGameplay.prototype =
         this.HighScore.Scale();
         this.ExplodeParticle.Scale();        
         this.BgParallax.Scale();
-    }
+    },
+	
+	initTimer()
+	{
+		this.TopUi.TimerManager.OnTimeRunOut = () => {
+			this.endGame(false);
+		}
+	},
+	
+	updateTimer()
+	{
+		if (this.TopUi.TimerManager.isInit) this.TopUi.TimerManager.UpdateTimer(this.game.time.elapsed);
+	},
+	
+	endGame(isVictory = false)
+	{
+		this.showVoucherGameOver(isVictory);
+		this.isGameOver = true;		
+	},
+	
+	showVoucherGameOver(isVictory = false)
+	{
+		this.voucherGameOverScreen = new VoucherController(this.game);
+		
+		this.voucherGameOverScreen.setEvents(() => {
+			this.game.state.start('gameplay');
+		}, () => {
+			this.game.state.start('gameplay');
+		}, () => {
+			this.game.state.start('gameplay');
+		})	
+		
+		if (isVictory)
+		{
+			this.voucherGameOverScreen.popUpWin(CONFIG.VOUCHER_CODE);
+		}
+		else
+		{
+			this.voucherGameOverScreen.popUpLose();
+		}
+	}	
 }

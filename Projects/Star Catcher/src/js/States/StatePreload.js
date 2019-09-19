@@ -97,6 +97,26 @@ StatePreload.prototype =
 
         this.game.load.atlas('atlas1', 'Assets/Images/textureatlas1.png', 'Assets/Images/textureatlas1.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 
+		this.game.load.image('timer_ui', 'assets/images/UI/Timer-UI.png');	
+		
+		this.game.load.image('life_frame', 'assets/images/UI/life-frame.png');	
+		
+		// VOUCHERS
+		
+        this.game.load.image('box_voucher', 'Assets/Images/vouchers/box_voucher.png');
+		
+		this.game.load.image('box_white', 'Assets/Images/vouchers/box_white.png');
+		this.game.load.image('btn_close', 'Assets/Images/vouchers/btn_close.png');
+		this.game.load.image('btn_copy', 'Assets/Images/vouchers/btn_copy.png');
+		this.game.load.image('btn_download', 'Assets/Images/vouchers/btn_download.png');
+		
+		this.game.load.image('btn_main', 'Assets/Images/vouchers/btn_main.png');
+		this.game.load.image('header_card1', 'Assets/Images/vouchers/header_card1.png');
+		this.game.load.image('header_card2', 'Assets/Images/vouchers/header_card2.png');			
+		
+		//
+		
+		
         // this.game.load.spine(
         //     'char',                        //The key used for Phaser's cache
         //     'Assets/Images/Spine/Char/skeleton.json'    //The location of the spine's json file

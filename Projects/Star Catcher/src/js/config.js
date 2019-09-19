@@ -1,0 +1,6 @@
+const CONFIG= {
+	MAX_LIVES:3,
+	TARGET_STAR:3,
+	VOUCHER_CODE:"VCODE",
+	TIME_LIMIT:5000 // in miliseconds
+}

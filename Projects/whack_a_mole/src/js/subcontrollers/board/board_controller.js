@@ -46,31 +46,31 @@ export default class BoardController  extends Phaser.GameObjects.Container{
         this.TargetGroup = this.scene.add.container(0,0);
         this.add(this.TargetGroup);
 
-        let hole1 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.2, this.ScreenUtility.GameHeight * 0.45, 0);
+        let hole1 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.2, this.ScreenUtility.GameHeight * 0.45, 'hole2', 0);
         this.Holes.push(hole1)
 
-        let hole2 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.5, this.ScreenUtility.GameHeight * 0.45, 0);
+        let hole2 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.5, this.ScreenUtility.GameHeight * 0.45, 'hole1', 0);
         this.Holes.push(hole2)
 
-        let hole3 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.82, this.ScreenUtility.GameHeight * 0.45, 0);
+        let hole3 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.82, this.ScreenUtility.GameHeight * 0.45, 'hole3', 0);
         this.Holes.push(hole3)
 
-        let hole4 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.18, this.ScreenUtility.GameHeight * 0.6, 0.1);
+        let hole4 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.18, this.ScreenUtility.GameHeight * 0.6, 'hole2', 0.1);
         this.Holes.push(hole4)
 
-        let hole5 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.48, this.ScreenUtility.GameHeight * 0.6, 0.1);
+        let hole5 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.48, this.ScreenUtility.GameHeight * 0.6, 'hole1', 0.1);
         this.Holes.push(hole5)
 
-        let hole6 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.77, this.ScreenUtility.GameHeight * 0.6, 0.1);
+        let hole6 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.77, this.ScreenUtility.GameHeight * 0.6, 'hole3', 0.1);
         this.Holes.push(hole6)
 
-        let hole7 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.2, this.ScreenUtility.GameHeight * 0.76, 0.2);
+        let hole7 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.2, this.ScreenUtility.GameHeight * 0.76, 'hole3', 0.2);
         this.Holes.push(hole7)
 
-        let hole8 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.5, this.ScreenUtility.GameHeight * 0.76, 0.2);
+        let hole8 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.5, this.ScreenUtility.GameHeight * 0.76, 'hole2', 0.2);
         this.Holes.push(hole8)
 
-        let hole9 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.8, this.ScreenUtility.GameHeight * 0.76, 0.2);
+        let hole9 = new Hole(this.scene, this.ScreenUtility.GameWidth * 0.8, this.ScreenUtility.GameHeight * 0.76, 'hole1', 0.2);
         this.Holes.push(hole9)
 
 

@@ -15,7 +15,9 @@ export default class LoadingGameplayController {
         this.scene.load.image('ui_scorebar', this.scene.CreatePath('/images/ui/UI_ScoreBar.png'));
         this.scene.load.image('ui_timesup', this.scene.CreatePath('/images/ui/TimesUp.png'));
 
-        this.scene.load.image('hole', this.scene.CreatePath('/images/hole.png'));
+        this.scene.load.image('hole1', this.scene.CreatePath('/images/hole1.png'));
+        this.scene.load.image('hole2', this.scene.CreatePath('/images/hole2.png'));
+        this.scene.load.image('hole3', this.scene.CreatePath('/images/hole3.png'));
         this.scene.load.spritesheet('minion', this.scene.CreatePath('/images/minion.png'), {frameWidth:1500/5, frameHeight:1200/4});
      
      }

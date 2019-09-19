@@ -5,13 +5,14 @@ import Minion from "./minion";
 export default class Hole {
 
     /** @param {Phaser.Scene} scene */
-    constructor(scene, x, y, depth){
+    constructor(scene, x, y, texture, depth){
         this.scene = scene;
         this.ScreenUtility = ScreenUtility.getInstance();
 
         this.x = x;
         this.y = y;
         this.Depth = depth;
+        this.HoleTexture = texture;
 
         this.InitData();
         this.InitView();
@@ -30,7 +31,7 @@ export default class Hole {
         
         this.Mask = this.MaskShape.createGeometryMask();
 
-        this.Hole = this.scene.add.image(this.x, this.y, 'hole');
+        this.Hole = this.scene.add.image(this.x, this.y, this.HoleTexture);
         this.Hole.displayWidth = this.ScreenUtility.GameWidth * 0.28;
         this.Hole.displayHeight = this.Hole.displayWidth * (this.Hole.height / this.Hole.width)
     }

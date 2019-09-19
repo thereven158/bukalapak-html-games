@@ -36,7 +36,9 @@ export default class TitleSceneView {
         this.GameLogo.displayHeight = this.GameLogo.displayWidth * (this.GameLogo.height/this.GameLogo.width);
         this.GameLogo.setOrigin(0.5,1);
         this.GameLogo.setAlpha(0.5);
+        let gamelogoScaleX = this.GameLogo.scaleX;
         this.GameLogo.scaleX = 0;
+
 
         this.ButtonPlay = new Button(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight  - this.Land.displayHeight * 0.7, 'btn_play');
         this.ButtonPlay.setAudioActive(false);
@@ -45,7 +47,7 @@ export default class TitleSceneView {
             targets:  this.GameLogo,
             y: this.ScreenUtility.GameHeight * 0.45,
             alpha: 1,
-            scaleX: 1,
+            scaleX: gamelogoScaleX,
             duration: 600,
             ease: Phaser.Math.Easing.Back.Out,
 		});	

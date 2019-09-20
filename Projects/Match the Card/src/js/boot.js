@@ -116,8 +116,10 @@ boot.prototype = {
 		
 		this.game.load.image('btn_main', AssetUrl+'img/vouchers/btn_main.png');
 		this.game.load.image('header_card1', AssetUrl+'img/vouchers/header_card1.png');
-		this.game.load.image('header_card2', AssetUrl+'img/vouchers/header_card2.png');		
+		this.game.load.image('header_card2', AssetUrl+'img/vouchers/header_card2.png');
 		
+		this.game.load.image('icn_close', AssetUrl+'img/vouchers/icn_close.png');		
+		this.game.load.image('icn_info', AssetUrl+'img/vouchers/icn_info.png');
 		//
 		
         game.load.start();
@@ -151,9 +153,9 @@ boot.prototype = {
 	},
     enableAnalytics(){
         if (!enableAnalytics) return;
-        if(!game.device.iOS)
-            ga ('create', androidTrackingId, 'auto');
-        else
-            ga('create', iosTrackingId, 'auto');
+        //if(!game.device.iOS)
+            //ga ('create', androidTrackingId, 'auto');
+        //else
+            //ga('create', iosTrackingId, 'auto');
     }
 }

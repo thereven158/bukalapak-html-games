@@ -17,6 +17,8 @@ let scaleRad	= 1; // scoreUI
 
 gameplay.prototype = {
 	create(){
+		this.screenUtility = new ScreenUtility(this.game, 1200, 1920, 1200/1920);
+		
 		this.voucherGameOverScreen = null;
 		
 		itemKey 		= ['Card_1','Card_2','Card_3','Card_4','Card_5','Card_6'];
@@ -132,7 +134,7 @@ gameplay.prototype = {
 				let scrPosY = (this.scoreUI.position.y + this.scoreUI.height * 3/4) - ((this.scoreUI.position.y + this.scoreUI.height)*1/30);
 				scrText 	= game.add.text(scrPosX, scrPosY, '000000', { 
 					font: "Panton-Regular", 
-					fontSize:75 * scaleRole*scaleRad, 
+					fontSize:this.screenUtility.correctSize(this.game, 60), 
 					fill: "#f5cd2c", 
 					align: "center" 
 				});
@@ -144,22 +146,22 @@ gameplay.prototype = {
 				
 				
 				timeTextClone 	= game.add.text(this.timerUI.x - (0.6 * this.timerUI.width),  this.timerUI.y + (0.7 * this.timerUI.height), '', {
-					font : "Panton-Bold",fontSize: 140 * scaleRole, fill :"#ff9d00", align:"center" 
+					font : "Panton-Bold",fontSize: this.screenUtility.correctSize(this.game, 108), fill :"#ff9d00", align:"center" 
 				});
 				timeTextClone.anchor.setTo(0.5,1);
 
 				timeText 	= game.add.text(timeTextClone.x, timeTextClone.y, lifeTime+'.', {
-					font : "Panton-Bold",fontSize: 140 * scaleRole, fill :"#ffffff", align:"center" 
+					font : "Panton-Bold",fontSize: this.screenUtility.correctSize(this.game, 108), fill :"#ffffff", align:"center" 
 				});
 				timeText.anchor.setTo(0.5,1);
 				
 				txtCommaClone 	= game.add.text(timeText.x + (0.52 *timeText.width), this.timerUI.y + (0.675 * this.timerUI.height), '', {
-					font : "Panton-Bold",fontSize: 100 * scaleRole, fill :"#ff9d00", align:"center" 
+					font : "Panton-Bold",fontSize: this.screenUtility.correctSize(this.game, 68), fill :"#ff9d00", align:"center" 
 				});
 				txtCommaClone.anchor.setTo(0,1);
 				
 				txtComma 	= game.add.text(txtCommaClone.x, txtCommaClone.y, timeCommaShow, {
-					font : "Panton-Bold",fontSize: 100 * scaleRole, fill :"#ffffff", align:"center" 
+					font : "Panton-Bold",fontSize: this.screenUtility.correctSize(this.game, 68), fill :"#ffffff", align:"center" 
 				});
 				txtComma.anchor.setTo(0,1);
 
@@ -439,7 +441,7 @@ gameplay.prototype = {
 				bnT 	= baseBonusTime;
 			}
 			this.par.push(game.add.sprite(pos1.x - (50*scaleRole), pos1.y, 'timePar'));
-			this.par.push(game.add.text(pos1.x + (50* scaleRole), pos1.y, '+' + bnT, {font: "Panton-Regular",fontSize:80* scaleRole, fill:"#ffffff"}));
+			this.par.push(game.add.text(pos1.x + (50* scaleRole), pos1.y, '+' + bnT, {font: "Panton-Regular",fontSize:this.screenUtility.correctSize(this.game, 60), fill:"#ffffff"}));
 			this.par[1].anchor.setTo(0.5);
 			scalingObject(this.par[0], 80,80,0.5, 0.5);
 			for(var i=0;i<this.par.length;i++){
@@ -448,7 +450,7 @@ gameplay.prototype = {
 					alpha : 0
 				},1000, Phaser.Easing.Linear.Out, true);
 			}
-			let plsTextS = game.add.text(pos2.x, pos2.y, '+' + bnS, {font: "Panton-Regular",fontSize:80* scaleRole,fill:"#f5cd2c"});
+			let plsTextS = game.add.text(pos2.x, pos2.y, '+' + bnS, {font: "Panton-Regular",fontSize:this.screenUtility.correctSize(this.game, 60),fill:"#f5cd2c"});
 			plsTextS.anchor.setTo(0.5);
 			let tween2 = game.add.tween(plsTextS).to({
 				y : pos2.y - (100 * scaleRole),
@@ -544,8 +546,6 @@ gameplay.prototype = {
 	endGame(isVictory = false)
 	{
 		isGameOver = true;
-		
-		console.log("AAAAAAAAAA");
 		
 		this.showVoucherGameOver(isVictory);
 		

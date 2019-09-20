@@ -10,7 +10,8 @@ VoucherController.prototype =
     create()
 	{
         this.view = new VoucherView(this.game);
-		this.voucherCode = "CODE";
+		
+		this.changeInfoVoucher();
     },
 	
 	popUpLose()
@@ -24,7 +25,7 @@ VoucherController.prototype =
 		this.view.helpButton.visible = false;
 		
 		this.view.descText.text = "Coba lagi yuk";
-		this.view.subDescText.text = "Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak.";
+		this.view.subDescText.text = "Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak.";		
 	},
 	
 	setEvents(downloadEvent=null, playAgainEvent=null, closeButtonEvent=null)
@@ -60,15 +61,19 @@ VoucherController.prototype =
 			this.view.closeButton.input.enabled = false;
 			this.view.helpButton.input.enabled = false;
 			
+			this.view.footerGroup.visible = false;
+			
 			this.displayGuide(true);
 		});
-		
+
 		this.view.closeGuideButton.onInputDown.add(() => 
 		{
 		 	this.view.downloadButton.input.enabled = true;
 			this.view.playAgainButton.input.enabled = true;
 			this.view.closeButton.input.enabled = true;
 			this.view.helpButton.input.enabled = true;
+			
+			this.view.footerGroup.visible = false;
 			
 			this.displayGuide(false);
 		});		
@@ -87,6 +92,15 @@ VoucherController.prototype =
 			this.view.footerGroup.visible = true;
 			this.copyVoucherCode(newCode);
 		});
+				
+		
+		this.view.kodePromoRightText.inputEnabled = true;
+		this.view.kodePromoRightText.events.onInputDown.add(() => 
+		{
+			this.view.footerGroup.visible = true;
+		 	this.copyVoucherCode(newCode);
+		});
+				
 	},
 	
 	copyVoucherCode(code)
@@ -101,7 +115,23 @@ VoucherController.prototype =
 		
 		document.execCommand("copy");
 		document.body.removeChild(inputCopy);
+		
+		window.getSelection().removeAllRanges();
 	}, 
+	
+	changeInfoVoucher()
+	{	
+		let voucherInfo = CONFIG.VOUCHER_INFO;
+		
+		this.view.titlePromoText.text = voucherInfo.TITLE;		
+		this.view.subtitlePromoText.text = voucherInfo.DESCRIPTION;
+		
+		this.view.masaBerlakuContentText.text = voucherInfo.MASA_BERLAKU;
+		this.view.minimumTransaksiContentText.text = voucherInfo.MINIMUM_BERLAKU;
+		this.view.kodePromoContentText.text = CONFIG.VOUCHER_CODE;
+		this.view.berlakuDiTitleContentText.text = voucherInfo.BERLAKU_DI;
+		this.view.sKContentText.text = voucherInfo.SK;
+	},
 	
 	displayGuide(isDisplay)
 	{

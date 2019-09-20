@@ -1,12 +1,16 @@
 import LoadingSceneView from './loading_scene_view';
 import ScreenUtility from '../../module/screen/screen_utility';
 import LoadingVoucherController from './subloader/loading_voucher_controller';
+import LoadingAudioController from './subloader/loading_audio_controller';
+import LoadingGameplayController from './subloader/loading_gameplay_controller';
 
 export default class LoadingSceneController extends Phaser.Scene{
     constructor(){
         super('LoadingScene');
 
         this.VoucherLoader = new LoadingVoucherController(this);
+        this.AudioLoader = new LoadingAudioController(this);
+        this.GameplayLoader = new LoadingGameplayController(this);
     }
 
     init(){
@@ -24,9 +28,9 @@ export default class LoadingSceneController extends Phaser.Scene{
             this.view.SetProgressText(value);
         },this);
         this.load.once('complete', this.OnCompleteLoad);  
-
+        
+        this.view.InitLoading();
         this.LoadResouces();
-
     }
 
     OnCompleteLoad = () =>{
@@ -42,32 +46,19 @@ export default class LoadingSceneController extends Phaser.Scene{
     update(){
 
     }
+    
 
     LoadResouces(){
         this.VoucherLoader.loadResource();
+        this.AudioLoader.loadResource();
+        this.GameplayLoader.loadResource();
 
         this.load.image('logo',this.CreatePath('/images/Logo-BL.png'));
-        this.load.image('paddle',this.CreatePath('/images/paddle.png'));
-        this.load.image('block',this.CreatePath('/images/block.png'));
-        this.load.image('ball',this.CreatePath('/images/ball.png'));
-        this.load.image('bg_black',this.CreatePath('/images/Bg_black.png'));
-        this.load.image('background',this.CreatePath('/images/Background.png'));
-        this.load.image('block-aqua',this.CreatePath('/images/Block-Aqua.png'));
-        this.load.image('block-magenta',this.CreatePath('/images/Block-Magenta.png'));
-        this.load.image('block-yellow',this.CreatePath('/images/Block-Yellow.png'));
-        this.load.image('life',this.CreatePath('/images/Life-UI.png'));
-        this.load.image('unlife',this.CreatePath('/images/Life2-UI.png'));
-        this.load.image('life-window',this.CreatePath('/images/Life-UI-Window.png'));
-        this.load.image('line-fail',this.CreatePath('/images/Line-Fail.png'));
-        this.load.image('timer-window',this.CreatePath('/images/Timer-UI-Window.png'));
-        this.load.image('top-border',this.CreatePath('/images/Top-Border.png'));
+        this.load.image('bg_loading',this.CreatePath('/images/loading/Background.png'));
+        this.load.image('loading_character',this.CreatePath('/images/loading/Character.png'));
+        this.load.image('loading_emptybar',this.CreatePath('/images/loading/Loading-Bar-Empty.png'));
+        this.load.image('loading_fullbar',this.CreatePath('/images/loading/Loading-Bar-Full.png'));
 
-        this.load.audio('main-music', this.CreatePath('/sounds/Bukalapak - Shoot the Block.mp3'));
-        this.load.audio('block-hit', this.CreatePath('/sounds/block_hit.mp3'));
-        this.load.audio('ball-bounce', this.CreatePath('/sounds/ball_bounce.mp3'));
-        this.load.audio('hp-down', this.CreatePath('/sounds/hp_down.mp3'));
-        this.load.audio('hp-out', this.CreatePath('/sounds/hp_out.mp3'));
-        this.load.audio('block-lasthit', this.CreatePath('/sounds/block_lasthit.mp3'));
     }
 
     CreatePath(path){

@@ -7,11 +7,22 @@ import VoucherView from '../../view/popup_voucher_view';
 export default class TitleSceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'TitleScene'});
-        
+        this.Bgm = null;
     }
 
-    init(){
+    init(data){
         console.log('title screen')
+
+        this.IniTitleData();
+        this.IsAfterGame = data.isAfterGame;
+        this.IsGameWin = data.isGameWin;
+        this.IsGameOver = data.isGameOver;
+    }
+
+    IniTitleData(){
+        this.IsAfterGame = false;
+        this.IsGameWin = false;
+        this.IsGameOver = false;
     }
 
     preload(){
@@ -26,21 +37,50 @@ export default class TitleSceneController extends Phaser.Scene {
 
         this.view.onClickPlay(this.OnClickPlay);
 
-        //add voucher script
-        this.VoucherView = new VoucherView(this);
-        this.VoucherView.ShowVoucherCode("7749vcx")
-        this.VoucherView.SetDescription('voucher_headerwin', 
-            "Voucher", 
-            "Yuk, Pakai Vouchernya!", 
-            "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak");
+        if(this.IsAfterGame){
+            this.VoucherView = new VoucherView(this);
 
-        this.VoucherView.OnClickClose(()=>{
-            console.log("do something when app need to be closed")
-        });
-        
-        this.VoucherView.OnClickMainLagi(this.OnClickPlay);
+            if(this.IsGameWin){
+                this.VoucherView.ShowVoucherCode(CONFIG.VOUCHER_CODE)
+                this.VoucherView.SetDescription('voucher_headerwin', 
+                    "Voucher", 
+                    "Yuk, Pakai Vouchernya!", 
+                    "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak");
+            }else if(this.IsGameOver){
+                this.VoucherView.DisableVoucherCode()
+                this.VoucherView.SetDescription('voucher_headergameover', 
+                    "GameOver", 
+                    "Coba lagi yuk", 
+                    "Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak.");
+            }
+            else{
+                this.VoucherView.DisableVoucherCode()
+                this.VoucherView.SetDescription('voucher_headertimeout', 
+                    "Timeout", 
+                    "Coba lagi yuk", 
+                    "Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak.");
+            }
+            
+            this.VoucherView.Open();
+    
+            this.VoucherView.OnClickClose(()=>{
+                
+            });
+            this.VoucherView.OnClickMainLagi(this.OnClickPlay);
 
-        this.VoucherView.Open();
+            // this.sound.play('transition');
+        }
+
+
+        if(this.Bgm == null){
+            this.Bgm = this.sound.add('menu-music',{
+                loop:-1,
+                volume: 1
+            });
+            
+        }
+        this.Bgm.play();
+
     }
 
     update(){
@@ -48,6 +88,9 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     OnClickPlay = ()=>{
-        this.scene.start('GameScene')
+        this.Bgm.stop();
+        this.game.sound.play('button-click');
+        this.scene.start('GameScene');
+        this.scene.stop();
     }
 }

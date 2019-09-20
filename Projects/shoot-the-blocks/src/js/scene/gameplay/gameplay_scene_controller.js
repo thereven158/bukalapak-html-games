@@ -10,23 +10,45 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     init(){
-        console.log('game screen')
+        console.log('game screen');
+        this.InitAudio();
+        this.InitGameData();
     }
 
     preload(){
         this.ScreenUtility = ScreenUtility.getInstance();
         this.ScreenUtility.Init(this)
+    }
 
+    InitAudio(){
+        this.blockHitSfx = this.sound.add('block-hit');
+        this.ballBounceSfx = this.sound.add('ball-bounce');
+        this.hpDownSfx = this.sound.add('hp-down');
+        this.hpOutSfx = this.sound.add('hp-out');
+        this.lastHitSfx = this.sound.add('block-lasthit');
+        this.timesUpFsx = this.sound.add('time-out');
+        if(this.Bgm == null){
+            this.Bgm = this.sound.add('main-music',{
+                loop:-1,
+                volume: 1
+            });
+            
+        }
+        this.Bgm.play();
+    }
+
+    InitGameData(){
+        this.life = 3;
+        this.score = 0;
+        this.IsGameOver = false;
+        this.isGameWin = false;
     }
 
     create(){
         this.view = new GameplaySceneView(this);
         this.view.create();
 
-        this.life = 3;
-
         this.timerEvent = this.time.delayedCall(90000, this.onEvent, [], this);
-        this.score = 0;
 
         this.physics.world.setBoundsCollision(true, true, true, false);
         this.view.paddle.setCollideWorldBounds(true);
@@ -66,15 +88,58 @@ export default class GameplaySceneController extends Phaser.Scene {
     update(){
         if (this.view.ball.y > this.ScreenUtility.GameHeight)
         {
-            this.ResetBall();
+            this.HpDown();
         }
         this.countDown = 90 - this.timerEvent.getElapsedSeconds();
         this.view.textTimer.setText('' + this.countDown.toString().substr(0, 5));
+        
+        if(this.countDown == 0){
+            this.TimesRanOut();
+        }
+    }
+
+    GameOver(){
+        this.TimesRanOut();
+        this.IsGameOver = true;
+        this.DelayCallbackEvent();
+    }
+
+    TimesRanOut(){
+        this.timesUpFsx.play();
+        this.view.TimesUp();
+        this.IsWinning = false;
+        this.DelayCallbackEvent();
+    }
+
+    Win(){
+        this.lastHitSfx.play();
+        // this.ResetLevel();
+        this.IsWinning = true;
+        this.DelayCallbackEvent();
+    }
+
+    DelayCallbackEvent(){
+        this.time.addEvent({ 
+            delay: 3000, 
+            callback: this.BackToTitle, 
+            callbackScope: this, 
+            loop: false 
+        });
+    }
+
+    BackToTitle(){
+        this.Bgm.stop();
+        this.scene.launch('TitleScene', {
+            isAfterGame: true,
+            isGameWin: this.IsWinning,
+            isGameOver: this.IsGameOver
+        });
+        this.scene.stop();
     }
 
     HitBlocks = (ball, blocks) =>
     {
-        this.view.blockHitSfx.play();
+        this.blockHitSfx.play();
         blocks.disableBody(true, true);
         this.score +=1;
 
@@ -85,14 +150,13 @@ export default class GameplaySceneController extends Phaser.Scene {
             this.view.redBlock.countActive() == 0 && 
             this.view.blueBlock.countActive() == 0)
         {
-            this.view.lastHitSfx.play();
-            this.ResetLevel();
+            this.Win();
         }
     }
 
     HitPaddle = (ball, paddle) =>
     {
-        this.view.ballBounceSfx.play();
+        this.ballBounceSfx.play();
         var diff = 0;
 
         if (ball.x < paddle.x)
@@ -140,26 +204,31 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     ResetBall(){
-        
-
         this.view.ball.setVelocity(0);
         this.view.ball.setPosition(this.view.paddle.x, 
-            this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight / 3);
+        this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight / 3);
         this.view.ball.setData('onPaddle', true);
+    }
 
+    HpDown(){
         this.life -= 1;
         if(this.life == 0){
             console.log("u lose");
-            this.view.hpOutSfx.play();
+            this.hpOutSfx.play();
             this.view.life1.setTexture('unlife');
+            this.GameOver();
+            // this.TimesRanOut();
         }
         else if(this.life == 1){
-            this.view.hpDownSfx.play();
+            this.hpDownSfx.play();
             this.view.life2.setTexture('unlife');
         }
         else if(this.life == 2){
-            this.view.hpDownSfx.play();
+            this.hpDownSfx.play();
             this.view.life3.setTexture('unlife');
         }
+
+        if(this.life > 0)
+            this.ResetBall();   
     }
 }

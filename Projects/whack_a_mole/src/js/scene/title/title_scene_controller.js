@@ -40,17 +40,23 @@ export default class TitleSceneController extends Phaser.Scene {
             this.VoucherView = new VoucherView(this);
 
             if(this.IsGameWin){
-                this.VoucherView.ShowVoucherCode(CONFIG.VOUCHER_CODE)
+                this.VoucherView.ShowVoucherCode(CONFIG.VOUCHER_CODE, {
+                    headInfo :  "Kamu dapet voucher gratis ongkir",
+                    description : "Kamu dapet voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi Bukalapak!"
+                });
+
                 this.VoucherView.SetDescription('voucher_headerwin', 
                     "Voucher", 
-                    "Yuk, Pakai Vouchernya!", 
-                    "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak");
+                    "Yuk, pakai vouchernya!", 
+                    "Kamu dapet voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi Bukalapak!"
+                );
             }else{
                 this.VoucherView.DisableVoucherCode()
                 this.VoucherView.SetDescription('voucher_headertimeout', 
                     "Timeout", 
                     "Coba lagi yuk", 
-                    "Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak.");
+                    "Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak."
+                );
             }
             
             this.VoucherView.Open();

@@ -4,7 +4,7 @@ export default class BootSceneController extends Phaser.Scene{
     constructor(){
         super({key:'BootScene'});
 
-        this.IsAudioOn = false;
+        this.IsAudioOn = true;
     }
 
     init(){
@@ -12,7 +12,7 @@ export default class BootSceneController extends Phaser.Scene{
 
         this.initAudio();
     }
-
+ 
     preload(){
         Promise.all([
             LoaderController.getInstance().init(),

@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import Button from '../module/objects/button';
 import ScreenUtility from '../module/screen/screen_utility';
+import VoucherInfoView from './popup_voucher_info_view';
 
 export default class VoucherView extends Phaser.GameObjects.Container{
 /** @param {Phaser.scene} scene */
@@ -11,10 +12,13 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         /** @type {ScreenUtility}  */
         this.ScreenUtility = scene.ScreenUtility;
         this.IsMessageActive = false;
+        this.IsVoucherCodeEnabled = false;
+        this.VoucherCode = '';
 
 		scene.add.existing(this);  
 
         this.InitView();
+        this.InitVoucherInfoView();
     }
 
     InitView(){
@@ -59,6 +63,11 @@ export default class VoucherView extends Phaser.GameObjects.Container{
 
         let innerContentStartPosY = this.TitleBox.y;
         let innerContentHeight = (this.Background.y + this.Background.displayHeight * 0.5) - innerContentStartPosY;
+
+        this.BtnInfo = new Button(this.scene, this.TitleBox.x + (contentWidth * 0.45), innerContentStartPosY + (innerContentHeight * 0.06), 'voucher_btninfo');
+        this.BtnInfo.setScale(this.ScreenUtility.ScalePercentage);
+        this.BtnInfo.OnClick(this.ClickInfo);
+        this.MainGroup.add(this.BtnInfo);
         
         this.HeadText = this.scene.add.text(this.TitleBox.x, innerContentStartPosY + (innerContentHeight * 0.175), "Yuk, Pakai Vouchernya!")
             .setFontSize(50)
@@ -75,7 +84,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
             .setFontFamily('panton')
             .setColor('#000000');
         this.DescriptionText.setOrigin(0.5,0.5);
-        this.DescriptionText.setWordWrapWidth(this.Background.displayWidth * 0.7);
+        this.DescriptionText.setWordWrapWidth(this.Background.displayWidth * 0.8);
         this.DescriptionText.setScale(this.ScreenUtility.ScalePercentage)
         this.MainGroup.add(this.DescriptionText);
 
@@ -132,8 +141,9 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         this.BtnClose.OnClick(this.Close);
         this.MainGroup.add(this.BtnClose);
         
-		this.MessageGroup = this.scene.add.container(0,0);
-        this.add(this.MessageGroup);
+        this.MessageGroup = this.scene.add.container(0,0);
+        this.MessageGroup.setDepth(1);
+        //this.add(this.MessageGroup);
 
         this.MessageBoxHeight = this.ScreenUtility.GameHeight * 0.08;
         
@@ -142,6 +152,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         this.MessageBox.fillRect(this.ScreenUtility.CenterX - (this.ScreenUtility.GameWidth * 0.5), this.ScreenUtility.GameHeight - this.MessageBoxHeight, this.ScreenUtility.GameWidth,this.MessageBoxHeight);
         this.MessageGroup.add(this.MessageBox);
 
+        
         this.MessageText = this.scene.add.text(this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight - (this.MessageBoxHeight * 0.5), "Berhasil disalin tinggal pakai vouchernya pas pembayaran")
             .setFontSize(30)
             .setAlign('center')
@@ -155,6 +166,14 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         this.MessageGroup.y = this.MessageBoxHeight;
     }
 
+    InitVoucherInfoView(){
+        this.VoucherInfoView = new VoucherInfoView(this.scene);
+        this.VoucherInfoView.Close();
+
+        this.VoucherInfoView.OnClickCopy(this.ClickCopy);
+        this.VoucherInfoView.OnClickClose(this.OnCloseInfo);
+    }
+
     SetDescription(texture, titleText, headText, description){
          this.Header.setTexture(texture);
         
@@ -163,14 +182,31 @@ export default class VoucherView extends Phaser.GameObjects.Container{
          this.DescriptionText.setText(description);
     }
 
-    ShowVoucherCode(code){
+    ShowVoucherCode(code, {headInfo, description, expireDate, minTransactionInfo, onlyAppliesInfo}){
+        this.BtnInfo.setVisible(true);
+
+        this.IsVoucherCodeEnabled = true;
         this.VoucherCodeGroup.setVisible(true);
+
         var el = document.getElementById("vouchercode");
         el.value = code;
+
+        this.VoucherCode = code;
+        this.VoucherInfoView.SetDescription(code, headInfo, description, expireDate , minTransactionInfo , onlyAppliesInfo);
     }
 
     DisableVoucherCode(){
+        this.BtnInfo.setVisible(false);
+
+        this.IsVoucherCodeEnabled = false;
         this.VoucherCodeGroup.setVisible(false);
+
+    }
+
+    ClickInfo = ()=>{
+        this.DomElement.setVisible(false);
+
+        this.VoucherInfoView.Open();
     }
 
     Open(){
@@ -189,6 +225,12 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     Close = ()=>{
         this.VoucherCodeGroup.setVisible(false);
         this.setVisible(false);
+    }
+
+    OnCloseInfo = () =>{
+        if(this.IsVoucherCodeEnabled){
+            this.DomElement.setVisible(true);
+        }
     }
 
     ShowMessage(){
@@ -251,9 +293,5 @@ export default class VoucherView extends Phaser.GameObjects.Container{
 
     OnClickMainLagi(event){
         this.BtnMainLagi.OnClick(event);
-    }
-
-    OnClickClose(event){
-        this.BtnClose.OnClick(event);
     }
 }

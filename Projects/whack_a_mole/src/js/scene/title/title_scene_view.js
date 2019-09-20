@@ -21,7 +21,7 @@ export default class TitleSceneView {
         this.Background.displayHeight =this.ScreenUtility.GameHeight;
 
         this.Light = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'title_light');
-        this.Light.displayWidth = this.ScreenUtility.GameWidth * 0.6;
+        this.Light.displayWidth = this.ScreenUtility.GameWidth * 0.45;
         this.Light.displayHeight = this.Light.displayWidth * (this.Light.height/this.Light.width);
         this.Light.setScale(this.ScreenUtility.ScalePercentage);
 

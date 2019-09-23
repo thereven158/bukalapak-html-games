@@ -109,7 +109,7 @@ export default class Minion extends Phaser.GameObjects.Sprite{
     }
 
     Hit(){
-        if(this.IsHurt && this.IsEnabled && this.IsJumping)
+        if((this.IsHurt || !this.IsEnabled) && this.IsJumping)
             return;
 
         this.IsHurt = true;
@@ -117,6 +117,7 @@ export default class Minion extends Phaser.GameObjects.Sprite{
 
         this.emit(this.EventList.OnHit);
         this.scene.sound.play("hit")
+        
     }
 
     OnceHit(event){

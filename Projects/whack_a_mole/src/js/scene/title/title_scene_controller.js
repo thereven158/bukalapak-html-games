@@ -3,6 +3,7 @@ import ScreenUtility from '../../module/screen/screen_utility';
 
 import TitleSceneView from './title_scene_view';
 import VoucherView from '../../view/popup_voucher_view';
+import VoucherData from '../../voucherdata';
 
 export default class TitleSceneController extends Phaser.Scene {
 	constructor() {
@@ -39,16 +40,22 @@ export default class TitleSceneController extends Phaser.Scene {
         if(this.IsAfterGame){
             this.VoucherView = new VoucherView(this);
 
+            let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
+
             if(this.IsGameWin){
-                this.VoucherView.ShowVoucherCode(CONFIG.VOUCHER_CODE, {
-                    headInfo :  "Kamu dapet voucher gratis ongkir",
-                    description : "Kamu dapet voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi Bukalapak!"
+                this.VoucherView.ShowVoucherCode(voucherData.Code, {
+                    titleInfo :  voucherData.InfoTitle,
+                    description : voucherData.InfoDescription,
+                    expireDate : voucherData.ExpireDate,
+                    minTransactionInfo : voucherData.MinimalTransactionInfo,
+                    onlyAppliesInfo : voucherData.OnlyAppliesInfo,
+                    termsandconditions : voucherData.TermsAndConditions,
                 });
 
                 this.VoucherView.SetDescription('voucher_headerwin', 
                     "Voucher", 
-                    "Yuk, pakai vouchernya!", 
-                    "Kamu dapet voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi Bukalapak!"
+                    voucherData.Title, 
+                    voucherData.Description
                 );
             }else{
                 this.VoucherView.DisableVoucherCode()

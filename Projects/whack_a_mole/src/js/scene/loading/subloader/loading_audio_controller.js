@@ -16,6 +16,7 @@ export default class LoadingAudioController {
         this.scene.load.audio('click', this.scene.CreatePath('/audio/ui_button_click.mp3'));
 
         this.scene.load.audio('show', this.scene.CreatePath('/audio/ingame_upak_mole.mp3'));
+        this.scene.load.audio('tap', this.scene.CreatePath('/audio/Ingame_tap.mp3'));
         this.scene.load.audio('hit', this.scene.CreatePath('/audio/ingame_whack.mp3'));
 
         this.scene.load.audio('transition', this.scene.CreatePath('/audio/ui_slide.mp3'));

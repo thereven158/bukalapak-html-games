@@ -80,8 +80,8 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         this.MainGroup.add(this.InfoGroup);
 
         let infoContentWidth = this.ScreenUtility.GameWidth * 0.9;
-        let infoContentHeight = 600;
-        let infoHeaderHeight = 130;
+        let infoContentHeight = 480;
+        let infoHeaderHeight = 110;
         let infoHeaderStartPosY = this.DescriptionText.y + (40 * 4);
         let infoContentStartPosX = this.ScreenUtility.CenterX  - (infoContentWidth * 0.5);
         let infoContentStartPosY = infoHeaderStartPosY + infoHeaderHeight;
@@ -106,11 +106,11 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
 
         let iconInfo = this.scene.add.image(GetInfoContentXPos(0.05), infoHeaderStartPosY + infoHeaderHeight * 0.5, 'voucher_icninfo')
         iconInfo.setOrigin(0,0.5);
-        iconInfo.setScale(this.ScreenUtility.ScalePercentage);
+        iconInfo.setScale(this.ScreenUtility.ScalePercentage * 0.8);
         this.InfoGroup.add(iconInfo)
 
         let infoTitleText = this.scene.add.text(iconInfo.x + (iconInfo.displayWidth * 1.5), infoHeaderStartPosY + infoHeaderHeight * 0.5, "INFO PROMO")
-            .setFontSize(60)
+            .setFontSize(45)
             .setAlign('left')
             .setFontFamily('panton_bold')
             .setColor('#ffffff');
@@ -212,9 +212,19 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         this.BtnCopy.setScale(this.ScreenUtility.ScalePercentage)
         this.BtnCopy.setInteractive();
         this.InfoGroup.add(this.BtnCopy);
+
+        this.SkText = this.scene.add.text(this.ScreenUtility.GameWidth * 0.05, (infoContentStartPosY + infoContentHeight) * 1.05, "*syarat dan ketentuan")
+            .setFontSize(25)
+            .setAlign('left')
+            .setFontFamily('panton')
+            .setColor('#000000');
+        this.SkText.setOrigin(0, 1);
+        this.SkText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.95);
+        this.SkText.setScale(this.ScreenUtility.ScalePercentage)
+        this.InfoGroup.add(this.SkText);
     }
 
-    SetDescription(voucherCode, titleText, description, expireDate, minTransactionInfo, onlyAppliesInfo){
+    SetDescription(voucherCode, titleText, description, expireDate, minTransactionInfo, onlyAppliesInfo, termandconditions){
         this.TitleText.setText(titleText);
         this.DescriptionText.setText(description);
 
@@ -229,6 +239,10 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
 
         if(onlyAppliesInfo != undefined){
             this.Info4Text.setText(onlyAppliesInfo);
+        }
+
+        if(termandconditions != undefined){
+            this.SkText.setText("*" + termandconditions);
         }
     }
 

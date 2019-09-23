@@ -19,6 +19,7 @@ export default class LoadingGameplayController {
         this.scene.load.image('hole2', this.scene.CreatePath('/images/hole2.png'));
         this.scene.load.image('hole3', this.scene.CreatePath('/images/hole3.png'));
         this.scene.load.spritesheet('minion', this.scene.CreatePath('/images/minion.png'), {frameWidth:1500/5, frameHeight:1200/4});
+        this.scene.load.spritesheet('hit_effect', this.scene.CreatePath('/images/hit_effect.png'), {frameWidth:2202/8, frameHeight:247});
      
      }
 }

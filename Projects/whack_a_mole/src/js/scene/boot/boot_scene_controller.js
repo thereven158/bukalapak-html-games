@@ -4,13 +4,15 @@ export default class BootSceneController extends Phaser.Scene{
     constructor(){
         super({key:'BootScene'});
 
-        this.IsAudioOn = true;
+        this.IsAudioOn = false;
     }
 
     init(){
         console.log('boot screen');
 
-        this.initAudio();
+        this.InitScreen();
+        this.InitAudio();
+        
     }
  
     preload(){
@@ -34,7 +36,11 @@ export default class BootSceneController extends Phaser.Scene{
         })
     }
 
-    initAudio(){
+    InitScreen(){
+        window.scrollTo(0,document.body.scrollHeight);
+    }
+
+    InitAudio(){
         this.sound.mute = !this.IsAudioOn;
 
         this.game.events.on('hidden', () =>{
@@ -52,4 +58,5 @@ export default class BootSceneController extends Phaser.Scene{
         this.IsAudioOn = on;
         this.sound.mute = !on;
     }
+
 };

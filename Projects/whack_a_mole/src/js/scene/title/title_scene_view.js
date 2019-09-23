@@ -28,7 +28,7 @@ export default class TitleSceneView {
         this.Character = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'title_character');
         this.Character.displayWidth = this.ScreenUtility.GameWidth * 0.6;
         this.Character.displayHeight = this.Character.displayWidth * (this.Character.height/this.Character.width);
-        this.Character.setScale(this.ScreenUtility.ScalePercentage);
+        this.Character.setScale(this.ScreenUtility.ScalePercentage); 
 
         this.Moon = this.scene.add.image(this.ScreenUtility.GameWidth, 0, 'bg_moon');
         this.Moon.setScale(this.ScreenUtility.ScalePercentage);
@@ -66,7 +66,7 @@ export default class TitleSceneView {
             duration: 7000,
             ease: Phaser.Math.Easing.Linear.Linear,
             loop: -1,
-		});	
+        });		
      }
 
      onClickPlay(event){

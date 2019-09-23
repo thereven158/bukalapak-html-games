@@ -3,8 +3,8 @@ import gameplaydata from '../../gameplaydata';
 
 import GameplaySceneView from './gameplay_scene_view';
 import BoardController from '../../subcontrollers/board/board_controller';
-import TargetObjectController from '../../gameobjects/hole';
 import Minion from '../../gameobjects/minion';
+import TapEffect from '../../view/tap_effect';
 
 
 export default class GameplaySceneController extends Phaser.Scene {
@@ -15,7 +15,7 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     init(){
-        console.log('game screen')
+        console.log('game screen');
 
         this.InitGameData();
         this.InitAnimationData();
@@ -34,13 +34,12 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         this.CurrentPhaseIdx = 0;
         this.CurrentPhase = gameplaydata.Phases[this.CurrentPhaseIdx];
-
-
-        
     }
 
     InitAnimationData(){
         Minion.InitAnimationData(this);
+        TapEffect.InitAnimationData(this);
+    
     }
 
     InitAudio(){
@@ -68,6 +67,14 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.Board.create();
 
         this.Board.OnTargetHit(this.OnTargetHit);
+
+        this.Tap = new TapEffect(this);
+        this.input.on('pointerdown', ()=>{
+            if(this.IsGameStarted){
+                this.sound.play('tap')
+                this.Tap.Show();
+            }
+        }, this);
 
         this.StartGame();
     }
@@ -119,7 +126,8 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         //Isgameover
         if(this.Timer <= 0){
-            this.Timer = 0;
+            if(this.Timer < 0)
+                this.Timer = 0;
 
             this.GameOver();
         }
@@ -133,6 +141,9 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.Score += gameplaydata.ScorePoint;
 
         this.IsWinning = this.TotalHit >= gameplaydata.VoucherWinPoint;
+
+        
+    
     }
 
     GameOver(){

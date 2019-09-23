@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import Button from '../module/objects/button';
 import ScreenUtility from '../module/screen/screen_utility';
 import VoucherInfoView from './popup_voucher_info_view';
+import { async } from 'q';
 
 export default class VoucherView extends Phaser.GameObjects.Container{
 /** @param {Phaser.scene} scene */
@@ -65,7 +66,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         let innerContentHeight = (this.Background.y + this.Background.displayHeight * 0.5) - innerContentStartPosY;
 
         this.BtnInfo = new Button(this.scene, this.TitleBox.x + (contentWidth * 0.45), innerContentStartPosY + (innerContentHeight * 0.06), 'voucher_btninfo');
-        this.BtnInfo.setScale(this.ScreenUtility.ScalePercentage);
+        this.BtnInfo.setScale(this.ScreenUtility.ScalePercentage * 0.95);
         this.BtnInfo.OnClick(this.ClickInfo);
         this.MainGroup.add(this.BtnInfo);
         
@@ -118,6 +119,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
                 border: none; 
                 box-shadow: none;
                 background: none;
+                color: rgba(0, 0, 0, 1);
             `;
         }
 
@@ -151,7 +153,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         this.MessageBox.fillStyle('0x00C88C', 1);
         this.MessageBox.fillRect(this.ScreenUtility.CenterX - (this.ScreenUtility.GameWidth * 0.5), this.ScreenUtility.GameHeight - this.MessageBoxHeight, this.ScreenUtility.GameWidth,this.MessageBoxHeight);
         this.MessageGroup.add(this.MessageBox);
-
+        
         
         this.MessageText = this.scene.add.text(this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight - (this.MessageBoxHeight * 0.5), "Berhasil disalin tinggal pakai vouchernya pas pembayaran")
             .setFontSize(30)
@@ -182,7 +184,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
          this.DescriptionText.setText(description);
     }
 
-    ShowVoucherCode(code, {headInfo, description, expireDate, minTransactionInfo, onlyAppliesInfo}){
+    ShowVoucherCode(code, {titleInfo, description, expireDate, minTransactionInfo, onlyAppliesInfo, termsandconditions}){
         this.BtnInfo.setVisible(true);
 
         this.IsVoucherCodeEnabled = true;
@@ -192,7 +194,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         el.value = code;
 
         this.VoucherCode = code;
-        this.VoucherInfoView.SetDescription(code, headInfo, description, expireDate , minTransactionInfo , onlyAppliesInfo);
+        this.VoucherInfoView.SetDescription(code, titleInfo, description, expireDate , minTransactionInfo , onlyAppliesInfo, termsandconditions);
     }
 
     DisableVoucherCode(){
@@ -204,7 +206,8 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     }
 
     ClickInfo = ()=>{
-        this.DomElement.setVisible(false);
+        var textElement = document.getElementById("vouchercode");
+        textElement.style.color = "rgb(0, 0, 0,0)";
 
         this.VoucherInfoView.Open();
     }
@@ -223,13 +226,15 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     }
 
     Close = ()=>{
+        
         this.VoucherCodeGroup.setVisible(false);
         this.setVisible(false);
     }
 
     OnCloseInfo = () =>{
         if(this.IsVoucherCodeEnabled){
-            this.DomElement.setVisible(true);
+            var textElement = document.getElementById("vouchercode");
+            textElement.style.color = "rgb(0, 0, 0,1)";
         }
     }
 

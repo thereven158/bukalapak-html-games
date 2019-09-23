@@ -23,7 +23,7 @@ var config = {
 		width: actualWidth,
 		height: actualHeight,
 		zoom: actualZoom
-
+		
 	},
 	scene: [
 		BootScene,

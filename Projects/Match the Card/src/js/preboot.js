@@ -3,7 +3,7 @@ preboot.prototype = {
     preload(){
         game.load.audio('bgmTitle',AssetUrl+'sound/media.io_bgm_title.mp3');
     },
-    create(){
+    create(){		
         console.log("preboot");
         game.state.start("boot");
     }

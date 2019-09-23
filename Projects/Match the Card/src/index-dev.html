@@ -7,6 +7,8 @@
 		window.URL_TYPE = 0;
 	</script>
 		
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
     <script async src='https://www.google-analytics.com/analytics.js'></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
     <script src="js/phaser.min.js"></script>
@@ -31,9 +33,6 @@
         body 
         {
 			margin: 0px 0px 0px 0px;
-			
-            overflow-x: hidden;
-            overflow-y: hidden;
         }
 
         .fontPreload {
@@ -52,13 +51,13 @@
         @font-face
         {
             font-family: "Panton-Regular";
-            src: url("../assets/font/Panton-Regular.otf") format("opentype");
+            src: url("assets/font/Panton-Regular.otf") format("opentype");
         }
 
         @font-face
         {
             font-family: "Panton-Bold";
-            src: url("../assets/font/Panton-Bold.otf") format("opentype");
+            src: url("assets/font/Panton-Bold.otf") format("opentype");
         }
         #matchPic {
           
@@ -67,13 +66,11 @@
 </head>
 <body>
     <div id="matchPic"></div>
-
+	<input class="23" id="voucher_code" type="text" value="code" disabled>
 </body>
 <script type="text/javascript">
     let poinArray = [];
 
-	var AssetUrl = "../assets/"
-	
     var game;
     var isDevelop = false;
     var showConsole = false;

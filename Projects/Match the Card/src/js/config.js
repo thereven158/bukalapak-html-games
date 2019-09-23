@@ -1,6 +1,9 @@
 var BUILD_TYPE = window.BUILD_TYPE;
 var URL_TYPE = window.URL_TYPE;
 
+var AssetUrl = "assets/"
+	
+
 if (BUILD_TYPE == null || BUILD_TYPE == undefined)
 {
 	BUILD_TYPE = 0;

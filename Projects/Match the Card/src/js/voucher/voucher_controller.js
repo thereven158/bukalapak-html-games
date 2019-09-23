@@ -7,9 +7,21 @@ var VoucherController = function(game)
 
 VoucherController.prototype = 
 {
+	
+
     create()
 	{
-        this.view = new VoucherView(this.game);
+        this.view = new VoucherView(this.game);	
+		
+//		let el = document.getElementById("voucher_code");
+//		el.value=CONFIG.VOUCHER_CODE;		
+	
+		let el = document.getElementById("voucher_code");
+		el.value = CONFIG.VOUCHER_CODE;
+		
+		//el.focus();
+		//el.select();
+		//el.setSelectionRange(0, 99999);	
 		
 		this.changeInfoVoucher();
     },
@@ -104,26 +116,40 @@ VoucherController.prototype =
 	},
 	
 	copyVoucherCode(code)
-	{
-		var inputCopy = document.createElement("input");
-		//inputCopy.style.display = "none";
-		document.body.appendChild(inputCopy);
+	{		
+		//var inputCopy = document.getElementById("voucher_code");
+				
+		//inputCopy.setSelectionRange(0, 99999); /*For mobile devices*/
 		
-		inputCopy.setAttribute("id", "copyboard");
-		document.getElementById("copyboard").value=code;
-		inputCopy.select();
+		let el = document.getElementById("voucher_code");
 		
-		document.execCommand("copy");
-		document.body.removeChild(inputCopy);
+		console.log(el);
 		
-		window.getSelection().removeAllRanges();
+		//el.style.display = "block";
+		
+		el.disabled = false;
+		
+		//el.focus();
+		el.select();
+		el.setSelectionRange(0, 99999);	
+		
+		//alert(document.execCommand("copy"));
+		window.setTimeout(() => {
+			document.execCommand("copy");
+			el.disabled = true;
+			//el.style.display = "none";
+			
+			//inputCopy.disabled = true;
+			//window.getSelection().removeAllRanges();			
+		}, 500);
+		
 	}, 
 	
 	changeInfoVoucher()
 	{	
 		let voucherInfo = CONFIG.VOUCHER_INFO;
 		
-		this.view.titlePromoText.text = voucherInfo.TITLE;		
+		this.view.titlePromoText.text = voucherInfo.TITLE;
 		this.view.subtitlePromoText.text = voucherInfo.DESCRIPTION;
 		
 		this.view.masaBerlakuContentText.text = voucherInfo.MASA_BERLAKU;

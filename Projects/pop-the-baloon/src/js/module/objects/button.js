@@ -5,6 +5,8 @@ export default class Button extends Phaser.GameObjects.Container{
     constructor(scene, x, y, texture){
         super(scene, x, y);
 
+        this.ScreenUtility = scene.ScreenUtility;
+
         this.scene = scene;
         this.IsEnabled = true;
 
@@ -40,6 +42,8 @@ export default class Button extends Phaser.GameObjects.Container{
         
         this.scene.add.existing(this);
 
+        this.Image.setScale(this.ScreenUtility.ScalePercentage)
+        
         this.EventList = {
             onClick: "onClick",
 			onPointerDown: "onPointerDown",

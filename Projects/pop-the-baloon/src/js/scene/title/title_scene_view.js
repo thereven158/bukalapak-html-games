@@ -1,7 +1,6 @@
 import TitleSceneController from "./title_scene_controller";
 
-import Button from "../../module/objects/button";
-import { runInThisContext } from "vm";
+import Button from "../../module/objects/button"; 
 
 export default class TitleSceneView {
     /** @param {TitleSceneController} scene */

@@ -2,10 +2,17 @@ import 'phaser';
 
 import LoadingSceneView from './loading_scene_view';
 import ScreenUtility from '../../module/screen/screen_utility';
+import LoadingAudioController from '../loading/subloader/loading_audio_controller';
+import LoadingGameplayController from '../loading/subloader/loading_gameplay_controller';
+import LoadingVoucherController from './subloader/loading_voucher_controller';
 
 export default class LoadingSceneController extends Phaser.Scene{
     constructor(){
         super('LoadingScene');
+
+        this.AudioLoader = new LoadingAudioController(this);
+        this.GameplayLoader = new LoadingGameplayController(this);
+        this.VoucherLoader = new LoadingVoucherController(this);
     }
 
     init(){
@@ -43,6 +50,10 @@ export default class LoadingSceneController extends Phaser.Scene{
     }
 
     LoadResouces(){
+        this.AudioLoader.loadResource();
+        this.GameplayLoader.loadResource();
+        this.VoucherLoader.loadResource();
+
         this.load.image('logo',this.CreatePath('/images/Logo-BL.png'));
         this.load.image('baloon',this.CreatePath('/images/rectangle.png'));
         this.load.image('pump',this.CreatePath('/images/pump.png'));

@@ -12,22 +12,28 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     init(data){
-        console.log('title screen')
+        //console.log('title screen')
 
-        this.IniTitleData();
+        this.InitTitle();
+        this.InitTitleData();
         this.IsAfterGame = data.isAfterGame;
         this.IsGameWin = data.isGameWin;
         
     }
 
-    IniTitleData(){
+    InitTitle(){
+        ScreenUtility.ResetGameScreen();
+        this.ScreenUtility = ScreenUtility.getInstance();
+    }
+
+    InitTitleData(){
         this.IsAfterGame = false;
         this.IsGameWin = false;
     }
 
     preload(){
         this.ScreenUtility = ScreenUtility.getInstance();
-        this.ScreenUtility.Init(this)
+
 
     }
 
@@ -76,7 +82,6 @@ export default class TitleSceneController extends Phaser.Scene {
             this.sound.play('transition');
         }
 
-       
         if(this.Bgm == null){
             this.Bgm = this.sound.add('bgm_title',{
                 loop:-1,

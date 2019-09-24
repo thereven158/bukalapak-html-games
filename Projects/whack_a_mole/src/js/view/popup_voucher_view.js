@@ -66,7 +66,8 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         let innerContentHeight = (this.Background.y + this.Background.displayHeight * 0.5) - innerContentStartPosY;
 
         this.BtnInfo = new Button(this.scene, this.TitleBox.x + (contentWidth * 0.45), innerContentStartPosY + (innerContentHeight * 0.06), 'voucher_btninfo');
-        this.BtnInfo.setScale(this.ScreenUtility.ScalePercentage * 0.95);
+        this.BtnInfo.Image.displayWidth = this.Background.displayWidth * 0.1;
+        this.BtnInfo.Image.displayHeight = this.BtnInfo.Image.displayWidth * (this.BtnInfo.Image.height /this.BtnInfo.Image.width);
         this.BtnInfo.OnClick(this.ClickInfo);
         this.MainGroup.add(this.BtnInfo);
         
@@ -93,7 +94,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         this.MainGroup.add(this.VoucherCodeGroup);
 
         this.VoucherBox = this.scene.add.image(this.ScreenUtility.CenterX, innerContentStartPosY + (innerContentHeight * 0.5), 'voucher_copyBox');
-        this.VoucherBox.displayWidth = this.Background.displayWidth * 0.75;
+        this.VoucherBox.displayWidth = this.Background.displayWidth * 0.725;
         this.VoucherBox.displayHeight = this.VoucherBox.displayWidth * (this.VoucherBox.height / this.VoucherBox.width);
         this.VoucherCodeGroup.add(this.VoucherBox);
         
@@ -106,11 +107,14 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         let el = document.getElementById("vouchercode");
         if(el == undefined){
             el = document.createElement('input');
-            el.id = "vouchercode"
-            el.value = 'CODE'
-            el.type = 'text'
-            
-            el.disabled = true
+            el.id = "vouchercode";
+            el.name = "vouchercode";
+            el.value = 'CODE';
+            el.type = 'text';
+            //el.contentEditable = true;
+            //el.readonly = true;
+            el.disabled = true;
+
             el.style = `
                 font-size: 40px;
                 color: black;
@@ -121,14 +125,17 @@ export default class VoucherView extends Phaser.GameObjects.Container{
                 background: none;
                 color: rgba(0, 0, 0, 1);
             `;
+            document.body.appendChild(el);
         }
 
         this.DomElement = this.scene.add.dom(this.ScreenUtility.CenterX - (this.VoucherBox.displayWidth * 0.1), innerContentStartPosY + (innerContentHeight * 0.5), el);
         this.DomElement.setScale(this.ScreenUtility.ScalePercentage)
         this.VoucherCodeGroup.add(this.DomElement);
 
+        this.TextElement = document.getElementById("vouchercode");
+
         this.BtnDownload = new Button(this.scene, this.ScreenUtility.CenterX, innerContentStartPosY + (innerContentHeight * 0.725), 'voucher_btnDownload');
-        this.BtnDownload.Image.displayWidth = this.Background.displayWidth * 0.675;
+        this.BtnDownload.Image.displayWidth = this.Background.displayWidth * 0.625;
         this.BtnDownload.Image.displayHeight = this.BtnDownload.Image.displayWidth * (this.BtnDownload.Image.height / this.BtnDownload.Image.width);
         this.BtnDownload.OnClick(this.ClickDownload);
         this.MainGroup.add(this.BtnDownload);
@@ -206,8 +213,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     }
 
     ClickInfo = ()=>{
-        var textElement = document.getElementById("vouchercode");
-        textElement.style.color = "rgb(0, 0, 0,0)";
+        this.TextElement.style.color = "rgba(0, 0, 0 ,0)";
 
         this.VoucherInfoView.Open();
     }
@@ -226,15 +232,13 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     }
 
     Close = ()=>{
-        
         this.VoucherCodeGroup.setVisible(false);
         this.setVisible(false);
     }
 
     OnCloseInfo = () =>{
         if(this.IsVoucherCodeEnabled){
-            var textElement = document.getElementById("vouchercode");
-            textElement.style.color = "rgb(0, 0, 0,1)";
+            this.TextElement.style.color = "rgba(0, 0, 1)";
         }
     }
 
@@ -272,20 +276,44 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     }
 
     ClickCopy = ()=>{
-        var textElement = document.getElementById("vouchercode");
-        textElement.disabled = false
-        textElement.select();
-        textElement.setSelectionRange(0, 99999); /*For mobile devices*/
+        let success = false;
+        try {
+            // 1) Copy text
+            navigator.clipboard.writeText(this.VoucherCode);
+            success = true;
+            
+            // 2) Catch errors
+          } catch (err) {
+            success = false;
+        }
+        
+        if(!success){
+            this.TextElement.disabled = false;
+            document.body.focus();
+            this.TextElement.focus();
+            this.TextElement.select();
+            this.TextElement.setSelectionRange(0, 99999); /*For mobile devices*/
+    
+            success = document.execCommand('copy');
+            this.TextElement.disabled = true
+        }
 
-        document.execCommand("copy");
-        textElement.disabled = true
-        window.getSelection().removeAllRanges();
+        if ( document.selection ) {
+            document.selection.empty();
+            
+        } else  {
+            window.getSelection().removeAllRanges();
+        }
+        
+        //window.focus();
 
-        this.ShowMessage();
+        if(success){
+            this.ShowMessage();
+        }
     }
 
     ClickDownload = ()=>{
-        window.history.back();
+        window.location.replace(window.DOWNLOAD_LINK);
     }
     
     OnClickClose(event){

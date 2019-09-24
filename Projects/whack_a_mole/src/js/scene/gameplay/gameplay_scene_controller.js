@@ -15,11 +15,17 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     init(){
-        console.log('game screen');
-
+        //console.log('game screen');
+        this.InitGame();
         this.InitGameData();
         this.InitAnimationData();
         this.InitAudio();
+
+    }
+
+    InitGame(){
+        ScreenUtility.ResetGameScreen();
+        this.ScreenUtility = ScreenUtility.getInstance();
     }
 
     InitGameData(){
@@ -52,11 +58,6 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
 
         this.Bgm.play();
-    }
-
-    preload(){
-        this.ScreenUtility = ScreenUtility.getInstance();
-        this.ScreenUtility.Init(this)
     }
 
     create(){
@@ -125,11 +126,11 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
 
         //Isgameover
-        if(this.Timer <= 0){
-            if(this.Timer < 0)
-                this.Timer = 0;
-
-            this.GameOver();
+        if(this.Timer <= 0){       
+            this.Timer = 0;
+            this.Timesout();
+        }else if(this.TotalHit >= gameplaydata.VoucherWinPoint){
+            this.Win();
         }
     }
 
@@ -142,15 +143,11 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         this.IsWinning = this.TotalHit >= gameplaydata.VoucherWinPoint;
 
-        
-    
     }
 
-    GameOver(){
-        this.IsGameStarted = false;
-        this.Board.Disable();
-        
+    Timesout(){
         this.view.TimesUp();
+        this.EndGame();
 
         this.time.addEvent({ 
             delay: 3000, 
@@ -160,6 +157,19 @@ export default class GameplaySceneController extends Phaser.Scene {
         });
 
         this.game.sound.play('timeout');
+    }
+
+    Win(){
+        this.EndGame();
+        this.BackToTitle();
+    }
+
+    EndGame(){
+        this.IsGameStarted = false;
+        this.Board.Disable();
+        
+
+        
         //this.BackToTitle();
     }
 

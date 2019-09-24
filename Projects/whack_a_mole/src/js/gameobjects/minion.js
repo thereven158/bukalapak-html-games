@@ -14,6 +14,7 @@ export default class Minion extends Phaser.GameObjects.Sprite{
         
         this.scene = scene;
         this.ScreenUtility = ScreenUtility.getInstance();
+        this.Animations = Animations;
 
         this.InitImage();
         this.InitData();
@@ -56,7 +57,7 @@ export default class Minion extends Phaser.GameObjects.Sprite{
     }
 
     GetGravity(){
-        return this.displayHeight * (this.IsHurt ?  0.003: 0.0018);
+        return this.displayHeight * (this.IsHurt ?  0.005: 0.0018);
     }
 
     preUpdate(time, delta){
@@ -70,7 +71,7 @@ export default class Minion extends Phaser.GameObjects.Sprite{
                 this.IsFalling = true;
 
                 if(!this.IsHurt){
-                    this.anims.play(Animations.Falling);
+                    this.anims.play(this.Animations.Falling);
                 }
             }
 
@@ -92,7 +93,7 @@ export default class Minion extends Phaser.GameObjects.Sprite{
 
         this.JumpSpeed = this.displayHeight * 0.07;
 
-        this.anims.play(Animations.Jump,false,0);
+        this.anims.play(this.Animations.Jump,false,0);
         this.anims.resume();
         
         this.scene.sound.play("show")
@@ -113,7 +114,7 @@ export default class Minion extends Phaser.GameObjects.Sprite{
             return;
 
         this.IsHurt = true;
-        this.play(Animations.FallingHurt);
+        this.play(this.Animations.FallingHurt);
 
         this.emit(this.EventList.OnHit);
         this.scene.sound.play("hit")

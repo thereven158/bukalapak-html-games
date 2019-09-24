@@ -14,6 +14,7 @@ export default class TapEffect extends Phaser.GameObjects.Container{
         this.scene = scene;
         /** @type {ScreenUtility}  */
         this.ScreenUtility = ScreenUtility.getInstance();
+        this.AnimationList = AnimationList;
 
         scene.add.existing(this);  
 
@@ -45,7 +46,7 @@ export default class TapEffect extends Phaser.GameObjects.Container{
         let x = this.scene.game.input.activePointer.x;
         let y = this.scene.game.input.activePointer.y;
         this.MainEffect.setPosition(x,y);
-        this.MainEffect.anims.play(AnimationList.Tap);
+        this.MainEffect.anims.play(this.AnimationList.Tap);
 
         this.setVisible(true);
     }

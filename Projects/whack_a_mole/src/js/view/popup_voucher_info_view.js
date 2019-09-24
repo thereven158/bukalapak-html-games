@@ -9,7 +9,7 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
 
         this.scene = scene;
         /** @type {ScreenUtility}  */
-        this.ScreenUtility = scene.ScreenUtility;
+        this.ScreenUtility = ScreenUtility.getInstance();
 
 		scene.add.existing(this);  
 
@@ -31,7 +31,7 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         whiteGround.fillRect(0,0, this.ScreenUtility.GameWidth,this.ScreenUtility.GameHeight);
         this.MainGroup.add(whiteGround);
 
-        let headerHeight = 150;
+        let headerHeight = 130;
         let contentHeight = this.ScreenUtility.GameHeight - headerHeight;
         function GetContentYPos(percentage){
             return headerHeight + (contentHeight * percentage);
@@ -63,16 +63,16 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
             .setColor('#000000');
         this.TitleText.setOrigin(0, 0);
         this.TitleText.setScale(this.ScreenUtility.ScalePercentage)
-        this.TitleText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.95);
+        this.TitleText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.925);
         this.MainGroup.add(this.TitleText);
 
-        this.DescriptionText = this.scene.add.text(this.TitleText.x, this.TitleText.y + (55 * 3) , "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak")
+        this.DescriptionText = this.scene.add.text(this.TitleText.x, this.TitleText.y + (55 * 2.5) , "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak")
             .setFontSize(40)
             .setAlign('left')
             .setFontFamily('panton')
             .setColor('#000000');
         this.DescriptionText.setOrigin(0,0);
-        this.DescriptionText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.95);
+        this.DescriptionText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.925);
         this.DescriptionText.setScale(this.ScreenUtility.ScalePercentage)
         this.MainGroup.add(this.DescriptionText);
 
@@ -82,7 +82,7 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         let infoContentWidth = this.ScreenUtility.GameWidth * 0.9;
         let infoContentHeight = 480;
         let infoHeaderHeight = 110;
-        let infoHeaderStartPosY = this.DescriptionText.y + (40 * 4);
+        let infoHeaderStartPosY = this.DescriptionText.y + (40 * 3);
         let infoContentStartPosX = this.ScreenUtility.CenterX  - (infoContentWidth * 0.5);
         let infoContentStartPosY = infoHeaderStartPosY + infoHeaderHeight;
         function GetInfoContentXPos(percentage){
@@ -213,13 +213,13 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         this.BtnCopy.setInteractive();
         this.InfoGroup.add(this.BtnCopy);
 
-        this.SkText = this.scene.add.text(this.ScreenUtility.GameWidth * 0.05, (infoContentStartPosY + infoContentHeight) * 1.05, "*syarat dan ketentuan")
+        this.SkText = this.scene.add.text(this.ScreenUtility.GameWidth * 0.05, (infoContentStartPosY + infoContentHeight) * 1.025, "*syarat dan ketentuan")
             .setFontSize(25)
             .setAlign('left')
             .setFontFamily('panton')
             .setColor('#000000');
-        this.SkText.setOrigin(0, 1);
-        this.SkText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.95);
+        this.SkText.setOrigin(0, 0);
+        this.SkText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.925);
         this.SkText.setScale(this.ScreenUtility.ScalePercentage)
         this.InfoGroup.add(this.SkText);
     }
@@ -248,6 +248,8 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
 
     Open(){
         this.setVisible(true);
+
+        ScreenUtility.ResetGameScreen();
     }
 
     Close = ()=>{
@@ -259,6 +261,6 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
     }
 
     OnClickCopy(event){
-        this.BtnCopy.on('pointerdown', event, this);
+        this.BtnCopy.on('pointerup', event, this);
     }
 }

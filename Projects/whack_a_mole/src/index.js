@@ -14,7 +14,7 @@ if(isLandscape){
 }
 
 var config = {
-	type: Phaser.CANVAS,
+	type: Phaser.AUTO,
 	canvas: document.getElementById('game'),
 	parent: 'content',
 	scale: {
@@ -37,7 +37,8 @@ var config = {
 	render: {
 		antiAlias: false,
 		pixelArt: false,
-		roundPixels: false
+		roundPixels: false,
+		powerPreference: 'high-performance'
 	},
 	autoRound: false
 };

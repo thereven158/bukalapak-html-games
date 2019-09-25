@@ -13,15 +13,19 @@ VoucherController.prototype =
 	{
         this.view = new VoucherView(this.game);	
 		
-//		let el = document.getElementById("voucher_code");
-//		el.value=CONFIG.VOUCHER_CODE;		
-	
 		let el = document.getElementById("voucher_code");
-		el.value = CONFIG.VOUCHER_CODE;
 		
-		//el.focus();
-		//el.select();
-		//el.setSelectionRange(0, 99999);	
+		if (el == null)
+		{
+			el = document.createElement("input");
+			el.setAttribute("id", "voucher_code");
+			el.disabled = true;
+			el.style.visibility = "hidden";
+			el.style.display = "none";
+			
+			document.body.appendChild(el);
+		}
+		
 		
 		this.changeInfoVoucher();
     },
@@ -99,7 +103,7 @@ VoucherController.prototype =
 		
 		this.view.copyText.text = newCode;
 		
-		this.view.copyButton.onInputDown.add(() => 
+		this.view.copyButton.onInputUp.add(() => 
 		{
 			this.view.footerGroup.visible = true;
 			this.copyVoucherCode(newCode);
@@ -107,7 +111,7 @@ VoucherController.prototype =
 				
 		
 		this.view.kodePromoRightText.inputEnabled = true;
-		this.view.kodePromoRightText.events.onInputDown.add(() => 
+		this.view.kodePromoRightText.events.onInputUp.add(() => 
 		{
 			this.view.footerGroup.visible = true;
 		 	this.copyVoucherCode(newCode);
@@ -117,32 +121,29 @@ VoucherController.prototype =
 	
 	copyVoucherCode(code)
 	{		
-		//var inputCopy = document.getElementById("voucher_code");
-				
-		//inputCopy.setSelectionRange(0, 99999); /*For mobile devices*/
-		
-		let el = document.getElementById("voucher_code");
-		
-		console.log(el);
-		
-		//el.style.display = "block";
+		var el = document.getElementById("voucher_code");
+		el.style.visibility = "visible";
+		el.style.display = "inline";
 		
 		el.disabled = false;
+		el.contentEditable = true;
+    	el.readOnly = false;		
+		el.value = code;
 		
-		//el.focus();
 		el.select();
-		el.setSelectionRange(0, 99999);	
+		el.setSelectionRange(0, 99999);
 		
-		//alert(document.execCommand("copy"));
-		window.setTimeout(() => {
-			document.execCommand("copy");
-			el.disabled = true;
-			//el.style.display = "none";
-			
-			//inputCopy.disabled = true;
-			//window.getSelection().removeAllRanges();			
-		}, 500);
+		document.execCommand('copy');	
 		
+		window.getSelection().removeAllRanges();
+		el.blur();
+				
+		el.disabled = true;
+		el.contentEditable = false;
+		el.readOnly = true;			
+		
+		el.style.visibility = "hidden";
+		el.style.display = "none";
 	}, 
 	
 	changeInfoVoucher()

@@ -180,11 +180,23 @@ gameplay.prototype = {
 				this.sfxBgSound.loopFull(0.6);
 
 				isInit = false;
+				
+						
 			}, 250);
 		}catch(err){
 			trackEvent('exception', err.message);
 		}
+		
+		this.resize();
 	},
+	resize()
+	{
+		/*
+		this.titleText.anchor.set(0.5, 0);0
+		this.scaler.proportionalScale(this.titleText, "x", this.game, 0.7);
+		this.titleText.position.set(this.game.width * 0.5, this.game.height*0.05);
+		*/
+	},	
 	timerRunOutAnim(isFade, isPlaying){
 		try{
 
@@ -220,12 +232,17 @@ gameplay.prototype = {
 					
 					let pos 		= this.place(row,col);
 					let item 		= game.add.sprite(pos.x, pos.y, 'block');
+
+					
 					item.inputEnabled = true;
 					item.events.onInputDown.add(()=>this.clicked(item), this);
 					item.myKey 		= iKey;
 					item.row 		= row;
 					item.col 		= col;
+					
 					scalingObject(item, 250,250, 0.5, 0.5);
+					//this.scaler.proportionalScale(item, "x", this.game, 0.1);	
+					
 					this.closeItem(item, false);
 					
 					

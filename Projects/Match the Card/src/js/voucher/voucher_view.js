@@ -87,12 +87,12 @@ VoucherView.prototype =
 	{
 		this.copyNotifPanel.anchor.set(0.5, 1);
 		//this.screenUtility.proportionalScale(this.copyNotifPanel, "x", this.game, 1, -1, false);
-        this.copyNotifPanel.position.set(this.game.width * 0.5, this.game.height * 1);
+        this.copyNotifPanel.position.set(Math.floor(this.game.width * 0.5), Math.floor(this.game.height * 1));
 						
 		this.copyNotifText.anchor.set(0, 0.5);
 		this.copyNotifText.wordWrapWidth = this.copyNotifPanel.width * 0.9;
 		this.copyNotifText.fontSize = this.screenUtility.correctSize(this.game, 24);
-		this.copyNotifText.position.set(this.copyNotifPanel.x - this.copyNotifPanel.width * 0.45, this.copyNotifPanel.y - this.copyNotifPanel.height * 0.5);	
+		this.copyNotifText.position.set(Math.floor(this.copyNotifPanel.x - this.copyNotifPanel.width * 0.45), Math.floor(this.copyNotifPanel.y - this.copyNotifPanel.height * 0.5));	
 	},
 	
 	createMainHUD()
@@ -110,7 +110,7 @@ VoucherView.prototype =
 		
 		this.descText = this.game.add.text(0, 0, "Yuk, pakai vouchernya!", {font: "Panton-Bold", fill: "#000000", align: "center", wordWrap:true})
 		
-		this.subDescText = this.game.add.text(0, 0, "Kamu dapat voucher gratis ongkir sampai Rp 20.000 buat belanja di aplikasi Bukalapak!", {font: "Panton-Regular", fill: "#000000", align: "center", wordWrap:true})
+		this.subDescText = this.game.add.text(0, 0, CONFIG.DESC_TEXT, {font: "Panton-Regular", fill: "#000000", align: "center", wordWrap:true})
 						
 		this.downloadButton = this.game.add.button(0, 0, "btn_download");
 		this.playAgainButton = this.game.add.button(0, 0, "btn_main");		
@@ -135,49 +135,49 @@ VoucherView.prototype =
 	{
 		this.whitePanel.anchor.set(0.5, 0.5);
 		this.screenUtility.proportionalScaleByBound(this.whitePanel, "x", 0.9, 0.8, 0, this.game.width, 0, this.game.height);
-        this.whitePanel.position.set(this.game.width * 0.5, this.game.height * 0.5);	
+        this.whitePanel.position.set(Math.floor(this.game.width * 0.5), Math.floor(this.game.height * 0.5));	
 		
 		this.minionPanelWin.anchor.set(0.5, 0);
 		this.screenUtility.proportionalScale(this.minionPanelWin, "x", this.whitePanel, 1.005);
-        this.minionPanelWin.position.set(this.whitePanel.x, this.whitePanel.y - this.whitePanel.height * 0.5);
+        this.minionPanelWin.position.set(Math.floor(this.whitePanel.x), Math.floor(this.whitePanel.y - this.whitePanel.height * 0.5));
 		
 		this.minionPanelLose.anchor.set(0.5, 0);
 		this.screenUtility.proportionalScale(this.minionPanelLose, "x", this.whitePanel, 1.005);
-        this.minionPanelLose.position.set(this.whitePanel.x, this.whitePanel.y - this.whitePanel.height * 0.5);			
+        this.minionPanelLose.position.set(Math.floor(this.whitePanel.x), Math.floor(this.whitePanel.y - this.whitePanel.height * 0.5));			
 		
 		this.titlePanel.anchor.set(0.5, 0.5);
 		this.screenUtility.proportionalScale(this.titlePanel, "x", this.whitePanel, 0.45);
-        this.titlePanel.position.set(this.whitePanel.x, this.minionPanelWin.y + this.minionPanelWin.height);			
+        this.titlePanel.position.set(Math.floor(this.whitePanel.x), Math.floor(this.minionPanelWin.y + this.minionPanelWin.height));			
 		
 		this.titleText.anchor.set(0.5, 0.5);
 		this.titleText.fontSize = this.screenUtility.correctSize(this.game, 48);
-		this.titleText.position.set(this.titlePanel.x, this.titlePanel.y);			
-				
+		this.titleText.position.set(Math.floor(this.titlePanel.x), Math.floor(this.titlePanel.y));			
+		
 		this.descText.anchor.set(0.5, 0);
 		this.descText.wordWrapWidth = this.whitePanel.width * 0.9;
 		this.descText.fontSize = this.screenUtility.correctSize(this.game, 48);
-		this.descText.position.set(this.titlePanel.x, this.titlePanel.y + this.titlePanel.height * 0.75);			
+		this.descText.position.set(Math.floor(this.titlePanel.x), Math.floor(this.titlePanel.y + this.titlePanel.height * 0.75));			
 				
 		this.subDescText.anchor.set(0.5, 0);
 		this.subDescText.wordWrapWidth = this.whitePanel.width * 0.8;
 		this.subDescText.fontSize = this.screenUtility.correctSize(this.game, 36);
-		this.subDescText.position.set(this.titlePanel.x, this.descText.y + this.descText.height * 1.25);			
-	
+		this.subDescText.position.set(Math.floor(this.titlePanel.x), Math.floor(this.descText.y + this.descText.height * 1.25));			
+		
 		this.playAgainButton.anchor.set(0.5, 1);
 		this.screenUtility.proportionalScale(this.playAgainButton, "x", this.whitePanel, 0.9);
-        this.playAgainButton.position.set(this.whitePanel.x, this.whitePanel.y + this.whitePanel.height * 0.465);		
+        this.playAgainButton.position.set(Math.floor(this.whitePanel.x), Math.floor(this.whitePanel.y + this.whitePanel.height * 0.465));		
 		
 		this.downloadButton.anchor.set(0.5, 1);
 		this.screenUtility.proportionalScale(this.downloadButton, "x", this.whitePanel, 0.9);
-        this.downloadButton.position.set(this.playAgainButton.x, this.playAgainButton.y - this.playAgainButton.height * 1.1);
+        this.downloadButton.position.set(Math.floor(this.playAgainButton.x), Math.floor(this.playAgainButton.y - this.playAgainButton.height * 1.1));
 		
 		this.copyButton.anchor.set(0.5, 1);
 		this.screenUtility.proportionalScale(this.copyButton, "x", this.whitePanel, 0.9);
-        this.copyButton.position.set(this.downloadButton.x, this.downloadButton.y - this.downloadButton.height * 1.125);
+        this.copyButton.position.set(Math.floor(this.downloadButton.x), Math.floor(this.downloadButton.y - this.downloadButton.height * 1.125));
 		
 		this.copyText.anchor.set(0, 0.5);
 		this.copyText.fontSize = this.screenUtility.correctSize(this.game, 36);
-		this.copyText.position.set(this.copyButton.x - this.copyButton.width * 0.45, this.copyButton.y - this.copyButton.height * 0.48);	
+		this.copyText.position.set(Math.floor(this.copyButton.x - this.copyButton.width * 0.45), Math.floor(this.copyButton.y - this.copyButton.height * 0.48));	
 	},
 	
 	createGuideHUD()
@@ -229,10 +229,10 @@ VoucherView.prototype =
 		this.whiteGuidePanel.anchor.set(0.5, 0.5);
 		//this.screenUtility.proportionalScaleByBound(this.whiteGuidePanel, "x", 0.9, 0.8, 0, this.game.width, 0, this.game.height);
 		//this.screenUtility.proportionalScale(this.whiteGuidePanel, "y", this.game, 1.2, -1, false);
-        this.whiteGuidePanel.position.set(this.game.width * 0.5, this.game.height * 0.5);	
+        this.whiteGuidePanel.position.set(Math.floor(this.game.width * 0.5), Math.floor(this.game.height * 0.5));	
 		
 		this.whiteGuideTopPanel.anchor.set(0.5, 0);
-        this.whiteGuideTopPanel.position.set(this.game.width * 0.5, this.game.height * 0);			
+        this.whiteGuideTopPanel.position.set(Math.floor(this.game.width * 0.5), Math.floor(this.game.height * 0));			
 		
 		//this.infoPromoText.anchor.set(0, 0.5);
 		this.infoPromoText.fontSize = this.screenUtility.correctSize(this.game, 28);
@@ -240,29 +240,30 @@ VoucherView.prototype =
 		
 		this.closeGuideButton.anchor.set(1, 0.5);
 		this.screenUtility.proportionalScale(this.closeGuideButton, "x", this.game, 0.05);
-        this.closeGuideButton.position.set(this.whiteGuidePanel.x + this.whiteGuidePanel.width * 0.45, this.whiteGuideTopPanel.y + this.whiteGuideTopPanel.height * 0.5);
+        this.closeGuideButton.position.set(Math.floor(this.whiteGuidePanel.x + this.whiteGuidePanel.width * 0.45), Math.floor(this.whiteGuideTopPanel.y + this.whiteGuideTopPanel.height * 0.5));
 						
 		this.titlePromoText.anchor.set(0, 0.5);
 		this.titlePromoText.wordWrapWidth = this.whitePanel.width * 0.9;
 		this.titlePromoText.fontSize = this.screenUtility.correctSize(this.game, 28);
-		this.titlePromoText.position.set(this.whiteGuidePanel.x - this.whiteGuidePanel.width * 0.45, this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.35);				
+		this.titlePromoText.position.set(Math.floor(this.whiteGuidePanel.x - this.whiteGuidePanel.width * 0.45), Math.floor(this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.35));				
 		
 		this.subtitlePromoText.anchor.set(0, 0.5);
 		this.subtitlePromoText.wordWrapWidth = this.whitePanel.width * 0.9;
 		this.subtitlePromoText.fontSize = this.screenUtility.correctSize(this.game, 24);
-		this.subtitlePromoText.position.set(this.whiteGuidePanel.x - this.whiteGuidePanel.width * 0.45, this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.275);
+		this.subtitlePromoText.position.set(Math.floor(this.whiteGuidePanel.x - this.whiteGuidePanel.width * 0.45), Math.floor(this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.275));
 		
 		this.resizeInfoPanelHUD();
 				
 		this.sKText.anchor.set(0, 0.5);
 		this.sKText.fontSize = this.screenUtility.correctSize(this.game, 28);
-		this.sKText.position.set(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 1.1);		
+		this.sKText.position.set(Math.floor(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 1.1));		
 		this.sKText.visible = false;
 		
 		this.sKContentText.anchor.set(0, 0.5);
 		this.sKContentText.wordWrapWidth = this.infoPromoContentPanel.width * 1.05;
 		this.sKContentText.fontSize = this.screenUtility.correctSize(this.game, 24);
 				
+		this.subtitlePromoText.wordWrapWidth = this.infoPromoContentPanel.width * 1.05;
 	},
 	
 	createInfoPanelHUD()
@@ -323,29 +324,29 @@ VoucherView.prototype =
 	{
 		this.infoPromoTitlePanel.anchor.set(0.5, 0);
 		this.screenUtility.proportionalScale(this.infoPromoTitlePanel, "x", this.whiteGuidePanel, 0.8);
-        this.infoPromoTitlePanel.position.set(this.whiteGuidePanel.x, this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.225);
+        this.infoPromoTitlePanel.position.set(Math.floor(this.whiteGuidePanel.x), Math.floor(this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.225));
 		
 		this.infoPromoContentPanel.anchor.set(0.5, 0);
 		this.screenUtility.proportionalScale(this.infoPromoContentPanel, "x", this.whiteGuidePanel, 0.8);
-        this.infoPromoContentPanel.position.set(this.infoPromoTitlePanel.x, this.infoPromoTitlePanel.y + this.infoPromoTitlePanel.height);	
+        this.infoPromoContentPanel.position.set(Math.floor(this.infoPromoTitlePanel.x), Math.floor(this.infoPromoTitlePanel.y + this.infoPromoTitlePanel.height));	
 		
 		//		
-		this.infoPromoText.position.set(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.5, this.whiteGuideTopPanel.y + this.whiteGuideTopPanel.height * 0.375);
-		this.titlePromoText.position.set(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.5, this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.35);				
-		this.subtitlePromoText.position.set(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.5, this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.275);
-		this.sKContentText.position.set(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.5, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 1.15);
+		this.infoPromoText.position.set(Math.floor(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.5), Math.floor(this.whiteGuideTopPanel.y + this.whiteGuideTopPanel.height * 0.375));
+		this.titlePromoText.position.set(Math.floor(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.5), Math.floor(this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.35));				
+		this.subtitlePromoText.position.set(Math.floor(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.5), Math.floor(this.whiteGuidePanel.y - this.whiteGuidePanel.height * 0.275));
+		this.sKContentText.position.set(Math.floor(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.5), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 1.15));
 		//
 		
 		//
 		
 		this.infoIcon.anchor.set(0, 0.5);
 		this.screenUtility.proportionalScale(this.infoIcon, "y", this.infoPromoTitlePanel, 0.35);
-        this.infoIcon.position.set(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.45, this.infoPromoTitlePanel.y + this.infoPromoTitlePanel.height * 0.5);
+        this.infoIcon.position.set(Math.floor(this.infoPromoTitlePanel.x - this.infoPromoTitlePanel.width * 0.45), Math.floor(this.infoPromoTitlePanel.y + this.infoPromoTitlePanel.height * 0.5));
 		
 		this.infoPromoTitleText.anchor.set(0, 0.5);
 		this.infoPromoTitleText.wordWrapWidth = this.whitePanel.width * 0.9;
 		this.infoPromoTitleText.fontSize = this.screenUtility.correctSize(this.game, 36);
-		this.infoPromoTitleText.position.set(this.infoIcon.x + this.infoIcon.width + this.infoPromoTitlePanel.width * 0.05, this.infoIcon.y + this.infoIcon.height * 0.125);
+		this.infoPromoTitleText.position.set(Math.floor(this.infoIcon.x + this.infoIcon.width + this.infoPromoTitlePanel.width * 0.05), Math.floor(this.infoIcon.y + this.infoIcon.height * 0.125));
 		
 		//
 		
@@ -353,42 +354,41 @@ VoucherView.prototype =
 		
 		this.masaBerlakuTitleText.anchor.set(0, 0.5);
 		this.masaBerlakuTitleText.fontSize = this.screenUtility.correctSize(this.game, 24);
-		this.masaBerlakuTitleText.position.set(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 0.1);
+		this.masaBerlakuTitleText.position.set(Math.floor(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 0.1));
 		
 		this.masaBerlakuContentText.anchor.set(0, 0.5);
 		this.masaBerlakuContentText.fontSize = this.screenUtility.correctSize(this.game, 28);
-		this.masaBerlakuContentText.position.set(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.1 + delta));		
+		this.masaBerlakuContentText.position.set(Math.floor(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.1 + delta)));		
 		
 		
 		this.minimumTransaksiTitleText.anchor.set(0, 0.5);
 		this.minimumTransaksiTitleText.fontSize = this.screenUtility.correctSize(this.game, 24);
-		this.minimumTransaksiTitleText.position.set(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 0.3);
+		this.minimumTransaksiTitleText.position.set(Math.floor(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 0.3));
 		
 		this.minimumTransaksiContentText.anchor.set(0, 0.5);
 		this.minimumTransaksiContentText.fontSize = this.screenUtility.correctSize(this.game, 28);
-		this.minimumTransaksiContentText.position.set(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.3 + delta));
+		this.minimumTransaksiContentText.position.set(Math.floor(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.3 + delta)));
 		
 		
 		this.kodePromoTitleText.anchor.set(0, 0.5);
 		this.kodePromoTitleText.fontSize = this.screenUtility.correctSize(this.game, 24);
-		this.kodePromoTitleText.position.set(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 0.5);
+		this.kodePromoTitleText.position.set(Math.floor(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 0.5));
 		
 		this.kodePromoContentText.anchor.set(0, 0.5);
 		this.kodePromoContentText.fontSize = this.screenUtility.correctSize(this.game, 28);
-		this.kodePromoContentText.position.set(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.5 + delta));		
+		this.kodePromoContentText.position.set(Math.floor(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.5 + delta)));		
 				
 		this.kodePromoRightText.anchor.set(1, 0.5);
 		this.kodePromoRightText.fontSize = this.screenUtility.correctSize(this.game, 24);
-		this.kodePromoRightText.position.set(this.infoPromoContentPanel.x + this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.5 + delta));
-				
+		this.kodePromoRightText.position.set(Math.floor(this.infoPromoContentPanel.x + this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.5 + delta)));				
 		
 		this.berlakuDiTitleText.anchor.set(0, 0.5);
 		this.berlakuDiTitleText.fontSize = this.screenUtility.correctSize(this.game, 24);
-		this.berlakuDiTitleText.position.set(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 0.7);
+		this.berlakuDiTitleText.position.set(Math.floor(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * 0.7));
 		
 		this.berlakuDiTitleContentText.anchor.set(0, 0.5);
 		this.berlakuDiTitleContentText.fontSize = this.screenUtility.correctSize(this.game, 28);
-		this.berlakuDiTitleContentText.position.set(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45, this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.7 + delta));		
+		this.berlakuDiTitleContentText.position.set(Math.floor(this.infoPromoContentPanel.x - this.infoPromoContentPanel.width * 0.45), Math.floor(this.infoPromoContentPanel.y + this.infoPromoContentPanel.height * (0.7 + delta)));		
 		
 		
 		// this.sKText = this.game.add.text(0, 0, "S dan K", {font: "Panton-Regular", fill: "#333333", align: "left"});

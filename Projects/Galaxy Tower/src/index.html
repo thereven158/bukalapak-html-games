@@ -4,6 +4,11 @@
         <meta charset="UTF-8" />
         <title>Galaxy Tower</title>
 
+		<script>
+			window.BUILD_TYPE = 0;
+			window.URL_TYPE = 0;
+		</script>
+		
 		<!-- Google Analytics -->
 		<script>
 		/*
@@ -15,18 +20,30 @@
 		</script>
 		<!-- End Google Analytics -->		
 		
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+		
         <link rel="stylesheet" href="game.css" type="text/css" charset="utf-8" />
         
         <style>
 			@font-face {
 				font-family: 'Panton_R';
-				src: url('fonts/Panton-Regular.otf') format('opentype');
+				src: url('assets/fonts/Panton-Regular.otf') format('opentype');
 			}
 
 			@font-face {
 				font-family: 'Panton_B';
-				src: url('fonts/Panton-Bold.otf') format('opentype');
+				src: url('assets/fonts/Panton-Bold.otf') format('opentype');
 			}			
+			
+			@font-face {
+				font-family: 'Panton-Regular';
+				src: url('assets/fonts/Panton-Regular.otf') format('opentype');
+			}
+
+			@font-face {
+				font-family: 'Panton-Bold';
+				src: url('assets/fonts/Panton-Bold.otf') format('opentype');
+			}				
 
             body {
                 margin: 0px 0px 0px 0px;
@@ -38,6 +55,11 @@
         </style>    
     </head>
     <body>		
+		
+		<div id="game">
+			<!-- <input class="23" id="voucher_code" type="text" value="code">-->
+		</div>		
+			
         <script type="text/javascript" src="js/framework/phaser.min.js"></script>
         
 		<script type="text/javascript" src="js/utilities/globalConst.js"></script> 
@@ -49,7 +71,13 @@
 		<script type="text/javascript" src="js/utilities/transitionPlayer.js"></script>	
 		<script type="text/javascript" src="js/utilities/screenUtility.js"></script>
 				
+		<script type="text/javascript" src="js/timer/timer_event_view.js"></script>	
+		<script type="text/javascript" src="js/timer/timer_event_controller.js"></script>		
+		
 		<script type="text/javascript" src="js/gameData.js"></script> 
+		
+		<script type="text/javascript" src="js/voucher/voucher_view.js"></script>	
+		<script type="text/javascript" src="js/voucher/voucher_controller.js"></script>		
 		
 		<script type="text/javascript" src="js/states/stateTokenCheck.js"></script>
         <script type="text/javascript" src="js/states/statePreloader.js"></script>	
@@ -60,5 +88,7 @@
 		<script type="text/javascript" src="js/states/stateTest.js"></script>
 		
 		<script type="text/javascript" src="js/main.js"></script> 
+		
+		
     </body>
 </html>

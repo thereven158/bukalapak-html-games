@@ -13,6 +13,12 @@ StateGameplay.prototype = {
     {
 		this.NORMAL_SCORE = 50;
 		this.PERFECT_SCORE = 100;
+		
+		if (gameRatio >= 0.75)
+		{
+			BLOCK_INIT_SCALE_SIZE = 0.35;			
+		}
+		
 		this.BLOCK_INIT_SIZE = Game.width * BLOCK_INIT_SCALE_SIZE;
 		
 		this.initCombo();
@@ -44,6 +50,8 @@ StateGameplay.prototype = {
 		
 		this.timerHighscore = null;
 		
+		this.goalProgress = 0;
+		
 		//this.speed = 500;
 		
 		this.minimalBlockSize = 0;
@@ -52,6 +60,8 @@ StateGameplay.prototype = {
 		
 		this.buildingTypeIndex = 0;
 		this.TimerInterval = undefined;
+		
+		this.timerObj = new TimerEventController(this.game);
     },
 
 	create: function()
@@ -62,16 +72,17 @@ StateGameplay.prototype = {
         this.init();
         		
         this.createHUD();		
-        
+        this.scaleHUD();
+		
 		if (IS_DEBUG)
 		{
 			this.initDebug();
 		}
 		
-        this.scale.onOrientationChange.removeAll();
-        this.scale.onOrientationChange.add(this.onOrientationChange.bind(this, false), this);
+        //this.scale.onOrientationChange.removeAll();
+        //this.scale.onOrientationChange.add(this.onOrientationChange.bind(this, false), this);
         
-        this.onOrientationChange(true);
+        //this.onOrientationChange(true);
 		
 		//
 		
@@ -86,6 +97,11 @@ StateGameplay.prototype = {
 		if (IS_DEBUG)
 		{
 			this.debugUpdate();
+		}
+		
+		if (this.timerObj)
+		{
+			this.timerObj.update();
 		}
 		
 		this.updateIncrementScore();
@@ -232,17 +248,26 @@ StateGameplay.prototype = {
 	
 	scaleBackgroundHUD:function()
 	{
-		Global.screenUtility.proportionalScale(this.bgImage, "x", Game, 1, false);
+		Global.screenUtility.proportionalScale(this.bgImage, "x", Game, 1, -1, false);
 		this.bgImage.position.setTo(Game.width * 0.5, Game.height - this.bgImage.height * 0.5);
 		
 		Global.screenUtility.proportionalScale(this.leftHillDecorImg, "x", Game, 0.4);
 		this.leftHillDecorImg.position.setTo(Game.width * 0, Game.height);	
 		
-		Global.screenUtility.proportionalScale(this.groundDecorImg, "x", Game, 1, false);
+		Global.screenUtility.proportionalScale(this.groundDecorImg, "x", Game, 1, -1, false);
 		this.groundDecorImg.position.setTo(Game.width * 0.5, Game.height);
 		
-		Global.screenUtility.proportionalScale(this.startBlock, "x", Game, 0.66);
-		this.startBlock.position.setTo(Game.width * 0.5, this.groundDecorImg.y - this.groundDecorImg.height * 0.43);
+		if (gameRatio >= 0.75)
+		{
+			Global.screenUtility.proportionalScale(this.startBlock, "x", Game, 0.45);
+			this.startBlock.position.setTo(Game.width * 0.5, this.groundDecorImg.y - this.groundDecorImg.height * 0.43);	
+		}
+		else
+		{
+			Global.screenUtility.proportionalScale(this.startBlock, "x", Game, 0.66);
+			this.startBlock.position.setTo(Game.width * 0.5, this.groundDecorImg.y - this.groundDecorImg.height * 0.43);
+		}
+
 	},
 	
 	//
@@ -268,11 +293,18 @@ StateGameplay.prototype = {
 		this.scoreText = this.add.text(0, 0, "00000", {font: "20px " + FONT_NAMES.PANTON_BOLD, fill: "#eeee11", align:"right"});
         this.scoreText.anchor.setTo(0.5, 0.5);
 		
+		this.timerPanelImg = this.add.image(0,0,"timer_panel");
+		this.timerPanelImg.anchor.set(1, 0);
+				
+		this.timerObj.createView();
+		this.timerObj.view.updateTimer(CONFIG.TIME_LIMIT);
+				
 		this.headerHUDGroup.add(this.topUiImg);
 		this.headerHUDGroup.add(this.additionalUiImg);
 		this.headerHUDGroup.add(this.scoreUiBehindImg);
 		this.headerHUDGroup.add(this.scoreUiImg);		
-		this.headerHUDGroup.add(this.scoreText);	
+		this.headerHUDGroup.add(this.scoreText);		
+		this.headerHUDGroup.add(this.timerPanelImg);
 	},
 	
 	scaleHeaderHUD:function()
@@ -291,7 +323,17 @@ StateGameplay.prototype = {
 		
 		this.scoreText.fontSize = Global.screenUtility.correctSize(Game, 56);
 		this.scoreText.position.set(Math.round(this.scoreUiImg.x + this.scoreUiImg.width * 0.525), this.scoreUiImg.y + Math.round(this.scoreUiImg.height * 0.675));
-				
+		
+		Global.screenUtility.proportionalScale(this.timerPanelImg, "x", Game, 0.4);
+		this.timerPanelImg.position.setTo(Game.width * 1, Game.height * 0);		
+		
+		let timerView = this.timerObj.view;
+		
+		timerView.timer1stDigitText.position.setTo(this.timerPanelImg.x - this.timerPanelImg.width * 0.705, this.timerPanelImg.y + this.timerPanelImg.height * 0.44);
+		timerView.timer2ndDigitText.position.setTo(this.timerPanelImg.x - this.timerPanelImg.width * 0.555, this.timerPanelImg.y + this.timerPanelImg.height * 0.44);
+		timerView.timerPeriodText.position.setTo(this.timerPanelImg.x - this.timerPanelImg.width * 0.450, this.timerPanelImg.y + this.timerPanelImg.height * 0.44);
+		timerView.timer3rdDigitText.position.setTo(this.timerPanelImg.x - this.timerPanelImg.width * 0.335, this.timerPanelImg.y + this.timerPanelImg.height * 0.44);
+		timerView.timer4thDigitText.position.setTo(this.timerPanelImg.x - this.timerPanelImg.width * 0.185, this.timerPanelImg.y + this.timerPanelImg.height * 0.44);
 	},
     
 	createFooterHUD:function()
@@ -560,6 +602,10 @@ StateGameplay.prototype = {
 		
 		this.isGameStarted = true;
 		
+		this.timerObj.activateTimer(CONFIG.TIME_LIMIT, () => {
+			this.endGame(false, "TIMEOUT");
+		}, false);
+		
 		this.nextBlock();
 		this.minimalBlockSize = MINIMUM_BLOCK_TOLERANCE_RATIO * this.curBlock.width;
 		
@@ -588,7 +634,7 @@ StateGameplay.prototype = {
 	},
 	
 	dropBlock:function()
-	{
+	{		
 		this.curBlock.playingTween.stop();
 		
 		this.activateDroppedBlockEvent();
@@ -678,6 +724,7 @@ StateGameplay.prototype = {
 			this.curBlock.x = this.prevBlock.x;
 			this.addScore(true);
 			this.ingameComboSfx.play();
+			this.addGoalProgress();
 		}
 		else if (!this.checkOutOfPrevBlockSize())
 		{
@@ -694,7 +741,9 @@ StateGameplay.prototype = {
 			this.addScore(false);	
 			
 			var isLeft = this.createAttachedBlock();
-			this.createFallingBlock(isLeft);			
+			this.createFallingBlock(isLeft);	
+			
+			this.addGoalProgress();
 		}
 		else
 		{			
@@ -705,6 +754,10 @@ StateGameplay.prototype = {
 		}
 		
 		this.incrementBuildingIndex();
+		
+		if (this.isGameOver) {
+			return;
+		}
 		
 		this.shiftBlockDown(() =>
 		{
@@ -719,70 +772,109 @@ StateGameplay.prototype = {
 		// console.log(this.isDroppingBlock, this.isShiftingBlock);
 	},
 	
-	prepareGameOver:function()
+	prepareGameOver:function(isVictory = false)
 	{
-		var tween = this.add.tween(this.curBlock).to({y:this.curBlock.y + this.curBlock.height * 3, alpha:0}, 500, 
-												  Phaser.Easing.Sinusoidal.Linear, 
-												  true, 0, 0, false);				
-		Global.musicPlayer.fadeOutMusic(1500);
+		this.isGameOver = true;
+		this.timerObj.pause(true);
 		
-		tween.onComplete.add(() => 
-		{
+		var timeEv = () => {
 			this.time.events.add(Phaser.Timer.SECOND * 1, () => 
 			{
-				this.activateGameOver();
+				this.activateGameOver(isVictory, "FAILED");
 			}, this);
-		}, this);		
+		}
+		
+		if (!isVictory)
+		{
+			var tween = this.add.tween(this.curBlock).to({y:this.curBlock.y + this.curBlock.height * 3, alpha:0}, 500, 
+												  Phaser.Easing.Sinusoidal.Linear, 
+												  true, 0, 0, false);	
+			
+			Global.musicPlayer.fadeOutMusic(1500);
+
+			tween.onComplete.add(() => 
+			{
+				timeEv();
+			}, this);			
+		}		
+		else
+		{
+			timeEv();
+		}
 	},
 	
-	activateGameOver:function()
-	{
+	activateGameOver:function(isVictory = false, reason="")
+	{		
+		if (!isVictory)
+		{
+			this.endGame(isVictory, reason);
+			this.ingameGameOverSfx.play();
+		}
+		else
+		{
+			this.endGame(isVictory, "VOUCHER");
+		}
+		
 		//GaAPI.trackFinishPlayingEv();
-		this.ingameGameOverSfx.play();
 		
-		this.ufoLight2Emitter.destroy();
-		this.gameOverHUDGroup.visible = true;
-		this.gameOverDarkBg.visible = true;
-		
-		this.ufoLightImg.visible = false;
-		
+				
 		//this.resultScoreText.text = this.score.toString();
 		
-		Global.gameData.addNewLastScore(this.score);
-		this.isNewHighScore = Global.gameData.addHighScore(this.score);
+		//Global.gameData.addNewLastScore(this.score);
+		//this.isNewHighScore = Global.gameData.addHighScore(this.score);
 		
-		this.activateIncrementScore();
+		//this.activateIncrementScore();
+	},
+	
+	addGoalProgress:function()
+	{
+		this.goalProgress++;
+		
+		if (this.goalProgress == CONFIG.GOAL_TARGET)
+		{
+			this.prepareGameOver(true);	
+		}
 	},
 	
 	incrementScore:function()
 	{
-		/*if (this.score > 0)
-		{
-			this.scoreGameover+=5;
-			this.score-=5;
+		this.resultScoreText.text = Math.round(this.scoreGameover).toString();
+	},
+	
+	endGame(isVictory = false, reason="")
+	{
+		this.ufoLight2Emitter.destroy();
+		this.ufoLightImg.visible = false;		
+		this.isGameOver = true;
+		
+		this.showVoucherGameOver(isVictory, reason);
+	},
+	showVoucherGameOver(isVictory = false, reason="")
+	{
+		this.voucherGameOverScreen = new VoucherController(this.game);
+		
+		this.voucherGameOverScreen.setEvents(() => {
+			Global.musicPlayer.stopMusic();
+			window.open(CONFIG.URL_DOWNLOAD, '_blank');
 			
-			if (this.score <= 0)
-			{
-				if (this.resultRollingScore != null)
-				{
-					this.resultRollingScore.stop();
-					this.resultRollingScore.destroy();
-				}
-				
-				if (this.isNewHighScore)
-				{					
-					this.ingameBeatHighScoreSfx.play();
-					this.ingameBeatHighScoreSfx.fadeOut(2000);
-					this.isNewHighScore = false;
-				}				
-			}
+		}, () => {
+			Global.musicPlayer.stopMusic();
+			this.game.state.start("Gameplay");
+		}, () => {
+			Global.musicPlayer.stopMusic();
+			this.game.state.start("Gameplay");
+		});
+		
+		this.voucherGameOverScreen.setTitleInfo(reason);
+		
+		if (isVictory)
+		{
+			this.voucherGameOverScreen.popUpWin(CONFIG.VOUCHER_CODE);
 		}
 		else
 		{
-			this.isGameOver = false;
+			this.voucherGameOverScreen.popUpLose();
 		}
-		*/
-		this.resultScoreText.text = Math.round(this.scoreGameover).toString();
 	},
 	
 	activateIncrementScore:function()
@@ -1409,6 +1501,12 @@ StateGameplay.prototype = {
 		{
 			return;
 		}
+		
+		if (this.isGameOver)
+		{
+			return;
+		}
+				
 		
 		//// console.log(this.isDroppingBlock, this.isShiftingBlock);
 		if (!this.isDroppingBlock && !this.isShiftingBlock)

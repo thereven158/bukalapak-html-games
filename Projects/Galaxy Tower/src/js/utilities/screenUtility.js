@@ -13,56 +13,126 @@ ScreenUtility.prototype =
 		this.refGameRatio = refGameRatio;
 	},
 	
-	proportionalScale(sprite, axis, container, scale, isRefAffected = true, isForceFitOnBlackBar = false)
+	proportionalScale(sprite, axis, container, scale, otherAxisLimitScale = -1, isForceFitOnBlackBar = false)
 	{	
-		var originalSize;
+		let originalSizeWidth = sprite.width;
+		let originalSizeHeight = sprite.height;
 
-		if (axis == "x")
+		if (axis === "x")
 		{
-			originalSize = sprite.width;
-			sprite.width = container.width * scale * (isRefAffected?this.refGameRatio * (this.game.height/this.game.width):1);
-			sprite.height = sprite.height * (sprite.width / originalSize);
+			sprite.width = container.width * scale;
+			sprite.height *= (sprite.width / originalSizeWidth);
+			
+			if (otherAxisLimitScale > -1)
+			{
+				if (sprite.height/container.height > otherAxisLimitScale)
+				{
+					sprite.height = container.width * otherAxisLimitScale;
+					sprite.width = originalSizeWidth;
+					sprite.width *= (sprite.height / originalSizeHeight);
+				}
+			}
+			
 		}
-		else if (axis == "y")
+		else if (axis === "y")
 		{
-			originalSize = sprite.height;
-			sprite.height = container.height * scale * (isRefAffected?this.refGameRatio * (this.game.height/this.game.width):1);
-			sprite.width = sprite.width * (sprite.height / originalSize);
+			sprite.height = container.height * scale;
+			sprite.width *= (sprite.height / originalSizeHeight);
+			
+			if (otherAxisLimitScale > -1)
+			{
+				if (sprite.width/container.width > otherAxisLimitScale)
+				{
+					sprite.width = container.height * otherAxisLimitScale;
+					sprite.height = originalSizeWidth;
+					sprite.height *= (sprite.width / originalSizeWidth);
+				}
+			}			
 		}
 		
 		if (isForceFitOnBlackBar)
 		{
+			//console.log();
+			
 			if (sprite.height < container.height)
 			{
-				originalSize = sprite.height;
+				originalSizeHeight = sprite.height;
 				sprite.height = container.height;
-				sprite.width = sprite.width * (sprite.height / originalSize);
+				sprite.width *= (sprite.height / originalSizeHeight);
 			}
-			else if (sprite.width < container.width)
+			
+			if (sprite.width < container.width)
 			{
-				originalSize = sprite.width;
+				originalSizeWidth = sprite.width;
 				sprite.width = container.width;
-				sprite.height = sprite.height * (sprite.width / originalSize);
-			}	
+				sprite.height *= (sprite.width / originalSizeWidth);
+			}
 		}
 	},
-
-	correctSize:function(gameContext, originalSize, initScale = 0.75, ratioScreen = 1)
+	
+	proportionalScaleByBound(sprite, axis, scale, otherAxisLimitScale= -1, boundXStart=0, boundXEnd=0, boundYStart=0, boundYEnd=0)
 	{
-		var result = Math.round(originalSize / (initScale * (this.refGameHeight / gameContext.height)));
-		//console.log(originalSize, result);
+		let sizeX = Math.abs(boundXEnd-boundXStart);
+		let sizeY = Math.abs(boundYEnd-boundYStart);
 		
-		/*if (ratioScreen >= 2)
+		let originalSizeWidth = sprite.width;
+		let originalSizeHeight = sprite.height;
+		
+		if (axis == "x")
+		{
+			if (sizeX > 0)
+			{
+				sprite.width = sizeX * scale;
+				
+				sprite.height *= (sprite.width / originalSizeWidth);
+
+				if (otherAxisLimitScale > -1 && sizeY > 0)
+				{
+					if (sprite.height > sizeY)
+					{
+						sprite.height = sizeY * otherAxisLimitScale;
+						sprite.width = originalSizeWidth;
+						sprite.width *= (sprite.height / originalSizeHeight);
+					}
+				}
+			}			
+		}
+		else 
+		{
+			if (sizeY > 0)
+			{
+				sprite.height = sizeY * scale;
+				sprite.width *= (sprite.height / originalSizeHeight);
+
+				if (otherAxisLimitScale > -1 && sizeX > 0)
+				{
+					if (sprite.width > sizeX)
+					{
+						sprite.width = sizeX * otherAxisLimitScale;
+						sprite.height = originalSizeHeight;
+						sprite.height *= (sprite.width / originalSizeWidth);
+					}
+				}
+			}			
+		}		
+	},
+	
+	correctSize(gameContext, originalSize, initScale = 0.75, ratioScreen = 1)
+	{
+		const result = Math.round(originalSize / (initScale * (this.refGameHeight / gameContext.height)));
+		// console.log(originalSize, result);
+		
+		/* if (ratioScreen >= 2)
 		{
 			result *= initScale;
-		}*/
+		} */
 		
 		return result;
 	},
 	
-	changeBarValue: function(bar, curVal, curValMax, isTriggerEventIfZeroBar=false, zeroBarEvent=null, isTween=true)
+	changeBarValue(bar, curVal, curValMax, isTriggerEventIfZeroBar=false, zeroBarEvent=null, isTween=true)
 	{
-		var percent = curVal / curValMax;
+		let percent = curVal / curValMax;
 		
 		if (percent < 0)
 		{
@@ -71,7 +141,7 @@ ScreenUtility.prototype =
 		
 		if (isTween)
 		{
-			var barTween = this.game.add.tween(bar.scale).to({x: bar.defaultScaleX * percent}, 500, Phaser.Easing.Sinusoidal.InOut, true, 0, 0, false);		
+			const barTween = this.game.add.tween(bar.scale).to({x: bar.defaultScaleX * percent}, 500, Phaser.Easing.Sinusoidal.InOut, true, 0, 0, false);		
 
 			if (isTriggerEventIfZeroBar)
 			{
@@ -85,5 +155,5 @@ ScreenUtility.prototype =
 		{
 			bar.scale.x = bar.defaultScaleX * percent;
 		}
-	},	
+	}
 }

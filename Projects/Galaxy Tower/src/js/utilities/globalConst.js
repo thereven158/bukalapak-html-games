@@ -10,7 +10,7 @@ const TIME_RUN_OUT = 5;
 
 const ERROR_TOKEN_MESSAGE = "You need to open this game\non bukalapak apps!";
 
-const BLOCK_INIT_SCALE_SIZE = 0.5;
+var BLOCK_INIT_SCALE_SIZE = 0.5;
 const GAP_TOLERANCE = 15;
 
 const DELTA_BLOCK_FASTER_SCORE_TRIGGER = 5000;

@@ -59,11 +59,11 @@ var Game;
 
 if (isStartLandScape)
 {
-	Game = new Phaser.Game(window.innerHeight * REF_GAME_RATIO, window.innerHeight, Phaser.CANVAS, "Game Kuis", { preload: preload, create: create, update: update, render: render});	
+	Game = new Phaser.Game(window.innerHeight * REF_GAME_RATIO, window.innerHeight, Phaser.CANVAS, "game", { preload: preload, create: create, update: update, render: render});	
 }
 else
 {
-	Game = new Phaser.Game(defaultGameScreenWidth, defaultGameScreenHeight, Phaser.CANVAS, "Game Kuis", { preload: preload, create: create, update: update, render: render});
+	Game = new Phaser.Game(defaultGameScreenWidth, defaultGameScreenHeight, Phaser.CANVAS, "game", { preload: preload, create: create, update: update, render: render});
 }
 
 //console.log(Game.width, Game.height);
@@ -133,7 +133,8 @@ function create ()
 	Game.state.add("Test", StateTest);
 
 	Game.stage.backgroundColor = '#191922';
-
+	Game.input.maxPointers = 1;
+	
 	let userAgent = navigator.userAgent;
 
 	if ( userAgent.match(/BLIos|blios/i) || userAgent.match(/BLAndroid|blandroid/i) || IS_404_BYPASS)

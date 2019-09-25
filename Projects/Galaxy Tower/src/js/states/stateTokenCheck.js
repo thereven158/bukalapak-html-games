@@ -23,11 +23,12 @@ StateTokenCheck.prototype = {
 		this.init();
 		
 		this.createHUD();
+		this.scaleHUD();
 		
-        this.scale.onOrientationChange.removeAll();
-        this.scale.onOrientationChange.add(this.onOrientationChangeEvent.bind(this, false), this);
+        //this.scale.onOrientationChange.removeAll();
+        //this.scale.onOrientationChange.add(this.onOrientationChangeEvent.bind(this, false), this);
         
-        this.onOrientationChangeEvent(true);
+        //this.onOrientationChangeEvent(true);
 	},
 	
 	createHUD: function()

@@ -28,11 +28,14 @@ StateTitle.prototype = {
         //
       
 		this.createHUD();
+		this.scaleHUD();
 		
-        this.scale.onOrientationChange.removeAll();
-        this.scale.onOrientationChange.add(this.onOrientationChangeEvent.bind(this, false), this);
+        //this.scale.onOrientationChange.removeAll();
+        //this.scale.onOrientationChange.add(this.onOrientationChangeEvent.bind(this, false), this);
         
-        this.onOrientationChangeEvent(true);
+        //this.onOrientationChangeEvent(true);
+		
+		
     },
     
     update: function()
@@ -180,6 +183,7 @@ StateTitle.prototype = {
 		
         this.highscoreButton = this.add.button(0, 0, "score_button", null, this, 0, 0 ,1);
         this.highscoreButton.anchor.setTo(0.5, 0.5);
+		this.highscoreButton.visible = false;
 
         this.startGameButton.onInputUp.add(() => 
 		{
@@ -228,10 +232,10 @@ StateTitle.prototype = {
 	
 	scaleMainHUD:function()
 	{
-		Global.screenUtility.proportionalScale(this.bgImage, "x", Game, 1, false, true);
+		Global.screenUtility.proportionalScale(this.bgImage, "x", Game, 1, -1, true);
         this.bgImage.position.setTo(Game.width * 0.5, Game.height * 0.5);
 		
-		Global.screenUtility.proportionalScale(this.greenLightDecorImg, "x", Game, 1, false, true);
+		Global.screenUtility.proportionalScale(this.greenLightDecorImg, "x", Game, 1, -1, true);
         this.greenLightDecorImg.position.setTo(Game.width * 0.5, Game.height * 1);		
 		
 		Global.screenUtility.proportionalScale(this.startGameButton, "x", Game, 0.55);
@@ -240,7 +244,7 @@ StateTitle.prototype = {
 		Global.screenUtility.proportionalScale(this.highscoreButton, "x", Game, 0.4);
         this.highscoreButton.position.set(Game.width * 0.5, Game.height * 0.87);			
 		
-		Global.screenUtility.proportionalScale(this.ufoImg, "x", Game, 0.7);
+		Global.screenUtility.proportionalScale(this.ufoImg, "x", Game, 0.7, 0.6);
         this.ufoImg.position.set(Game.width * 0.5, Game.height * 0.65);
 		
 		var tween = this.add.tween(this.ufoImg).to({y:this.ufoImg.y - this.ufoImg.height * 0.1}, 1000, 

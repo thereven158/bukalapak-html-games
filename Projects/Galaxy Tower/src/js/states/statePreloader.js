@@ -123,7 +123,7 @@ StatePreloader.prototype = {
 		
 		var originalSize = 0;
 		
-		Global.screenUtility.proportionalScale(this.background, "x", Game, 1, false, true);
+		Global.screenUtility.proportionalScale(this.background, "x", Game, 1, -1, true);
         this.background.position.setTo(Game.width * 0.5, Game.height * 0.5);
 		
         this.instructionText.fontSize = Global.screenUtility.correctSize(Game, 20);
@@ -334,6 +334,7 @@ StatePreloader.prototype = {
 		this.loadResultGraphics();
 		this.loadHighscoreGraphics();
 		this.loadGameOverGraphics();
+		this.loadVouchers();
 		
 		// TRANSITION
 		//this.load.image("screen_transition","graphics/transition.png");		
@@ -376,6 +377,8 @@ StatePreloader.prototype = {
 		this.load.image("top_ui",  AssetUrl + "graphics/gameplay/top_ui/Top-UI.png");
 		
 		this.load.image("background_ground",  AssetUrl + "graphics/gameplay/BackgroundLong.png");
+		
+		this.load.image("timer_panel", AssetUrl + "graphics/gameplay/top_ui/Timer-UI.png");
 	},
 	
 	loadBuildingGraphics:function()
@@ -418,6 +421,29 @@ StatePreloader.prototype = {
 	loadResultGraphics:function()
 	{
 		
+	},
+	
+	loadVouchers: function()
+	{
+		// VOUCHERS
+		
+        this.game.load.image('box_voucher',AssetUrl+'graphics/vouchers/box_voucher.png');
+		
+		this.game.load.image('box_white', AssetUrl+'graphics/vouchers/box_white.png');
+		this.game.load.image('btn_close', AssetUrl+'graphics/vouchers/btn_close.png');
+		this.game.load.image('btn_copy', AssetUrl+'graphics/vouchers/btn_copy.png');
+		this.game.load.image('btn_download', AssetUrl+'graphics/vouchers/btn_download.png');
+		
+		this.game.load.image('btn_info1', AssetUrl+'graphics/vouchers/btn_info1.png');
+		this.game.load.image('btn_info2', AssetUrl+'graphics/vouchers/btn_info2.png');
+		
+		this.game.load.image('btn_main', AssetUrl+'graphics/vouchers/btn_main.png');
+		this.game.load.image('header_card1', AssetUrl+'graphics/vouchers/header_tower1.png');
+		this.game.load.image('header_card2', AssetUrl+'graphics/vouchers/header_tower2.png');
+		
+		this.game.load.image('icn_close', AssetUrl+'graphics/vouchers/icn_close.png');		
+		this.game.load.image('icn_info', AssetUrl+'graphics/vouchers/icn_info.png');
+		//		
 	},
 	
     loadAudios: function()

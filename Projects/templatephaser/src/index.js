@@ -23,7 +23,7 @@ var config = {
 		width: actualWidth,
 		height: actualHeight,
 		zoom: actualZoom
-
+		
 	},
 	scene: [
 		BootScene,
@@ -37,7 +37,8 @@ var config = {
 	render: {
 		antiAlias: false,
 		pixelArt: false,
-		roundPixels: false
+		roundPixels: false,
+		powerPreference: 'high-performance'
 	},
 	autoRound: false
 };

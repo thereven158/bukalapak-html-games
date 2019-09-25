@@ -14,9 +14,9 @@ export default class BootSceneController extends Phaser.Scene{
     init(){
         //console.log('boot screen');
 
+        this.InitGame();
         this.InitScreen();
         this.InitAudio();
-    
     }
  
     preload(){
@@ -38,6 +38,10 @@ export default class BootSceneController extends Phaser.Scene{
         }).catch((err) =>{
             console.log(err);
         })
+    }
+
+    InitGame(){
+
     }
 
     InitScreen(){

@@ -13,6 +13,9 @@ export class DeviceHelper {
 		Opera: function() {
 			return navigator.userAgent.match(/Opera Mini/i);
 		},
+		Mozilla: function() {
+			return navigator.userAgent.match(/Mozilla/i);
+		},
 		Windows: function() {
 			return navigator.userAgent.match(/IEMobile/i);
 		},

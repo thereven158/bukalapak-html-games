@@ -4,6 +4,7 @@
 	"description": "A Phaser Project",
 	"main": "src/index.js",
 	"scripts": {
+		"copy:asset": "npx copyfiles -u 2 \"src/assets/**/*.*\" dist/",
 		"build": "webpack --config webpack/webpack.prod.js --env.build=agate-dev",
 		"dist": "npx http-server dist/ -p 5500 -e",
 		"dev": "webpack-dev-server --config webpack/webpack.dev.js --env.build=agate-dev --host=0.0.0.0"

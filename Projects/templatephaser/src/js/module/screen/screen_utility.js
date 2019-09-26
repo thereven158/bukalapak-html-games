@@ -30,7 +30,11 @@ export default class ScreenUtility{
 
     static ResetGameScreen(){
         window.focus();
-        window.scrollTo(0, document.body.scrollHeight);
+        if(DeviceHelper.Env.iOS()){
+            window.scrollTo(0, document.body.scrollHeight);
+        }else{
+            window.scrollTo(0, 0);
+        }
     }
 
     

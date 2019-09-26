@@ -32,33 +32,8 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     create(){
-        this.view = new TitleSceneView(this);
-        this.view.create();
+        this.view = new TitleSceneView(this).create();
 
-        this.view.onClickPlay(this.OnClickPlay);
-
-        //add voucher script
-        this.VoucherView = new VoucherView(this);
-        let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
-
-        this.VoucherView.ShowVoucherCode(voucherData.Code, {
-            titleInfo :  voucherData.InfoTitle,
-            description : voucherData.InfoDescription,
-            expireDate : voucherData.ExpireDate,
-            minTransactionInfo : voucherData.MinimalTransactionInfo,
-            onlyAppliesInfo : voucherData.OnlyAppliesInfo,
-            termsandconditions : voucherData.TermsAndConditions,
-        });
-
-        this.VoucherView.SetDescription('voucher_headerwin', 
-            "Voucher", 
-            voucherData.Title, 
-            voucherData.Description
-        );
-        
-        this.VoucherView.OnClickMainLagi(this.OnClickPlay);
-
-        this.VoucherView.Open();
     }
 
     update(){

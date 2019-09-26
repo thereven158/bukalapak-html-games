@@ -10,11 +10,13 @@ export default class LoadingSceneView{
     
     }
 
+    /** @return {LoadingSceneView} */
     create(){
         this.loadingScreen = this.scene.add.graphics();
         this.loadingScreen.fillStyle('0x00000', 1);
         this.loadingScreen.fillRect(0,0, this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight);
         
+        return this;
     }
 
     InitLoading(){

@@ -17,18 +17,20 @@ export default class LoadingSceneController extends Phaser.Scene{
 
     init(){
         console.log('loading screen');
+
+        this.initLoading();
+    }
+
+    initLoading(){
+        this.ScreenUtility = ScreenUtility.getInstance();
+
+        this.view = new LoadingSceneView(this).create();
     }
 
     preload(){
-        this.ScreenUtility = ScreenUtility.getInstance();
-
-        this.view = new LoadingSceneView(this);
-        this.view.create();
-
         this.load.once('complete', this.LoadBootResoucesComplete);  
-
         this.LoadBootResouces();
-   
+
     }
 
     LoadBootResoucesComplete = () =>{

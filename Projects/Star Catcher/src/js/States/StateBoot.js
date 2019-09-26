@@ -24,7 +24,8 @@ StateBoot.prototype =
         this.game.load.image('charload', 'Assets/Images/Loader/Character.png');
         this.game.load.image('loadbarempty', 'Assets/Images/Loader/Loading-Bar-Empty.png');
         this.game.load.image('loadbarfill', 'Assets/Images/Loader/Loading-Bar-Full.png');
-
+		this.game.load.image('bg_polos',  'Assets/Images/Background_Polos.png');
+		
         this.game.load.audio('bgmtitle', 'Assets/Sounds/bgm_title.mp3');
 
         //plugin

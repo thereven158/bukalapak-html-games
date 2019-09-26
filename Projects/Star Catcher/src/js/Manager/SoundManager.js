@@ -14,6 +14,8 @@ var SoundManager = function()
     this.SfxChangeScene = GlobalObject.Game.add.audio('sfxchangescene');
 
     GlobalObject.SoundManager = this;
+	
+	this.curBgmStr = "";
 }
 
 SoundManager.prototype.constructor = SoundManager;
@@ -38,8 +40,17 @@ SoundManager.prototype.FadeBmgGame = function()
     }, this)
 }
 
+SoundManager.prototype.Stop = function()
+{
+    this.BgmGame.stop();
+}
+
 SoundManager.prototype.PlayBgm = function(bgm)
 {
+	if (this.curBgmStr==bgm) {
+		return;
+	}
+	
     switch(bgm)
     {
         case GlobalConst.BgmTitle:
@@ -49,6 +60,8 @@ SoundManager.prototype.PlayBgm = function(bgm)
         this.BgmGame.loopFull(1);
         break;
     }
+	
+	this.curBgmStr = bgm;
 }
 
 SoundManager.prototype.PlaySfx = function(sfx)

@@ -8,6 +8,8 @@ var DropItemManager = function()
 
     this.Star = new Star();  
     this.Meteor = new Meteor();
+	
+	this.isStopped = false;
 }
 
 DropItemManager.prototype.constructor = DropItemManager;
@@ -19,6 +21,12 @@ DropItemManager.prototype.Init = function()
     this.ChanceForDoubleShow = -1;
     this.MinStarSpawnRate = GlobalConst.StarSpawnChance;
 }
+
+DropItemManager.prototype.StopDropping = function(isStop=true)
+{
+    this.isStopped = isStop
+}
+
 
 DropItemManager.prototype.ShowDropItem = function()
 {
@@ -79,6 +87,11 @@ DropItemManager.prototype.ShowStarAndMeteor = function()
 
 DropItemManager.prototype.CheckForNewSpawn = function()
 {
+	if (this.isStopped)
+	{
+		return;
+	}
+	
     if(GlobalConst.LivesManager.IndexLives >= 0)
     {
         this.CheckCounter++;

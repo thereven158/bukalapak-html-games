@@ -85,6 +85,14 @@ Title.prototype.ShowAfetrScoreHide = function()
     },this);
 }
 
+Title.prototype.InstantHide = function()
+{
+	this.TextTitle.visible = false;
+	this.BtnPlay.visible = false;
+	this.BtnScore.visible = false;
+	this.visible = false;
+}
+
 Title.prototype.Hide = function()
 {
     this.BtnPlay.inputEnabled = false;

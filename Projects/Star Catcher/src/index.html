@@ -6,12 +6,24 @@
         <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/phaser-ce/2.7.0/phaser.min.js"></script> -->
         <script type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
                 
+		<script>
+			window.BUILD_TYPE = 0;
+			window.URL_TYPE = 0;
+		</script>	
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />	
+
         <script type = "text/javascript" src = "Lib/analytics.js"></script>
         <script type = "text/javascript" src = "Lib/fps.js"></script>
         <!-- <script type = "text/javascript" src = "Lib/phaser-spine.js"></script> -->
         <link rel = "stylesheet" type = "text/css" href = "Lib/Font.css">
 
 		<script type = "text/javascript" src = "js/config.js"></script>
+		
+		<script>
+			// config
+			
+		</script>
 		
         <script type = "text/javascript" src = "js/Singleton/GlobalObject.js"></script>
         <script type = "text/javascript" src = "js/Singleton/GlobalConst.js"></script>
@@ -36,18 +48,21 @@
         <script type = "text/javascript" src = "js/Entities/Highscore.js"></script>
         <script type = "text/javascript" src = "js/Entities/Title.js"></script>
         <script type = "text/javascript" src = "js/Entities/Combo.js"></script>
-
+		
+		<script type = "text/javascript" src = "js/utilities/screenUtility.js"></script>
+		
+		<script type = "text/javascript" src = "js/Entities/timer/timer_event_view.js"></script>
+		<script type = "text/javascript" src = "js/Entities/timer/timer_event_controller.js"></script>		
+				
+		<script type = "text/javascript" src = "js/Entities/voucher/voucher_view.js"></script>
+		<script type = "text/javascript" src = "js/Entities/voucher/voucher_controller.js"></script>		
+		
         <script type = "text/javascript" src = "js/Manager/InputManager.js"></script>
         <script type = "text/javascript" src = "js/Manager/CollisionManager.js"></script>
         <script type = "text/javascript" src = "js/Manager/LivesManager.js"></script>
         <script type = "text/javascript" src = "js/Manager/DropItemManager.js"></script>
         <script type = "text/javascript" src = "js/Manager/SoundManager.js"></script>
 		<script type = "text/javascript" src = "js/Manager/TimerManager.js"></script>
-		
-		<script type = "text/javascript" src = "js/utilities/screenUtility.js"></script>
-		
-		<script type = "text/javascript" src = "js/Entities/voucher/voucher_view.js"></script>
-		<script type = "text/javascript" src = "js/Entities/voucher/voucher_controller.js"></script>
 		
         <script type = "text/javascript" src = "js/States/StateBoot.js"></script>
         <script type = "text/javascript" src = "js/States/StatePreload.js"></script>
@@ -58,51 +73,7 @@
     <body>     
         <div class = "fontPreload" style = "font-family: Panton-Regular">.</div>   
         <div class = "fontPreload" style = "font-family: Panton-Bold">.</div>   
-
-        <script>
-
-            (function(){  
-
-                GlobalConst.GetParameter();
-
-                let gameWidth = 1080;
-                let gameHeight = 1920;                
-
-                if(window.innerWidth > window.innerHeight)
-                {   
-                    gameWidth *= window.innerHeight/gameHeight;
-                    gameHeight = window.innerHeight;  
-                }
-                else
-                {
-                    gameWidth = window.innerWidth;
-                    gameHeight = window.innerHeight;
-                }
-
-                if(!/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream)
-                {
-                    game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, "");  
-                }
-                else
-                {
-                    game = new Phaser.Game(gameWidth, gameHeight, Phaser.WEBGL, "");  
-                }
-
-                game.transparent = true;
-                game.enableDebug = false;
-                game.antialias = true;
-                //console.log(game);
-
-                game.state.add('boot', StateBoot);
-                game.state.add('preload', StatePreload);
-                game.state.add('gameplay', StateGameplay); 
-                game.state.add('titlescreen', StateTitleScreen); 
-                
-                GlobalObject.Game = game;
-
-                // Call the Boot state
-                game.state.start('boot');
-            })();
-        </script>
+		<div id="game"></div>
+        <script type = "text/javascript" src = "js/main.js"></script>
     </body>
 </html>

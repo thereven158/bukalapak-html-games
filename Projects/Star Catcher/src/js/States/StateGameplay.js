@@ -35,8 +35,16 @@ StateGameplay.prototype =
     {
 		this.star = 0;
 		this.isGameOver = false;
+		this.isGameStarted = false;
+		
+		this.loseReason = "";
 		
 		this.screenUtility = new ScreenUtility(this.game, 1080, 1920, 1080/1920);
+		
+		this.bgPolos = this.add.sprite(0,0,"bg_polos");
+        this.bgPolos.anchor.setTo(0.5, 0.5)
+		this.screenUtility.proportionalScale(this.bgPolos, "x", this.game, 1, -1, false, true);
+		this.bgPolos.position.setTo(this.game.width * 0.5, this.game.height * 0.5);
 		
         // var h = GlobalObject.Game.height;
         // var myBitmap = GlobalObject.Game.add.bitmapData(GlobalObject.Game.width, h);
@@ -77,21 +85,27 @@ StateGameplay.prototype =
 
         this.Title.OnPlay = ()=>
         {
-            this.SoundManager.FadeBmgTitle();
-            this.SoundManager.PlaySfx(GlobalConst.SfxChangeScene);
-
+			if (!GlobalConst.isRestarted)
+			{
+				this.SoundManager.FadeBmgTitle();
+				this.SoundManager.PlaySfx(GlobalConst.SfxChangeScene);
+			}
+			
             //GlobalFunction.SetGAEvent('stc start playing');
         }
 
         this.Title.OnTitleDoneHiding = ()=>
         {
             GlobalConst.SpeedMultiplier = 1;
-
+			this.isGameStarted = true;
+			
             this.TopUi.Show();  
             this.Basket.Show();
 
-            this.SoundManager.PlayBgm(GlobalConst.BgmGame);
-
+			if (!GlobalConst.isRestarted)
+			{
+            	this.SoundManager.PlayBgm(GlobalConst.BgmGame);
+			}
         }   
 
         this.Title.OnScore = ()=>
@@ -108,6 +122,11 @@ StateGameplay.prototype =
 
         this.DropItemManager.Star.OnHitBasket = ()=>
         {
+			if (this.isGameOver)
+			{
+				return;
+			}
+							
             this.Basket.StartShake();
             this.TopUi.Score.AddScore();
             this.ExplodeParticle.Show();            
@@ -133,6 +152,7 @@ StateGameplay.prototype =
 					this.TopUi.Hide();
             		this.DropItemManager.Init();
 					
+					this.TopUi.TimerManager.HideTimer(true);
 					this.endGame(true);
 				}
 				else
@@ -171,11 +191,21 @@ StateGameplay.prototype =
 
         this.InputManager.OnLeft = ()=>
         {
+			if (!this.isGameStarted || this.isGameOver)
+			{
+				return;
+			}
+			
             this.Basket.MoveLeft();
             this.SoundManager.PlaySfx(GlobalConst.SfxSwipe);
         };
         this.InputManager.OnRight = ()=>
         {
+			if (!this.isGameStarted || this.isGameOver)
+			{
+				return;
+			}
+			
             this.Basket.MoveRight();
             this.SoundManager.PlaySfx(GlobalConst.SfxSwipe);
         };
@@ -184,6 +214,7 @@ StateGameplay.prototype =
         this.TopUi.OnDoneShow = ()=>
         {
             this.DropItemManager.ShowDropItem();
+			this.TopUi.TimerManager.HideTimer(false); 
         }
 
         this.TopUi.Score.OnScore3000 = ()=>
@@ -209,6 +240,9 @@ StateGameplay.prototype =
 
         this.TopUi.LivesManager.OnLivesZero = ()=>
         {
+			this.TopUi.TimerManager.Pause();
+			this.TopUi.TimerManager.HideTimer(true);
+			
             this.Basket.Die();            
             this.TopUi.Hide();
             this.DropItemManager.Init();
@@ -223,6 +257,8 @@ StateGameplay.prototype =
         this.Basket.OnOutScreen = ()=>
         {
             //this.GameOver.Show(this.TopUi.Score.CurrentScore);
+			
+			this.loseReason = "FAILED";
 			this.endGame(false);
         }
 
@@ -297,12 +333,20 @@ StateGameplay.prototype =
         GlobalObject.Game.add.existing(this.Title);
         GlobalObject.Game.add.existing(this.GameOver);
         GlobalObject.Game.add.existing(this.HighScore);
-        GlobalObject.Game.add.existing(this.TopUi);        
+        GlobalObject.Game.add.existing(this.TopUi); 
 		//GlobalObject.Game.add.existing(this.timerHUDGroup); 
 		
+		this.frontGroup = this.add.group();
+		this.frontGroup.add(this.TopUi.TimerManager.view.hudGroup);
 		
 		
         this.ScaleAll();
+		
+		if (GlobalConst.isRestarted)
+		{
+			this.Title.InstantHide();
+			this.Title.OnTitleDoneHiding();
+		}
     },
 
     update:function()
@@ -339,6 +383,15 @@ StateGameplay.prototype =
 	initTimer()
 	{
 		this.TopUi.TimerManager.OnTimeRunOut = () => {
+			this.TopUi.TimerManager.Pause();
+			this.TopUi.TimerManager.HideTimer(true);
+			
+            //this.Basket.Die();
+            this.TopUi.Hide();
+            this.DropItemManager.StopDropping(true);
+            this.HighScore.AddScore(this.TopUi.Score.CurrentScore);			
+			
+			this.loseReason = "TIMEOUT"
 			this.endGame(false);
 		}
 	},
@@ -350,6 +403,7 @@ StateGameplay.prototype =
 	
 	endGame(isVictory = false)
 	{
+		this.TopUi.TimerManager.Pause();
 		this.showVoucherGameOver(isVictory);
 		this.isGameOver = true;		
 	},
@@ -359,10 +413,15 @@ StateGameplay.prototype =
 		this.voucherGameOverScreen = new VoucherController(this.game);
 		
 		this.voucherGameOverScreen.setEvents(() => {
+			//Global.musicPlayer.stopMusic();
+			window.open(CONFIG.URL_DOWNLOAD, '_blank');
+		}, () => {
+			//this.SoundManager.Stop();
+			GlobalConst.isRestarted = true;
 			this.game.state.start('gameplay');
 		}, () => {
-			this.game.state.start('gameplay');
-		}, () => {
+			//this.SoundManager.Stop();
+			GlobalConst.isRestarted = true;
 			this.game.state.start('gameplay');
 		})	
 		
@@ -373,6 +432,7 @@ StateGameplay.prototype =
 		else
 		{
 			this.voucherGameOverScreen.popUpLose();
+			this.voucherGameOverScreen.view.titleText.text = this.loseReason;
 		}
 	}	
 }

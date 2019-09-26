@@ -1,5 +1,7 @@
 var GlobalConst =
 {
+	isRestarted : false,
+	
     AndoirdId : 'UA-44537548-18',
     IosId  : 'UA-44537548-19',
     GAId : null,

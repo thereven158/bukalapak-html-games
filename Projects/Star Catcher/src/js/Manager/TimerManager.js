@@ -12,6 +12,11 @@ var TimerManager = function(timer=90000)
 	this.defaultTimer = timer;
 	
 	this.isInit = false;
+	
+	this.view = new TimerEventView(GlobalObject.Game);
+	this.view.hudGroup.visible = false;
+	
+	this.isPaused = false;
 }
 
 TimerManager.prototype = Object.create(Phaser.Sprite.prototype);
@@ -20,6 +25,11 @@ TimerManager.prototype.constructor = TimerManager;
 TimerManager.prototype.Scale = function()
 {
     ScaleScreen.ScaleObject(this,422,218);
+}
+
+TimerManager.prototype.Pause = function()
+{
+	this.isPaused = true;
 }
 
 TimerManager.prototype.Init = function()
@@ -31,9 +41,27 @@ TimerManager.prototype.Init = function()
 	this.isInit = true;
 }
 
+TimerManager.prototype.HideTimer = function(isHide)
+{
+	this.view.hudGroup.visible = !isHide;
+}
+
 TimerManager.prototype.UpdateTimer = function(timeElapsed)
 {
-	if (this.curTimer > 0) this.curTimer -= timeElapsed;
+	if (this.isPaused)
+	{
+		return;
+	}
+	
+	if (this.curTimer > 0) 
+	{
+		this.curTimer -= 15;
+	}
+	else
+	{
+		return;
+	}
+		
 	
 	if (this.curTimer <= 0)
 	{
@@ -55,41 +83,21 @@ TimerManager.prototype.OnTimeRunOut = function()
 
 TimerManager.prototype.CreateHUD = function()
 {
-	this.timerText = GlobalObject.Game.add.text(0, 0, '00.00', {font : "Panton-Bold",fontSize: 50 , fill :"#ff9d00", align:"center"});
+	//this.timerText = GlobalObject.Game.add.text(0, 0, '00.00', {font : "Panton-Bold",fontSize: 50 , fill :"#ff9d00", align:"center"});
 	
 	//this.addChild(this.timerText);
-}
-
-TimerManager.prototype.AppendTimer = function()
-{
-	let timerText = this.curTimer.toString();
 	
-	if (timerText > 4)
-	{
-		timerText = timerText.substr(0, 4);
-	}
+	let timePanel = this;
 	
-	if (timerText.length == 1)
-	{
-		timerText = `00.0 ${timerText}`;
-	}
-	else if (timerText.length == 2)
-	{
-		timerText = `00. ${timerText}`;
-	}
-	else if (timerText.length == 3)
-	{
-		timerText = `0${timerText.substr(0,1)}. ${timerText.substr(1,2)}`;
-	}
-	else if (timerText.length == 4)
-	{
-		timerText = `${timerText.substr(0,2)}. ${timerText.substr(2,2)}`;
-	}	
-	
-	return timerText;
+	this.view.timer1stDigitText.position.setTo(timePanel.x - timePanel.width * 0.705, timePanel.y + timePanel.height * 0.44);
+	this.view.timer2ndDigitText.position.setTo(timePanel.x - timePanel.width * 0.555, timePanel.y + timePanel.height * 0.44);
+	this.view.timerPeriodText.position.setTo(timePanel.x - timePanel.width * 0.450, timePanel.y + timePanel.height * 0.44);
+	this.view.timer3rdDigitText.position.setTo(timePanel.x - timePanel.width * 0.335, timePanel.y + timePanel.height * 0.44);
+	this.view.timer4thDigitText.position.setTo(timePanel.x - timePanel.width * 0.185, timePanel.y + timePanel.height * 0.44);	
 }
 
 TimerManager.prototype.UpdateTimerDisplay = function()
 {
-	this.timerText.text = this.AppendTimer();
+	//this.timerText.text = this.AppendTimer();
+	this.view.updateTimer(this.curTimer);
 }

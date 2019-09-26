@@ -32,8 +32,7 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     create(){
-        this.view = new TitleSceneView(this);
-        this.view.create();
+        this.view = new TitleSceneView(this).create();
 
         this.view.onClickPlay(this.OnClickPlay);
 

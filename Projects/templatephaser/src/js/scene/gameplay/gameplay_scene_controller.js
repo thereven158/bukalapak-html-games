@@ -31,9 +31,7 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     create(){
-        this.view = new GameplaySceneView(this);
-        this.view.create();
-
+        this.view = new GameplaySceneView(this).create();
 
 
         this.StartGame();

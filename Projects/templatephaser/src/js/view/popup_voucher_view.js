@@ -53,7 +53,6 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         
         this.TitleText = new Text(this.scene, this.TitleBox.x, this.TitleBox.y, "Voucher", 
             {align:'center', fontFamily: 'panton', color: '#000000'}).setFontSizeR(45);
-        this.TitleText.setOrigin(0.5,0.5);
         this.MainGroup.add(this.TitleText);
 
         let innerContentStartPosY = this.TitleBox.y;
@@ -67,12 +66,10 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         
         this.HeadText = new Text(this.scene, this.TitleBox.x, innerContentStartPosY + (innerContentHeight * 0.175), "Yuk, Pakai Vouchernya!"
             ,{align:'center', fontFamily: 'panton_bold', color: '#000000'}).setFontSizeR(50);
-        this.HeadText.setOrigin(0.5,0.5);
         this.MainGroup.add(this.HeadText);
 
         this.DescriptionText = new Text(this.scene, this.TitleBox.x, innerContentStartPosY + (innerContentHeight * 0.3), "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak"
             ,{align:'center', fontFamily: 'panton', color: '#000000'}).setFontSizeR(30);
-        this.DescriptionText.setOrigin(0.5,0.5);
         this.DescriptionText.setWordWrapWidth(this.Background.displayWidth * (0.8));
         this.MainGroup.add(this.DescriptionText);
 
@@ -142,7 +139,6 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         
         this.MessageText = new Text(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight - (this.MessageBoxHeight * 0.5), "Berhasil disalin tinggal pakai vouchernya pas pembayaran"
             ,{align:'center', fontFamily: 'panton', color: '#ffffff'}).setFontSizeR(30);
-        this.MessageText.setOrigin(0.5,0.5);
         this.MessageText.setWordWrapWidth(this.MessageBox.displayWidth * 0.8);
         this.MessageGroup.add(this.MessageText);
 

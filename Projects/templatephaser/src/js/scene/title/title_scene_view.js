@@ -21,7 +21,7 @@ export default class TitleSceneView {
         this.logo = new Button(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'logo');
     }
 
-    onClickPlay(event){
+    OnClickPlay(event){
         this.logo.onClick(event);
     }
 };

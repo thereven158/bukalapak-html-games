@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import GameplaySceneView from './gameplay_scene_view';
 import ScreenUtility from '../../module/screen/screen_utility';
 import Minion from '../../gameobject/Minion';
+import Baloon from '../../gameobject/Baloon';
 
 export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
@@ -14,12 +15,14 @@ export default class GameplaySceneController extends Phaser.Scene {
     init(){
         console.log('game screen');
         Minion.InitAnimationData(this);
+        Baloon.InitAnimationData(this);
         this.InitAudio();
         this.InitGameData();
     }
 
     InitGameData(){
         this.score = 0;
+        this.temp = 100;
         this.pumpedCount = 0;
         this.IsWinning = false;
         this.baloonActive = true;
@@ -50,7 +53,10 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.view.create();
 
         this.timerEvent = this.time.delayedCall(20000, this.onEvent, [], this);
-        this.view.onClickPumped(this.onClickPumped);
+        
+        this.view.pump.on('pointerdown', function() {
+            this.onClickPumped();
+        }, this);
     }
 
     update(){
@@ -65,10 +71,12 @@ export default class GameplaySceneController extends Phaser.Scene {
     Win(){
         this.winSfx.play();
         this.IsWinning = true;
+        this.view.miniun.Happy();
         this.DelayCallbackEvent();
     }
 
     TimesRanOut(){
+        this.baloonActive = false;
         this.timesUpFsx.play();
         this.view.TimesUp();
         this.DelayCallbackEvent();
@@ -98,22 +106,32 @@ export default class GameplaySceneController extends Phaser.Scene {
         console.log("timer removed");
     }
 
-    onClickPumped = ()=>{
+    onClickPumped() {
         if(this.baloonActive == true){
             this.pumpedCount +=1;
+            this.temp += 30;
+
+            this.view.LeverTween();
+
+            this.view.baloon.setPosition(
+                this.ScreenUtility.CenterX,
+                this.ScreenUtility.CenterY
+            );
 
             if(this.pumpedCount == 6){
                 this.BaloonPop();
+                this.temp = 100;
             }
             else{
-                this.view.baloon.displayWidth += 100;
-                this.view.baloon.displayHeight += 100;
+                this.view.baloon.displayWidth += 50;
+                this.view.baloon.displayHeight += 50;
                 this.blowSfx.play();
             }
         }
     }
 
     BaloonPop(){
+        this.view.miniun.Happy();
         this.popSfx.play();
         this.score +=1;
         this.view.scoreText.setText('' + this.score);
@@ -126,11 +144,23 @@ export default class GameplaySceneController extends Phaser.Scene {
             this.Win();
             this.view.TimesUp();
         }
+
+        this.time.addEvent({ 
+            delay: 3000, 
+            callback: this.IdleCallback, 
+            callbackScope: this, 
+            loop: false 
+        });
+    }
+
+    IdleCallback(){
+        this.view.miniun.Idle();
     }
 
     destroyCreateObject = () =>{
         console.log("called destroy")
-        this.view.baloon.destroy();
+        // this.view.baloon.destroy();
+        this.view.baloon.Pop();
         this.view.createBaloon();
     }
 }

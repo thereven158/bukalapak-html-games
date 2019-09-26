@@ -5,6 +5,7 @@ import ScreenUtility from '../../module/screen/screen_utility';
 import LoadingAudioController from '../loading/subloader/loading_audio_controller';
 import LoadingGameplayController from '../loading/subloader/loading_gameplay_controller';
 import LoadingVoucherController from './subloader/loading_voucher_controller';
+import LoadingMenuController from './subloader/loading_menu_controller';
 
 export default class LoadingSceneController extends Phaser.Scene{
     constructor(){
@@ -13,6 +14,7 @@ export default class LoadingSceneController extends Phaser.Scene{
         this.AudioLoader = new LoadingAudioController(this);
         this.GameplayLoader = new LoadingGameplayController(this);
         this.VoucherLoader = new LoadingVoucherController(this);
+        this.MenuLoader = new LoadingMenuController(this);
     }
 
     init(){
@@ -53,6 +55,7 @@ export default class LoadingSceneController extends Phaser.Scene{
         this.AudioLoader.loadResource();
         this.GameplayLoader.loadResource();
         this.VoucherLoader.loadResource();
+        this.MenuLoader.loadResource();
 
         this.load.image('logo',this.CreatePath('/images/Logo-BL.png'));
         this.load.image('baloon',this.CreatePath('/images/rectangle.png'));

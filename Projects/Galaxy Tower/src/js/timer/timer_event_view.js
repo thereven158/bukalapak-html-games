@@ -55,23 +55,13 @@ TimerEventView.prototype =
 	
 	appendTimer(time)
 	{
-		let timerText = time.toString();
+		if (time < 0) time = 0;
 		
-		if (time > 10000)
-		{
-			if (timerText.length > 4)
-			{
-				timerText = timerText.substr(0, 4);
-			}			
-		}
-		else
-		{
-			if (timerText.length > 3)
-			{
-				timerText = timerText.substr(0, 3);
-			}			
-		}
-
+		let timerText = time.toString();
+		timerText = timerText.substr(0, timerText.length-1);
+		
+		if (timerText=="") timerText = "0";
+		
 		if (timerText.length == 1)
 		{
 			timerText = `00.0${timerText}`;

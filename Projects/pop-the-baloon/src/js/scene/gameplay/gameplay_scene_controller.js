@@ -16,7 +16,8 @@ export default class GameplaySceneController extends Phaser.Scene {
         console.log('game screen');
         Minion.InitAnimationData(this);
         Baloon.InitAnimationData(this);
-        this.InitAudio();
+        this.InitGame();
+        this.InitAudioGame();
         this.InitGameData();
     }
 
@@ -26,9 +27,10 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.pumpedCount = 0;
         this.IsWinning = false;
         this.baloonActive = true;
+        this.IsGameStarted = false;
     }
 
-    InitAudio(){
+    InitAudioGame(){
         this.blowSfx = this.sound.add('baloon-blow');
         this.popSfx = this.sound.add('baloon-pop');
         this.timesUpFsx = this.sound.add('ingame-timeout');
@@ -36,16 +38,20 @@ export default class GameplaySceneController extends Phaser.Scene {
         if(this.Bgm == null){
             this.Bgm = this.sound.add('main-music',{
                 loop:-1,
-                volume: 0.5
+                volume: 1
             });
             
         }
         this.Bgm.play();
     }
 
-    preload(){
+    InitGame(){
+        ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
-        this.ScreenUtility.Init(this)
+    }
+
+    InitAudio(){
+
     }
 
     create(){
@@ -57,6 +63,12 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.view.pump.on('pointerdown', function() {
             this.onClickPumped();
         }, this);
+
+        this.StartGame();
+    }
+
+    StartGame(){
+        this.IsGameStarted = true;
     }
 
     update(){
@@ -123,8 +135,9 @@ export default class GameplaySceneController extends Phaser.Scene {
                 this.temp = 100;
             }
             else{
-                this.view.baloon.displayWidth += 50;
-                this.view.baloon.displayHeight += 50;
+                // this.view.baloon.displayWidth += 50;
+                // this.view.baloon.displayHeight += 50;
+                this.view.BaloonTween();
                 this.blowSfx.play();
             }
         }

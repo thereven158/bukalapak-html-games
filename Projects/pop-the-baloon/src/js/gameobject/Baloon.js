@@ -31,6 +31,6 @@ export default class Baloon extends Phaser.GameObjects.Sprite{
 
     Pop(){
         this.anims.play(Animations.Explode);
-        this.anims.setRepeat(1);
+        this.anims.setRepeat(0);
     }
 }

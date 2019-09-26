@@ -36,7 +36,8 @@ var config = {
 	render: {
 		antiAlias: false,
 		pixelArt: false,
-		roundPixels: false
+		roundPixels: false,
+		powerPreference: 'high-performance'
 	},
 	autoRound: false
 };

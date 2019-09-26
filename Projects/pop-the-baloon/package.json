@@ -1,9 +1,10 @@
 {
-	"name": "my-phaser-project",
+	"name": "pop-the-baloon",
 	"version": "1.0.0",
 	"description": "A Phaser Project",
 	"main": "src/index.js",
 	"scripts": {
+		"copy:asset": "npx copyfiles -u 2 \"src/assets/**/*.*\" dist/",
 		"build": "webpack --config webpack/webpack.prod.js --env.build=agate-dev",
 		"dist": "npx http-server dist/ -p 5500 -e",
 		"dev": "webpack-dev-server --config webpack/webpack.dev.js --env.build=agate-dev --host=0.0.0.0"
@@ -29,6 +30,6 @@
 		"webpack-obfuscator": "^0.18.3"
 	},
 	"dependencies": {
-		"phaser": "^3.18"
+		"phaser": "^3.19.0"
 	}
 }

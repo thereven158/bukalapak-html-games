@@ -58,7 +58,7 @@ export default class TitleSceneView {
      }
 
      onClickPlay(event){
-      this.ButtonPlay.OnClick(event);
+      this.ButtonPlay.onClick(event);
      }
      
 };

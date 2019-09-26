@@ -2,6 +2,9 @@ import GameplaySceneController from "./gameplay_scene_controller";
 import Button from "../../module/objects/button";
 import Minion from '../../gameobject/Minion';
 import Baloon from '../../gameobject/Baloon';
+import Image from '../../module/objects/image';
+import Text from '../../module/objects/text';
+
 
 export default class GameplaySceneView {
     /** @param {GameplaySceneController} scene */
@@ -13,63 +16,67 @@ export default class GameplaySceneView {
      }
 
      create(){
-        this.background = this.scene.add.image(this.ScreenUtility.CenterX, 
-          this.ScreenUtility.CenterY, 'background');
-        this.background.displayWidth = this.ScreenUtility.GameWidth;
-        this.background.displayHeight =this.ScreenUtility.GameHeight;
+        this.background = new Image(this.scene, 
+          this.ScreenUtility.CenterX, 
+          this.ScreenUtility.CenterY, 
+          'background');
+        this.background.setDisplaySize(this.ScreenUtility.GameWidth, 
+          this.ScreenUtility.GameHeight);
 
-        this.timerWindow = this.scene.add.image(0, 0, 'ui-timer');
-          this.timerWindow.displayWidth = 500;
-        this.timerWindow.setPosition(this.ScreenUtility.GameWidth - this.timerWindow.displayWidth /2, 
-            0 + this.timerWindow.displayHeight /2);
+        this.timerWindow = new Image(this.scene, 0, 0, 'ui-timer');
+        this.timerWindow.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
+        this.timerWindow.setPosition(
+          this.ScreenUtility.GameWidth - this.timerWindow.displayWidth / 2,
+          0 + this.timerWindow.displayHeight / 2);
 
-        this.textTimer = this.scene.add.text(this.timerWindow.x / 0.97,
+        this.textTimer = new Text(this.scene,
+          this.timerWindow.x / 0.97,
           this.timerWindow.y / 1.15, 
           "90.00", 
-          { fontSize: "110px", fill: "#fff" });
+          { align:'center', fontFamily: 'panton', color: '#f9d023' })
+          .setFontSizeR(130);
         this.textTimer.setDepth(1);
         this.textTimer.setOrigin(0.5, 0.5);
 
-        this.scoreWindow = this.scene.add.image(0, 0, 'ui-score');
+        this.scoreWindow = new Image(this.scene, 0, 0, 'ui-score');
         this.scoreWindow.setPosition(this.scoreWindow.displayWidth / 2,
         this.scoreWindow.displayHeight / 2);
+        this.scoreWindow.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
 
-        this.scoreText = this.scene.add.text(this.scoreWindow.x / 1.05,
+        this.scoreText = new Text(this.scene,
+          this.scoreWindow.x / 1.05,
           this.scoreWindow.y / 0.9, 
           "0", 
-          { fontSize: "100px", fill: "#fff" });
+          { align:'center', fontFamily: 'panton', color: '#f9d023' })
+          .setFontSizeR(100);
         this.scoreText.setDepth(1);
 
         this.createBaloon();
 
-        // this.pump = new Button(this.scene, 
-        //   this.ScreenUtility.CenterX + this.ScreenUtility.CenterX / 2.2, 
-        //   this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight / 4, 
-        //   'pump');
-        // this.pump.setDepth(2);
-
-        this.pump = this.scene.add.image(0,0,'pump');
+        this.pump = new Image(this.scene, 0,0,'pump');
         this.pump.setDepth(2);
-        this.pump.displayWidth = this.ScreenUtility.GameWidth * 0.6;
-        // this.pump.displayHeight = this.pump.width;
+        this.pump.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
         this.pump.setPosition(
-          this.ScreenUtility.CenterX + this.ScreenUtility.CenterX / 2, 
+          this.ScreenUtility.CenterX + this.ScreenUtility.CenterX / 2.5, 
           this.ScreenUtility.CenterY + this.ScreenUtility.CenterY / 2);
         this.pump.setInteractive();
-        console.log("width: " + this.pump.displayWidth);
-        console.log("height: " + this.pump.displayWidth * (this.pump.height / this.pump.width ));
-
-        console.log("game width: " + this.ScreenUtility.GameWidth);
-        console.log("game height: " + this.ScreenUtility.GameHeight);
 
         this.lever = this.scene.add.image(this.pump.x - 55,
           this.pump.y - 170,
           'lever');
-         this.lever.setDepth(1);  
+
+        this.lever.displayWidth = this.ScreenUtility.GameWidth * 0.2;
+        this.lever.displayHeight = this.lever.displayWidth * (this.lever.height/this.lever.width);
+        this.lever.setDepth(1);  
+
+        console.log(this.lever.width);
+        console.log(this.lever.height);
         
         this.miniun = new Minion(this.scene,
           this.ScreenUtility.CenterX - this.ScreenUtility.CenterX / 2, 
           this.pump.y + 200);
+        this.miniun.displayWidth = this.ScreenUtility.GameWidth * 0.5;
+        this.miniun.displayHeight = this.miniun.displayWidth * (this.miniun.height/this.miniun.width);
         
         this.miniun.Idle();
 
@@ -85,15 +92,11 @@ export default class GameplaySceneView {
         this.leverTween.pause();
      }
 
-    //  onClickPumped(event){
-    //   this.pump.OnClick(event);
-    //  }
-
      createBaloon(){
       this.baloon = new Baloon(this.scene,
         this.ScreenUtility.CenterX,
         this.ScreenUtility.CenterY);
-      this.baloon.displayWidth = this.ScreenUtility.GameWidth * 0.6;
+      this.baloon.displayWidth = this.ScreenUtility.GameWidth * 0.5;
       this.baloon.displayHeight = this.baloon.displayWidth * (this.baloon.height/this.baloon.width);
      }
 
@@ -106,5 +109,14 @@ export default class GameplaySceneView {
 
      LeverTween(){
       this.leverTween.restart();
+     }
+
+     BaloonTween(){
+      this.scene.tweens.add({
+        targets: this.baloon ,
+        scale: this.baloon.scale + 0.1,
+        ease: 'Linear',
+        duration: 150,
+      });
      }
 };

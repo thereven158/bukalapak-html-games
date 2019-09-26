@@ -3,6 +3,7 @@ import ScreenUtility from '../../module/screen/screen_utility';
 
 import TitleSceneView from './title_scene_view';
 import VoucherView from '../../view/popup_voucher_view';
+import VoucherData from '../../voucherdata';
 
 export default class TitleSceneController extends Phaser.Scene {
 	constructor() {
@@ -15,6 +16,7 @@ export default class TitleSceneController extends Phaser.Scene {
         console.log('title screen');
 
         this.IniTitleData();
+        this.InitTitle();
         this.IsAfterGame = data.isAfterGame;
         this.IsGameWin = data.isGameWin;
     }
@@ -24,10 +26,9 @@ export default class TitleSceneController extends Phaser.Scene {
         this.IsGameWin = false;
     }
 
-    preload(){
+    InitTitle(){
+        ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
-        this.ScreenUtility.Init(this)
-
     }
 
     create(){
@@ -36,15 +37,21 @@ export default class TitleSceneController extends Phaser.Scene {
 
         this.view.onClickPlay(this.OnClickPlay);
 
+        //add voucher script
         if(this.IsAfterGame){
             this.VoucherView = new VoucherView(this);
+            let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
 
             if(this.IsGameWin){
-                this.VoucherView.ShowVoucherCode(CONFIG.VOUCHER_CODE)
-                this.VoucherView.SetDescription('voucher_headerwin', 
-                    "Voucher", 
-                    "Yuk, Pakai Vouchernya!", 
-                    "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak");
+                this.VoucherView.ShowVoucherCode(voucherData.Code, {
+                    titleInfo :  voucherData.InfoTitle,
+                    description : voucherData.InfoDescription,
+                    expireDate : voucherData.ExpireDate,
+                    minTransactionInfo : voucherData.MinimalTransactionInfo,
+                    onlyAppliesInfo : voucherData.OnlyAppliesInfo,
+                    termsandconditions : voucherData.TermsAndConditions,
+                });
+        
             }else{
                 this.VoucherView.DisableVoucherCode()
                 this.VoucherView.SetDescription('voucher_headertimeout', 

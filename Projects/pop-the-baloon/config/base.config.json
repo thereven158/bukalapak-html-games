@@ -1,4 +1,5 @@
 {
-	"BASE_ASSET_URL": "",
-	"VOUCHER_CODE" : "TANPAONGKIR"
+	"BASE_ASSET_URL": "/assets",
+	"VOUCHER_TYPE" : 0
+
 }

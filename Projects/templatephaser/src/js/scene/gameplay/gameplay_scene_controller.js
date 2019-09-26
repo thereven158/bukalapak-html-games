@@ -11,11 +11,22 @@ export default class GameplaySceneController extends Phaser.Scene {
 
     init(){
         console.log('game screen')
+
+        this.InitGame();
+        this.InitGameData();
+        this.InitAudio();
     }
 
-    preload(){
+    InitGame(){
+        ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
-        this.ScreenUtility.Init(this)
+    }
+
+    InitGameData(){
+        this.IsGameStarted = false;
+    }
+
+    InitAudio(){
 
     }
 
@@ -23,9 +34,23 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.view = new GameplaySceneView(this);
         this.view.create();
 
+
+
+        this.StartGame();
     }
 
-    update(){
+    StartGame(){
+        this.IsGameStarted = true;
+    }
+
+    update(timestep, delta){
+        if(this.IsGameStarted){
+            this.gameUpdate(timestep, delta);
+        }
+
+    }
+
+    gameUpdate(timestep, delta){
 
     }
 }

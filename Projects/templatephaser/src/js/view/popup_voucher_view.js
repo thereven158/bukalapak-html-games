@@ -24,8 +24,9 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     }
 
     InitView(){
+        this.setDepth(10);
         this.Blackground = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'bg_black').setInteractive();
-		this.Blackground.setDisplaySize(this.ScreenUtility.GameHeight, this.ScreenUtility.GameWidth);
+		this.Blackground.setDisplaySize(this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight);
         this.Blackground.setAlpha(0.8);
         this.add(this.Blackground);
 
@@ -128,7 +129,7 @@ export default class VoucherView extends Phaser.GameObjects.Container{
         this.MainGroup.add(this.BtnClose);
         
         this.MessageGroup = this.scene.add.container(0,0);
-        this.MessageGroup.setDepth(1);
+        this.MessageGroup.setDepth(11);
 
         this.MessageBoxHeight = this.ScreenUtility.GameHeight * 0.08;
         
@@ -151,6 +152,8 @@ export default class VoucherView extends Phaser.GameObjects.Container{
 
         this.VoucherInfoView.OnClickCopy(this.ClickCopy);
         this.VoucherInfoView.OnClickClose(this.CloseInfo);
+
+        this.add(this.VoucherInfoView);
     }
 
     SetDescription(texture, titleText, headText, description){

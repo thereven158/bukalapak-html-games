@@ -1,7 +1,8 @@
-import Phaser from 'phaser';
+import ScreenUtility from '../../module/screen/screen_utility';
 
 import TitleSceneView from './title_scene_view';
-import ScreenUtility from '../../module/screen/screen_utility';
+import VoucherView from '../../view/popup_voucher_view';
+import VoucherData from '../../voucherdata';
 
 export default class TitleSceneController extends Phaser.Scene {
 	constructor() {
@@ -9,13 +10,24 @@ export default class TitleSceneController extends Phaser.Scene {
         
     }
 
-    init(){
+    init(data){
         console.log('title screen')
+
+        this.InitTitle();
+        this.InitTitleData(data);
+        this.InitAudio();
     }
 
-    preload(){
+    InitTitle(){
+        ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
-        this.ScreenUtility.Init(this)
+    }
+
+    InitTitleData(data){
+
+    }
+
+    InitAudio(){
 
     }
 
@@ -23,14 +35,37 @@ export default class TitleSceneController extends Phaser.Scene {
         this.view = new TitleSceneView(this);
         this.view.create();
 
-        this.view.onClickPlay(this.onClickPlay);
+        this.view.onClickPlay(this.OnClickPlay);
+
+        //add voucher script
+        this.VoucherView = new VoucherView(this);
+        let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
+
+        this.VoucherView.ShowVoucherCode(voucherData.Code, {
+            titleInfo :  voucherData.InfoTitle,
+            description : voucherData.InfoDescription,
+            expireDate : voucherData.ExpireDate,
+            minTransactionInfo : voucherData.MinimalTransactionInfo,
+            onlyAppliesInfo : voucherData.OnlyAppliesInfo,
+            termsandconditions : voucherData.TermsAndConditions,
+        });
+
+        this.VoucherView.SetDescription('voucher_headerwin', 
+            "Voucher", 
+            voucherData.Title, 
+            voucherData.Description
+        );
+        
+        this.VoucherView.OnClickMainLagi(this.OnClickPlay);
+
+        this.VoucherView.Open();
     }
 
     update(){
 
     }
 
-    onClickPlay = ()=>{
+    OnClickPlay = ()=>{
         this.scene.start('GameScene')
     }
 }

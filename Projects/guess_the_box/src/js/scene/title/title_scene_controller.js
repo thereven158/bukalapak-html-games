@@ -33,6 +33,7 @@ export default class TitleSceneController extends Phaser.Scene {
 
     create(){
         this.view = new TitleSceneView(this).create();
+        this.view.OnClickPlay(this.ClickPlay);
 
     }
 
@@ -40,7 +41,7 @@ export default class TitleSceneController extends Phaser.Scene {
 
     }
 
-    OnClickPlay = ()=>{
+    ClickPlay = ()=>{
         this.scene.start('GameScene')
     }
 }

@@ -1,7 +1,8 @@
-import Phaser from 'phaser';
+import ScreenUtility from '../../module/screen/screen_utility';
 
 import TitleSceneView from './title_scene_view';
-import ScreenUtility from '../../module/screen/screen_utility';
+import VoucherView from '../../view/popup_voucher_view';
+import VoucherData from '../../voucherdata';
 
 export default class TitleSceneController extends Phaser.Scene {
 	constructor() {
@@ -9,28 +10,41 @@ export default class TitleSceneController extends Phaser.Scene {
         
     }
 
-    init(){
+    init(data){
         console.log('title screen')
+
+        this.InitTitle();
+        this.InitTitleData(data);
+        this.InitAudio();
     }
 
-    preload(){
+    InitTitle(){
+        ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
-        this.ScreenUtility.Init(this)
+    }
+
+    InitTitleData(data){
+
+    }
+
+    InitAudio(){
 
     }
 
     create(){
-        this.view = new TitleSceneView(this);
-        this.view.create();
+        this.view = new TitleSceneView(this).create();
+        this.view.OnClickPlay(this.ClickPlay);
 
-        this.view.onClickPlay(this.onClickPlay);
+		this.view.buttonPlay.onClick(() => {
+			this.ClickPlay();
+		});
     }
 
     update(){
 
     }
 
-    onClickPlay = ()=>{
-        this.scene.start('GameScene')
+    ClickPlay = () =>{
+        this.scene.start('GameScene');
     }
 }

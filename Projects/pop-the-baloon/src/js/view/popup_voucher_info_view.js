@@ -34,7 +34,7 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         this.MainGroup.add(whiteGround);
 
         //header
-        let headerHeight = this.ScreenUtility.GameHeight * 0.08;
+        let headerHeight = this.ScreenUtility.GameHeight * 0.1;
         let contentHeight = this.ScreenUtility.GameHeight - headerHeight;
         function GetContentYPos(percentage){
             return headerHeight + (contentHeight * percentage);
@@ -46,7 +46,7 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         this.MainGroup.add(headerLine);
 
         let headerText = new Text(this.scene, this.ScreenUtility.GameWidth * 0.05, headerHeight * 0.5, "Info Promo"
-            ,{align:'center', fontFamily: 'panton_bold', color: '#000000'}).setFontSizeR(65);
+            ,{align:'center', fontFamily: 'panton_bold', color: '#000000'}).setFontSizeR(55);
         headerText.setOrigin(0,0.5);
         this.MainGroup.add(headerText);
 
@@ -63,7 +63,7 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         this.TitleText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.945);
         this.MainGroup.add(this.TitleText);
 
-        this.DescriptionText = new Text(this.scene, this.TitleText.x, this.TitleText.y + this.TitleText.height * 1.1, "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak"
+        this.DescriptionText = new Text(this.scene, this.TitleText.x, this.TitleText.y + this.TitleText.height * 1.1, "Kamu dapet voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi Bukalapak!"
             ,{align:'left', fontFamily: 'panton', color: '#000000'}).setFontSizeR(38);
         this.DescriptionText.setOrigin(0,0);
         this.DescriptionText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.935);

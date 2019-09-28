@@ -1,12 +1,13 @@
 import { AnimationHelper } from "../helper/animation_helper";
 import ScreenUtility from "../module/screen/screen_utility";
+import Sprite from "../module/objects/sprite";
 
 var Animations = {
     Idle: 'idle',
     Happy: 'happy'
   }
 
-export default class Minion extends Phaser.GameObjects.Sprite{
+export default class Minion extends Sprite{
         /** @param {Phaser.Scene} scene */
     constructor(scene, x, y){
         super(scene, x, y, 'idle', 0);

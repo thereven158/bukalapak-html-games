@@ -1,3 +1,5 @@
+import ScreenUtility from "../screen/screen_utility";
+
 export default class Sprite extends Phaser.GameObjects.Sprite{
     /** 
   * @param {Phaser.Scene} scene 

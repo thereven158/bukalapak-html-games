@@ -13,6 +13,7 @@ export default class GameplaySceneView {
        this.ScreenUtility = scene.ScreenUtility;
        
        this.leverTween;
+       this.temp = 0;
      }
 
      create(){
@@ -24,7 +25,7 @@ export default class GameplaySceneView {
           this.ScreenUtility.GameHeight);
 
         this.timerWindow = new Image(this.scene, 0, 0, 'ui-timer');
-        this.timerWindow.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
+        this.timerWindow.setDisplayWidth(this.ScreenUtility.GameWidth * 0.4, true);
         this.timerWindow.setPosition(
           this.ScreenUtility.GameWidth - this.timerWindow.displayWidth / 2,
           0 + this.timerWindow.displayHeight / 2);
@@ -34,55 +35,49 @@ export default class GameplaySceneView {
           this.timerWindow.y / 1.15, 
           "90.00", 
           { align:'center', fontFamily: 'panton', color: '#f9d023' })
-          .setFontSizeR(130);
+          .setFontSizeRS(100);
         this.textTimer.setDepth(1);
-        this.textTimer.setOrigin(0.5, 0.5);
 
         this.scoreWindow = new Image(this.scene, 0, 0, 'ui-score');
+        this.scoreWindow.setDisplayWidth(this.ScreenUtility.GameWidth * 0.4, true);
         this.scoreWindow.setPosition(this.scoreWindow.displayWidth / 2,
-        this.scoreWindow.displayHeight / 2);
-        this.scoreWindow.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
+          this.scoreWindow.displayHeight / 2);
 
         this.scoreText = new Text(this.scene,
-          this.scoreWindow.x / 1.05,
-          this.scoreWindow.y / 0.9, 
+          this.scoreWindow.x / 0.925,
+          this.scoreWindow.y / 0.7, 
           "0", 
           { align:'center', fontFamily: 'panton', color: '#f9d023' })
-          .setFontSizeR(100);
+          .setFontSizeRS(90);
         this.scoreText.setDepth(1);
-
-        this.createBaloon();
 
         this.pump = new Image(this.scene, 0,0,'pump');
         this.pump.setDepth(2);
-        this.pump.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
+        this.pump.setDisplayWidth(this.ScreenUtility.GameWidth * 0.4, true);
         this.pump.setPosition(
-          this.ScreenUtility.CenterX + this.ScreenUtility.CenterX / 2.5, 
-          this.ScreenUtility.CenterY + this.ScreenUtility.CenterY / 2);
+          this.ScreenUtility.CenterX + this.ScreenUtility.CenterX / 2.85, 
+          this.ScreenUtility.CenterY + this.ScreenUtility.CenterY / 1.75);
         this.pump.setInteractive();
 
-        this.lever = this.scene.add.image(this.pump.x - 55,
-          this.pump.y - 170,
-          'lever');
-
-        this.lever.displayWidth = this.ScreenUtility.GameWidth * 0.2;
-        this.lever.displayHeight = this.lever.displayWidth * (this.lever.height/this.lever.width);
+        this.lever = new Image(this.scene, 0, 0, 'lever');
+        this.lever.setDisplayWidth(this.ScreenUtility.GameWidth * 0.15, true);
         this.lever.setDepth(1);  
+        this.lever.setPosition(this.pump.x - this.pump.displayWidth / 9,
+          this.pump.y - this.pump.displayHeight / 3.75);
 
-        console.log(this.lever.width);
-        console.log(this.lever.height);
+        this.createBaloon();
         
-        this.miniun = new Minion(this.scene,
+        this.miniun = new Minion(this.scene, 0, 0);
+        this.miniun.setDisplayWidth(this.ScreenUtility.GameWidth * 0.3, true);
+        this.miniun.setPosition(
           this.ScreenUtility.CenterX - this.ScreenUtility.CenterX / 2, 
-          this.pump.y + 200);
-        this.miniun.displayWidth = this.ScreenUtility.GameWidth * 0.5;
-        this.miniun.displayHeight = this.miniun.displayWidth * (this.miniun.height/this.miniun.width);
+          this.ScreenUtility.CenterY + this.ScreenUtility.CenterY / 1.4);
         
         this.miniun.Idle();
 
         this.leverTween = this.scene.tweens.add({
           targets:  this.lever,
-          y: this.lever.y + 100,
+          y: this.pump.y - 30,
           yoyo: true,
           duration: 250,
           ease: 'Power1',
@@ -93,18 +88,45 @@ export default class GameplaySceneView {
      }
 
      createBaloon(){
-      this.baloon = new Baloon(this.scene,
-        this.ScreenUtility.CenterX,
-        this.ScreenUtility.CenterY);
-      this.baloon.displayWidth = this.ScreenUtility.GameWidth * 0.5;
-      this.baloon.displayHeight = this.baloon.displayWidth * (this.baloon.height/this.baloon.width);
+      this.baloon = new Baloon(this.scene, 0, 0);
+      this.baloon.setDisplayWidth(this.ScreenUtility.GameWidth * 0.4, true);
+
+      this.baloon.setPosition(
+        this.pump.x - this.pump.displayWidth / 2.25 , 
+        this.pump.y - this.pump.displayHeight / 1.325);
+      
+      this.baloon.setDepth(3);
      }
 
-     TimesUp(){
+     TimesUpBanner(){
       this.TimesUpBar = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'times-up');
       this.TimesUpBar.displayWidth = this.ScreenUtility.GameWidth;
       this.TimesUpBar.displayHeight = this.TimesUpBar.displayWidth * (this.TimesUpBar.height / this.TimesUpBar.width);
-      this.TimesUpBar.setDepth(1);
+      this.TimesUpBar.setDepth(8);
+
+      this.timesUpText = new Text(this.scene,
+        this.TimesUpBar.x,
+        this.TimesUpBar.y, 
+        "Time's Up", 
+        { align:'center', fontFamily: 'panton', color: '#f9d023' })
+        .setFontSizeRS(120);
+      this.timesUpText.setDepth(9);
+     }
+
+     WinBanner(){
+      this.TimesUpBar = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'times-up');
+      this.TimesUpBar.displayWidth = this.ScreenUtility.GameWidth;
+      this.TimesUpBar.displayHeight = this.TimesUpBar.displayWidth * (this.TimesUpBar.height / this.TimesUpBar.width);
+
+      this.TimesUpBar.setDepth(8);
+
+      this.timesUpText = new Text(this.scene,
+        this.TimesUpBar.x,
+        this.TimesUpBar.y, 
+        "Task Complete", 
+        { align:'center', fontFamily: 'panton', color: '#f9d023' })
+        .setFontSizeRS(120);
+      this.timesUpText.setDepth(9);
      }
 
      LeverTween(){
@@ -112,11 +134,22 @@ export default class GameplaySceneView {
      }
 
      BaloonTween(){
+      this.temp += 23;
+
+      if(this.temp >= 115){
+        this.temp = 115
+        console.log(this.baloon.x);
+      console.log(this.baloon.y);
+      }
       this.scene.tweens.add({
         targets: this.baloon ,
-        scale: this.baloon.scale + 0.1,
-        ease: 'Linear',
+        scale: this.baloon.scale + 0.075,
+        y: this.pump.y - this.pump.displayHeight / 1.325 - this.temp,
+        yoyo: false,
+        ease: 'Power1',
         duration: 150,
       });
+
+      
      }
 };

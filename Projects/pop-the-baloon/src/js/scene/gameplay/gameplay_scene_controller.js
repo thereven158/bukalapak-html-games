@@ -4,6 +4,9 @@ import GameplaySceneView from './gameplay_scene_view';
 import ScreenUtility from '../../module/screen/screen_utility';
 import Minion from '../../gameobject/Minion';
 import Baloon from '../../gameobject/Baloon';
+import VoucherView from '../../view/popup_voucher_view';
+import VoucherData from '../../voucherdata';
+
 
 export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
@@ -23,9 +26,9 @@ export default class GameplaySceneController extends Phaser.Scene {
 
     InitGameData(){
         this.score = 0;
-        this.temp = 100;
+        this.temp = 0;
         this.pumpedCount = 0;
-        this.IsWinning = false;
+        this.IsGameWin = false;
         this.baloonActive = true;
         this.IsGameStarted = false;
     }
@@ -64,6 +67,8 @@ export default class GameplaySceneController extends Phaser.Scene {
             this.onClickPumped();
         }, this);
 
+
+
         this.StartGame();
     }
 
@@ -72,45 +77,84 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     update(){
-        this.countDown = 20 - this.timerEvent.getElapsedSeconds();
-        this.view.textTimer.setText('' + this.countDown.toString().substr(0, 5));
-
-        if(this.countDown == 0){
+        if(this.IsGameStarted){
+            this.countDown = 20 - this.timerEvent.getElapsedSeconds();
+            this.view.textTimer.setText('' + this.countDown.toString().substr(0, 5));
+        }
+        if(this.countDown == 0 && this.IsGameStarted){
             this.TimesRanOut();
         }
     }
 
+    ShowResult = ()=>{
+        this.VoucherView = new VoucherView(this);
+        this.VoucherView.OnClickMainLagi(this.Restart);
+        this.VoucherView.OnClickClose(this.Restart);
+        
+        let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
+
+        if(this.IsGameWin){
+            console.log("test");
+            this.VoucherView.ShowVoucherCode(voucherData.Code, {
+                titleInfo :  voucherData.InfoTitle,
+                description : voucherData.InfoDescription,
+                expireDate : voucherData.ExpireDate,
+                minTransactionInfo : voucherData.MinimalTransactionInfo,
+                onlyAppliesInfo : voucherData.OnlyAppliesInfo,
+                termsandconditions : voucherData.TermsAndConditions,
+            });
+
+            this.VoucherView.SetDescription('voucher_headerwin', 
+                "Voucher", 
+                voucherData.Title, 
+                voucherData.Description
+            );
+        }else{
+            this.VoucherView.DisableVoucherCode()
+            this.VoucherView.SetDescription('voucher_headertimeout', 
+                "Timeout", 
+                VoucherData.VoucherTimeout.Title, 
+                VoucherData.VoucherTimeout.Description
+            );
+        }
+        
+        this.VoucherView.Open();
+    }
+
+
     Win(){
+        this.IsGameStarted = false;
+        this.view.WinBanner();
         this.winSfx.play();
-        this.IsWinning = true;
+        this.IsGameWin = true;
         this.view.miniun.Happy();
         this.DelayCallbackEvent();
     }
 
     TimesRanOut(){
+        this.IsGameStarted = false;
         this.baloonActive = false;
         this.timesUpFsx.play();
-        this.view.TimesUp();
+        this.view.TimesUpBanner();
         this.DelayCallbackEvent();
     }
 
     DelayCallbackEvent(){
         this.time.addEvent({ 
             delay: 3000, 
-            callback: this.BackToTitle, 
+            callback: this.ShowResult, 
             callbackScope: this, 
             loop: false 
         });
     }
 
-    BackToTitle(){
-        this.Bgm.stop();
-        this.scene.launch('TitleScene', {
-            isAfterGame: true,
-            isGameWin: this.IsWinning,
-            isGameOver: this.IsGameOver
-        });
+    BackToTitle = ()=>{
+        this.scene.launch('TitleScene');
         this.scene.stop();
+    }
+    
+    Restart = ()=>{
+        this.scene.restart();
     }
 
     onEvent = () => {
@@ -121,22 +165,14 @@ export default class GameplaySceneController extends Phaser.Scene {
     onClickPumped() {
         if(this.baloonActive == true){
             this.pumpedCount +=1;
-            this.temp += 30;
 
             this.view.LeverTween();
 
-            this.view.baloon.setPosition(
-                this.ScreenUtility.CenterX,
-                this.ScreenUtility.CenterY
-            );
-
-            if(this.pumpedCount == 6){
+            if(this.pumpedCount >= 6){
+                this.view.temp = 0;
                 this.BaloonPop();
-                this.temp = 100;
             }
             else{
-                // this.view.baloon.displayWidth += 50;
-                // this.view.baloon.displayHeight += 50;
                 this.view.BaloonTween();
                 this.blowSfx.play();
             }
@@ -155,7 +191,6 @@ export default class GameplaySceneController extends Phaser.Scene {
             this.baloonActive = false;
             this.view.baloon.destroy();
             this.Win();
-            this.view.TimesUp();
         }
 
         this.time.addEvent({ 

@@ -17,9 +17,11 @@ export default class LoadingVoucherController {
         this.scene.load.image('voucher_copyBox', this.scene.CreatePath('/images/voucher/box_copyBox.png'));
         this.scene.load.image('voucher_btnCopy', this.scene.CreatePath('/images/voucher/btn_copy.png'));
         this.scene.load.image('voucher_btnMainLagi', this.scene.CreatePath('/images/voucher/btn_main.png'));
+        this.scene.load.image('voucher_btninfo', this.scene.CreatePath('/images/voucher/btn_info.png'));
         
         this.scene.load.image('voucher_btnClose', this.scene.CreatePath('/images/voucher/btn_close.png'));
-
+        this.scene.load.image('voucher_btnCloseInfo', this.scene.CreatePath('/images/voucher/btn_closeInfo.png'));
+        this.scene.load.image('voucher_icninfo', this.scene.CreatePath('/images/voucher/icn_info.png'));
 
      }
 }

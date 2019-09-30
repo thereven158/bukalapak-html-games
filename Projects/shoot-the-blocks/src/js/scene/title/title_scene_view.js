@@ -15,7 +15,7 @@ export default class TitleSceneView {
     }
 
     onClickPlay(event){
-      this.logo.OnClick(event);
+      this.logo.onClick(event);
     }
 
      

@@ -2,6 +2,9 @@ import Phaser from 'phaser';
 
 import GameplaySceneView from './gameplay_scene_view';
 import ScreenUtility from '../../module/screen/screen_utility';
+import VoucherView from '../../view/popup_voucher_view';
+import VoucherData from '../../voucherdata';
+
 
 export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
@@ -41,7 +44,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.life = 3;
         this.score = 0;
         this.IsGameOver = false;
-        this.isGameWin = false;
+        this.IsWinning = false;
     }
 
     create(){
@@ -83,6 +86,12 @@ export default class GameplaySceneController extends Phaser.Scene {
             }
 
         }, this);
+
+        this.StartGame();
+    }
+
+    StartGame(){
+        this.IsGameStarted = true;
     }
 
     update(){
@@ -90,51 +99,91 @@ export default class GameplaySceneController extends Phaser.Scene {
         {
             this.HpDown();
         }
-        this.countDown = 90 - this.timerEvent.getElapsedSeconds();
-        this.view.textTimer.setText('' + this.countDown.toString().substr(0, 5));
-        
-        if(this.countDown == 0){
+
+        if(this.IsGameStarted){
+            this.countDown = 20 - this.timerEvent.getElapsedSeconds();
+            this.view.textTimer.setText('' + this.countDown.toString().substr(0, 5));
+        }
+
+        if(this.countDown == 0 && this.IsGameStarted){
+            console.log("check");
             this.TimesRanOut();
         }
     }
 
     GameOver(){
-        this.TimesRanOut();
-        this.IsGameOver = true;
+        this.IsGameStarted = false;
+        this.IsGameWin = false;
+
         this.DelayCallbackEvent();
     }
 
+    Restart = ()=>{
+        this.scene.restart();
+    }
+
+    BackToTitle = ()=>{
+        this.scene.launch('TitleScene');
+        this.scene.stop();
+    }
+
+    ShowResult = ()=>{
+        this.VoucherView = new VoucherView(this);
+        this.VoucherView.OnClickMainLagi(this.Restart);
+        this.VoucherView.OnClickClose(this.BackToTitle);
+        
+        let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
+
+        if(this.IsGameWin){
+            this.VoucherView.ShowVoucherCode(voucherData.Code, {
+                titleInfo :  voucherData.InfoTitle,
+                description : voucherData.InfoDescription,
+                expireDate : voucherData.ExpireDate,
+                minTransactionInfo : voucherData.MinimalTransactionInfo,
+                onlyAppliesInfo : voucherData.OnlyAppliesInfo,
+                termsandconditions : voucherData.TermsAndConditions,
+            });
+
+            this.VoucherView.SetDescription('voucher_headerwin', 
+                "Voucher", 
+                voucherData.Title, 
+                voucherData.Description
+            );
+        }else{
+            this.VoucherView.DisableVoucherCode()
+            this.VoucherView.SetDescription('voucher_headertimeout', 
+                "Timeout", 
+                VoucherData.VoucherTimeout.Title, 
+                VoucherData.VoucherTimeout.Description
+            );
+        }
+        
+        this.VoucherView.Open();
+    }
+
+
     TimesRanOut(){
+        this.IsGameStarted = false;
+        this.IsGameWin = false;
         this.timesUpFsx.play();
         this.view.TimesUp();
-        this.IsWinning = false;
         this.DelayCallbackEvent();
     }
 
     Win(){
+        this.IsGameWin = true;
         this.lastHitSfx.play();
-        // this.ResetLevel();
-        this.IsWinning = true;
+        this.IsGameStarted = false;
         this.DelayCallbackEvent();
     }
 
     DelayCallbackEvent(){
         this.time.addEvent({ 
             delay: 3000, 
-            callback: this.BackToTitle, 
+            callback: this.ShowResult, 
             callbackScope: this, 
             loop: false 
         });
-    }
-
-    BackToTitle(){
-        this.Bgm.stop();
-        this.scene.launch('TitleScene', {
-            isAfterGame: true,
-            isGameWin: this.IsWinning,
-            isGameOver: this.IsGameOver
-        });
-        this.scene.stop();
     }
 
     HitBlocks = (ball, blocks) =>
@@ -145,10 +194,11 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         ball.setVelocityY(700);
         // if (this.view.blocks.countActive() == 0)
-        if (this.view.yellowBlock.countActive() == 0 &&
-            this.view.yellowBlock2.countActive() == 0 && 
-            this.view.redBlock.countActive() == 0 && 
-            this.view.blueBlock.countActive() == 0)
+        // if (this.view.yellowBlock.countActive() == 0 &&
+        //     this.view.yellowBlock2.countActive() == 0 && 
+        //     this.view.redBlock.countActive() == 0 && 
+        //     this.view.blueBlock.countActive() == 0)
+        if (this.view.blueBlock.countActive() == 0)
         {
             this.Win();
         }
@@ -179,30 +229,6 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
     }
 
-    ResetLevel(){
-        this.ResetBall();
-
-        // this.view.blocks.children.each(function (block) {
-        //     block.enableBody(false, 0, 0, true, true);
-        // });
-
-        this.view.blueBlock.children.each(function (block) {
-            block.enableBody(false, 0, 0, true, true);
-        });
-
-        this.view.redBlock.children.each(function (block) {
-            block.enableBody(false, 0, 0, true, true);
-        });
-
-        this.view.yellowBlock.children.each(function (block) {
-            block.enableBody(false, 0, 0, true, true);
-        });
-
-        this.view.yellowBlock2.children.each(function (block) {
-            block.enableBody(false, 0, 0, true, true);
-        });
-    }
-
     ResetBall(){
         this.view.ball.setVelocity(0);
         this.view.ball.setPosition(this.view.paddle.x, 
@@ -213,7 +239,6 @@ export default class GameplaySceneController extends Phaser.Scene {
     HpDown(){
         this.life -= 1;
         if(this.life == 0){
-            console.log("u lose");
             this.hpOutSfx.play();
             this.view.life1.setTexture('unlife');
             this.GameOver();

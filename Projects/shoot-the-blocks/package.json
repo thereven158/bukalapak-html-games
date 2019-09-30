@@ -1,5 +1,5 @@
 {
-	"name": "my-phaser-project",
+	"name": "shoot-the-blocks",
 	"version": "1.0.0",
 	"description": "A Phaser Project",
 	"main": "src/index.js",

@@ -94,7 +94,6 @@ export default class GameplaySceneController extends Phaser.Scene {
         let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
 
         if(this.IsGameWin){
-            console.log("test");
             this.VoucherView.ShowVoucherCode(voucherData.Code, {
                 titleInfo :  voucherData.InfoTitle,
                 description : voucherData.InfoDescription,

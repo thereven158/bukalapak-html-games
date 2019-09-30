@@ -44,8 +44,8 @@ export default class GameplaySceneView {
           this.scoreWindow.displayHeight / 2);
 
         this.scoreText = new Text(this.scene,
-          this.scoreWindow.x / 0.925,
-          this.scoreWindow.y / 0.7, 
+          this.scoreWindow.x * 1.08,
+          this.scoreWindow.y * 1.45, 
           "0", 
           { align:'center', fontFamily: 'panton', color: '#f9d023' })
           .setFontSizeRS(90);
@@ -62,8 +62,8 @@ export default class GameplaySceneView {
         this.lever = new Image(this.scene, 0, 0, 'lever');
         this.lever.setDisplayWidth(this.ScreenUtility.GameWidth * 0.15, true);
         this.lever.setDepth(1);  
-        this.lever.setPosition(this.pump.x - this.pump.displayWidth / 9,
-          this.pump.y - this.pump.displayHeight / 3.75);
+        this.lever.setPosition(this.pump.x - this.pump.displayWidth * 0.325 * 0.315,
+          this.pump.y - this.pump.displayHeight * 0.4 * 0.5);
 
         this.createBaloon();
         
@@ -93,7 +93,7 @@ export default class GameplaySceneView {
 
       this.baloon.setPosition(
         this.pump.x - this.pump.displayWidth / 2.25 , 
-        this.pump.y - this.pump.displayHeight / 1.325);
+        this.pump.y - this.pump.displayHeight / 1.45);
       
       this.baloon.setDepth(3);
      }
@@ -134,17 +134,17 @@ export default class GameplaySceneView {
      }
 
      BaloonTween(){
-      this.temp += 23;
+      this.temp += 19;
 
-      if(this.temp >= 115){
-        this.temp = 115
-        console.log(this.baloon.x);
-      console.log(this.baloon.y);
-      }
+      // if(this.temp >= 115){
+      //   this.temp = 115
+      //   console.log(this.baloon.x);
+      // console.log(this.baloon.y);
+      // }
       this.scene.tweens.add({
         targets: this.baloon ,
-        scale: this.baloon.scale + 0.075,
-        y: this.pump.y - this.pump.displayHeight / 1.325 - this.temp,
+        scale: this.baloon.scale + 0.06,
+        y: this.pump.y - this.pump.displayHeight / 1.45 - this.temp,
         yoyo: false,
         ease: 'Power1',
         duration: 150,

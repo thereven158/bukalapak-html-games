@@ -1,6 +1,7 @@
 import TitleSceneController from "./title_scene_controller";
 
 import Button from "../../module/objects/button"; 
+import Image from '../../module/objects/image';
 
 export default class TitleSceneView {
     /** @param {TitleSceneController} scene */
@@ -11,25 +12,33 @@ export default class TitleSceneView {
      }
 
      create(){
-        this.Background = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'background');
-        this.Background.displayWidth = this.ScreenUtility.GameWidth;
-        this.Background.displayHeight =this.ScreenUtility.GameHeight;
+        this.Background = new Image (this.scene, 
+          this.ScreenUtility.CenterX, 
+          this.ScreenUtility.CenterY, 
+          'background');
+        this.Background.setDisplaySize(this.ScreenUtility.GameWidth, 
+          this.ScreenUtility.GameHeight);
 
-        this.Light = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'title_light');
-        this.Light.displayWidth = this.ScreenUtility.GameWidth * 0.45;
-        this.Light.displayHeight = this.Light.displayWidth * (this.Light.height/this.Light.width);
+        this.Light = new Image (this.scene, 
+          this.ScreenUtility.CenterX, 
+          this.ScreenUtility.CenterY, 
+          'title_light');
+        this.Light.setDisplayWidth(this.ScreenUtility.GameWidth * 0.45, true);
         this.Light.setScale(this.ScreenUtility.ScalePercentage);
 
-        this.Character = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'title_character');
-        this.Character.displayWidth = this.ScreenUtility.GameWidth * 0.6;
-        this.Character.displayHeight = this.Character.displayWidth * (this.Character.height/this.Character.width);
-        this.Character.setScale(this.ScreenUtility.ScalePercentage); 
+        this.Character = new Image (this.scene, 
+          this.ScreenUtility.CenterX, 
+          this.ScreenUtility.CenterY, 
+          'title_character');
+        this.Character.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
+        // this.Character.setScale(this.ScreenUtility.ScalePercentage); 
 
         let gameLogoPosY = this.Character.y - (this.ScreenUtility.CenterY + this.Character.displayHeight * 0.5) * 0.5;
-        this.GameLogo = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.6, 'logo_game');
-        this.GameLogo.displayWidth = this.ScreenUtility.GameWidth * 0.6;
-        this.GameLogo.displayHeight = this.GameLogo.displayWidth * (this.GameLogo.height/this.GameLogo.width);
-        //this.GameLogo.setOrigin(0.5,1);
+        this.GameLogo = new Image (this.scene, 
+          this.ScreenUtility.CenterX, 
+          this.ScreenUtility.GameHeight, 
+          'logo_game');
+        this.GameLogo.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
         this.GameLogo.setAlpha(0.5);
         let gamelogoScaleX = this.GameLogo.scaleX;
         this.GameLogo.scaleX = 0;

@@ -1,6 +1,8 @@
+import TimerEventView from './timer_event_view';
+
 export default class TimerEventController
 {  
-	constructor(scene)
+	constructor(game)
 	{
 		this.game = game;
 		

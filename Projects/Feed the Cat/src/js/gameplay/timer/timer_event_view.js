@@ -1,3 +1,5 @@
+import Text from '../../module/objects/text';
+
 export default class TimerEventView
 {
 	constructor(game)
@@ -18,11 +20,14 @@ export default class TimerEventView
 	{
 		//this.timerText = this.game.add.text(0,0, "00.00", {font : "Panton-Bold", fontSize: 20 , fill :"#ff9d00", align:"center"});
 		
-		this.timer1stDigitText = this.game.add.text(0,0, "0", {font : "Panton-Bold", fontSize: 20 , fill :"#ff9d00", align:"center"});
-		this.timer2ndDigitText = this.game.add.text(0,0, "0", {font : "Panton-Bold", fontSize: 20 , fill :"#ff9d00", align:"center"});
-		this.timerPeriodText = this.game.add.text(0,0, ".", {font : "Panton-Bold", fontSize: 20 , fill :"#ff9d00", align:"center"});
-		this.timer3rdDigitText = this.game.add.text(0,0, "0", {font : "Panton-Bold", fontSize: 20 , fill :"#ff9d00", align:"center"});
-		this.timer4thDigitText = this.game.add.text(0,0, "0", {font : "Panton-Bold", fontSize: 20 , fill :"#ff9d00", align:"center"});
+		// this.TitleText = new Text(this.scene, this.TitleBox.x, this.TitleBox.y, "Voucher", 
+        //    {align:'center', fontFamily: 'panton', color: '#000000'}).setFontSizeR(45);
+		
+		this.timer1stDigitText = new Text(this.game, 0,0, "0", {fontFamily : "panton", color :"#ffffff", align:"center"}).setFontSizeR(120);
+		this.timer2ndDigitText = new Text(this.game, 0,0, "0", {fontFamily : "panton", color :"#ffffff", align:"center"}).setFontSizeR(120);
+		this.timerPeriodText = new Text(this.game, 0,0, ".", {fontFamily : "panton", color :"#ffffff", align:"center"}).setFontSizeR(120);
+		this.timer3rdDigitText = new Text(this.game, 0,0, "0", {fontFamily : "panton", color :"#ffffff", align:"center"}).setFontSizeR(120);
+		this.timer4thDigitText = new Text(this.game, 0,0, "0", {fontFamily : "panton", color :"#ffffff", align:"center"}).setFontSizeR(120);
 	}
 	
 	resizeHUD()
@@ -33,8 +38,8 @@ export default class TimerEventView
 		this.timer1stDigitText.setOrigin(0.5, 0.5);
 		this.timer2ndDigitText.setOrigin(0.5, 0.5);
 		this.timerPeriodText.setOrigin(0.5, 0.5);
-		this.timer3rdDigitText.anchor.set(0.5, 0.5);
-		this.timer4thDigitText.setOrigingin(0.5, 0.5);
+		this.timer3rdDigitText.setOrigin(0.5, 0.5);
+		this.timer4thDigitText.setOrigin(0.5, 0.5);
 		
 		//this.timer1stDigitText.fontSize = Global.screenUtility.correctSize(this.game, 80);
 		//this.timer2ndDigitText.fontSize = Global.screenUtility.correctSize(this.game, 80);
@@ -50,14 +55,14 @@ export default class TimerEventView
 		this.timer1stDigitText.text = timerTxt[0];
 		this.timer2ndDigitText.text = timerTxt[1];
 		this.timer3rdDigitText.text = timerTxt[3];
-		this.timer4thDigitText.text = timerTxt[4];		
+		this.timer4thDigitText.text = timerTxt[4];
 	}
 	
 	appendTimer(time)
 	{
 		if (time < 0) time = 0;
 		
-		let timerText = time.toString();
+		let timerText = Math.floor(time).toString();
 		timerText = timerText.substr(0, timerText.length-1);
 		
 		if (timerText=="") timerText = "0";
@@ -79,6 +84,6 @@ export default class TimerEventView
 			timerText = `${timerText.substr(0,2)}.${timerText.substr(2,2)}`;
 		}	
 
-		return timerText;	
+		return timerText;
 	}
 }

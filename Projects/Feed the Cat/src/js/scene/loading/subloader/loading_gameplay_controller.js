@@ -13,7 +13,7 @@ export default class LoadingGameplayController {
 		 this.scene.load.image('gameplay_background', this.scene.CreatePath('/images/In-game/BG.png'));			 
 		 this.scene.load.image('wrench', this.scene.CreatePath('/images/In-game/Wrench.png'));
 		 
-		 this.scene.load.spritesheet('minion_player', this.scene.CreatePath('/images/In-game/Sprite.png'), {frameWidth:8640/8, frameHeight:4800/3});
+		 this.scene.load.spritesheet('minion_player', this.scene.CreatePath('/images/In-game/Sprite.png'), {frameWidth:8640/8, frameHeight:4800/3, endFrame: 21});
 		 
 		 this.loadTopUiGraphics();
      }

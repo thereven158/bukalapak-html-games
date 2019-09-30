@@ -25,6 +25,7 @@ var config = {
 		zoom: actualZoom
 		
 	},
+	
 	scene: [
 		BootScene,
 		LoadingScene, 
@@ -40,7 +41,10 @@ var config = {
 		roundPixels: false,
 		powerPreference: 'high-performance'
 	},
-	autoRound: false
+	autoRound: false,
+	physics: {
+        default: 'arcade'	
+	},	
 };
 
 const game = new Phaser.Game(config);

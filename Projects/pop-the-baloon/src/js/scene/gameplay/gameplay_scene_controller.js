@@ -61,7 +61,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.view = new GameplaySceneView(this);
         this.view.create();
 
-        this.timerEvent = this.time.delayedCall(20000, this.onEvent, [], this);
+        this.timerEvent = this.time.delayedCall(60000, this.onEvent, [], this);
         
         this.view.pump.on('pointerdown', function() {
             this.onClickPumped();
@@ -78,7 +78,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 
     update(){
         if(this.IsGameStarted){
-            this.countDown = 20 - this.timerEvent.getElapsedSeconds();
+            this.countDown = 60 - this.timerEvent.getElapsedSeconds();
             this.view.textTimer.setText('' + this.countDown.toString().substr(0, 5));
         }
         if(this.countDown == 0 && this.IsGameStarted){
@@ -186,7 +186,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.pumpedCount = 0;
         this.destroyCreateObject();
 
-        if(this.score == 5){
+        if(this.score == 10){
             this.baloonActive = false;
             this.view.baloon.destroy();
             this.Win();

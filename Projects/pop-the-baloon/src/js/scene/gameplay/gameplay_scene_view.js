@@ -62,7 +62,7 @@ export default class GameplaySceneView {
         this.lever = new Image(this.scene, 0, 0, 'lever');
         this.lever.setDisplayWidth(this.ScreenUtility.GameWidth * 0.15, true);
         this.lever.setDepth(1);  
-        this.lever.setPosition(this.pump.x - this.pump.displayWidth * 0.325 * 0.315,
+        this.lever.setPosition(this.pump.x - this.pump.displayWidth * 0.31 * 0.31,
           this.pump.y - this.pump.displayHeight * 0.4 * 0.5);
 
         this.createBaloon();

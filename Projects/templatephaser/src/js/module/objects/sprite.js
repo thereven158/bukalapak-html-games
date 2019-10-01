@@ -1,7 +1,7 @@
 import ScreenUtility from "../screen/screen_utility";
 
 export default class Sprite extends Phaser.GameObjects.Sprite{
-      /** 
+/** 
     * @param {Phaser.Scene} scene 
     * @param {Number} x
     * @param {Number} y
@@ -14,6 +14,11 @@ export default class Sprite extends Phaser.GameObjects.Sprite{
         this.scene = scene;
         this.ScalePercentage = ScreenUtility.getInstance().ScalePercentage;
 
+        /** @type {Number} */
+        this.WidthAspectRatio = this.width / this.height;
+        /** @type {Number} */
+        this.HeightAspectRatio = this.height / this.width;
+
         this.scene.add.existing(this);
         this.setToResponsiveScale();
     }
@@ -22,14 +27,14 @@ export default class Sprite extends Phaser.GameObjects.Sprite{
     * @param {Number} size
     */
     matchHeightToAspectRatio(size){
-        this.displayHeight = size * (this.height / this.width);
+        this.displayHeight = size * this.HeightAspectRatio;
     }
 
     /** 
     * @param {Number} size
     */
     matchWidthToAspectRatio(size){
-        this.displayWidth = size * (this.width / this.height);
+        this.displayWidth = size * this.WidthAspectRatio;
     }
 
     /** 
@@ -75,7 +80,7 @@ export default class Sprite extends Phaser.GameObjects.Sprite{
         return this;
     }
 
-    ResetScale(){
+    resetScale(){
         this.setScale(1);
     }
 }

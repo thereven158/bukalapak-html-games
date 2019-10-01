@@ -14,7 +14,7 @@ export default class ScreenUtility{
     };
 
     /**@param {Phaser.Scene} scene */
-    Init(scene)
+    init(scene)
     {
         this.scene = scene;
         this.GameDefaultWidth = 1080;

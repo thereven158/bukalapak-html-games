@@ -14,6 +14,11 @@ export default class Image extends Phaser.GameObjects.Image{
         this.scene = scene;
         this.ScalePercentage = ScreenUtility.getInstance().ScalePercentage;
 
+        /** @type {Number} */
+        this.WidthAspectRatio = this.width / this.height;
+        /** @type {Number} */
+        this.HeightAspectRatio = this.height / this.width;
+
         this.scene.add.existing(this);
         this.setToResponsiveScale();
     }
@@ -22,14 +27,14 @@ export default class Image extends Phaser.GameObjects.Image{
     * @param {Number} size
     */
     matchHeightToAspectRatio(size){
-        this.displayHeight = size * (this.height / this.width);
+        this.displayHeight = size * this.HeightAspectRatio;
     }
 
     /** 
     * @param {Number} size
     */
     matchWidthToAspectRatio(size){
-        this.displayWidth = size * (this.width / this.height);
+        this.displayWidth = size * this.WidthAspectRatio;
     }
 
     /** 

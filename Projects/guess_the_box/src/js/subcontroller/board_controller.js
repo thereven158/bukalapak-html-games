@@ -21,18 +21,20 @@ export default class BoardController{
             OnceAnswering : 'OnceAnswering',
         }
 
-        this.Init();
+        this.init();
     }
 
     /** @return {BoardController} */
-    Init(){
-        this.InitData();
-        this.InitiateBoard();
+    init = () =>{
+        this.initData();
+        this.initiateBoard();
 
         return this;
     }
 
-    InitData(){
+    initData = () =>{
+        this.IsEnabled = true;
+
         /** @type {(PlatformController|Array)} */
         this.Platforms = [];
         this.PlatformSpeedAlpha = 1;
@@ -45,7 +47,7 @@ export default class BoardController{
         this.SameRotationCount = 0;
     }
 
-    InitiateBoard(){
+    initiateBoard = () =>{
         this.PosList = [
             {
                 x : this.ScreenUtility.GameWidth * 0.2,
@@ -73,6 +75,20 @@ export default class BoardController{
         let platform3 = new PlatformController(this.scene, this.PosList[2].x, this.PosList[2].y).SetIdx(2);
         platform3.OnSelect(this.BoxSelectedEvent);
         this.Platforms.push(platform3);
+    }
+
+    Prologue(onFinishPrologueEvent){
+        for(let i = 0; i< this.Platforms.length;i++){
+            /** @type {PlatformController} */
+            let platform = this.Platforms[i];
+            platform.x = this.PosList[i].x * -0.5;
+            platform.Move(i, this.PosList[i].x, this.PosList[i].y, 0, ()=>{
+                if(this.IsAllPlatformAtLocation())
+                    onFinishPrologueEvent();
+            });
+        }
+        
+        this.scene.sound.play('move');
     }
 
     ShowCorrectBox = ()=>{
@@ -114,7 +130,7 @@ export default class BoardController{
     }
 
     CheckRotationPhase = ()=>{
-        if(!this.IsAllPlatformAtLocation()){
+        if(!this.IsAllPlatformAtLocation() || !this.IsEnabled){
             return;
         }
 
@@ -127,12 +143,12 @@ export default class BoardController{
         }
     }
 
-    FinishRotationPhase(){
+    FinishRotationPhase = () =>{
         this.IsOnRotationPhase = false;
         this.Event.emit(this.EventList.OncePhaseFinish);
     }
 
-    ResetRotationPhase(){
+    ResetRotationPhase = () =>{
         this.RotationCount = 0;
 
         this.IsOnRotationPhase = false;
@@ -140,7 +156,7 @@ export default class BoardController{
         this.PrevRotation = undefined;
     }
 
-    Rotate(){
+    Rotate = () =>{
         //same rotation prevention algorithm
         let isClockwise = (Phaser.Math.Between(0, 1) == 0) ? false : true;
         if(this.PrevRotation != undefined){
@@ -171,15 +187,20 @@ export default class BoardController{
 
         this.Event.emit(this.EventList.OnStartRotate, isClockwise);
         this.RotationCount += 1;
+
+        this.scene.sound.play('move');
     }
 
-    OnceWaitingForAnswer(event){
+    OnceWaitingForAnswer = (event) =>{
         this.IsWaitingForAnswer = true;
         this.Event.once(this.EventList.OnceAnswering, event, this);
     }
 
     /** @param {PlatformController} box*/
     BoxSelectedEvent = (box) =>{
+        if(!this.IsEnabled)
+            return;
+
         if(this.IsWaitingForAnswer){
             this.IsWaitingForAnswer = false;
             this.Event.emit(this.EventList.OnceAnswering, box.IsTrueBox);
@@ -194,8 +215,7 @@ export default class BoardController{
 
     }
 
-    platformsUpdate(timestep, delta)
-    {
+    platformsUpdate = (timestep, delta) =>{
         for(let i = 0; i< this.Platforms.length;i++){
             /** @type {PlatformController} */
             let platform = this.Platforms[i];
@@ -204,7 +224,7 @@ export default class BoardController{
     }
 
     /** @return {Boolean} */
-    IsAllPlatformAtLocation(){
+    IsAllPlatformAtLocation = () =>{
         for(let i = 0; i< this.Platforms.length;i++){
             /** @type {PlatformController} */
             let platform = this.Platforms[i];
@@ -215,11 +235,15 @@ export default class BoardController{
         return true;
     }
 
-    Disable(){
+    Disable = () =>{
+        this.IsEnabled = false;
+
         for(let i = 0; i< this.Platforms.length;i++){
             /** @type {PlatformController} */
             let platform = this.Platforms[i];
             platform.Disable();
         }
+
+        this.Event.removeAllListeners();
     }
 }

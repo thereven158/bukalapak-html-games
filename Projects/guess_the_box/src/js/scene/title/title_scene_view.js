@@ -22,11 +22,20 @@ export default class TitleSceneView {
         this.Background.setDisplaySize(this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight);
         this.Background.setOrigin(0.5,0);
 
-        this.GameLogo = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.3, 'logo_title');
-        this.GameLogo.setDisplayWidth(this.ScreenUtility.GameWidth * 0.6, true);
+        let gameLogo = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.25, 'logo_title');
+        gameLogo.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
 
+        let box = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.55, 'title_box');
+        box.setDisplayWidth(this.ScreenUtility.GameWidth * 0.4, true);
 
-        this.ButtonPlay = new Button(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.7, 'logo');
+        this.ButtonPlay = new Button(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.85 , 'btn_main');
+        this.ButtonPlay.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
+        this.ButtonPlay.setAudioActive(false);
+
+        let joystick = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight, 'bg_joystick');
+        joystick.setDisplayWidth(this.ScreenUtility.GameWidth , true);
+        joystick.setOrigin(0.5,1);
+
     }
 
     OnClickPlay(event){

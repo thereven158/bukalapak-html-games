@@ -1,7 +1,7 @@
 
 export default {
     GameTime : 90,
-    TargetPoint : 20,
+    TargetPoint : 25,
 
     waitDurationPerMove : 1500,
 
@@ -13,13 +13,13 @@ export default {
             ScorePoint : 1,
             ChainMoveTarget : 2,
             MaxRotation : 2,
-            SpeedAlpha : 0, // alpha value between SlowMoveDuration and FastMoveDuration 0-1 / percentage
+            SpeedAlpha : 0.2, // alpha value between SlowMoveDuration and FastMoveDuration 0-1 / percentage
         },
         {
             ScorePoint : 2,
             ChainMoveTarget : 4,
             MaxRotation : 3,
-            SpeedAlpha : 0.2,
+            SpeedAlpha : 0.4,
         },
         {
             ScorePoint : 3,
@@ -33,5 +33,11 @@ export default {
             MaxRotation : 5,
             SpeedAlpha : 0.8, 
         },
+        {
+            ScorePoint : 4,
+            ChainMoveTarget : 8,
+            MaxRotation : 6,
+            SpeedAlpha : 0.8,
+        }
     ]
 };

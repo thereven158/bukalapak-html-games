@@ -3,11 +3,13 @@ import ScreenUtility from '../../module/screen/screen_utility';
 import TitleSceneView from './title_scene_view';
 import VoucherView from '../../view/popup_voucher_view';
 import VoucherData from '../../voucherdata';
+import AudioController from '../../module/audio/audio_controller';
 
 export default class TitleSceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'TitleScene'});
-        
+
+        this.Bgm;
     }
 
     init(data){
@@ -21,6 +23,7 @@ export default class TitleSceneController extends Phaser.Scene {
     InitTitle(){
         ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
+
     }
 
     InitTitleData(data){
@@ -28,7 +31,14 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     InitAudio(){
+        if(this.Bgm == undefined){
+            this.Bgm = this.sound.add('bgm_title', {
+                loop:-1,
+                volume: 1
+            });
+        }
 
+        this.Bgm.play();
     }
 
     create(){
@@ -42,6 +52,9 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     ClickPlay = ()=>{
+        this.Bgm.stop();
+        this.sound.play('start');
+
         this.scene.start('GameScene')
     }
 }

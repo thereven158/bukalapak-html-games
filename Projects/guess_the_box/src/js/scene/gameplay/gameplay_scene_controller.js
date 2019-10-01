@@ -6,28 +6,34 @@ import VoucherView from '../../view/popup_voucher_view';
 import VoucherData from '../../voucherdata';
 import BoardController from '../../subcontroller/board_controller';
 import PlatformController from '../../subcontroller/platform_controller';
+import AudioController from '../../module/audio/audio_controller';
+import ClawAController from '../../subcontroller/claw_a_controller';
+import ClawBController from '../../subcontroller/claw_b_controller';
+import { Helper } from '../../helper/helper';
 
 export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'GameScene'});
         
+        this.Bgm;
     }
 
-    init(){
+    init = () =>{
         console.log('game screen')
-        this.InitAnimatonData();
+        this.initAnimatonData();
 
-        this.InitGame();
-        this.InitGameData();
-        this.InitAudio();
+        this.initGame();
+        this.initGameData();
+        this.initAudio();
     }
 
-    InitGame(){
+    initGame = () =>{
         ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
+
     }
 
-    InitGameData(){
+    initGameData = () =>{
         this.IsGameStarted = false;
 
         this.Score = 0;
@@ -40,13 +46,21 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.CurrentPhase = gameplaydata.Phases[this.CurrentPhaseIdx];
     }
 
-    InitAudio(){
+    initAudio = () =>{
+        if(this.Bgm == undefined){
+            this.Bgm = this.sound.add('bgm_ingame', {
+                loop:-1,
+                volume: 1
+            });
+        }
 
+        this.Bgm.play();
     }
 
-    InitAnimatonData(){
-        //BoxController.InitAnimationData(this);
-        PlatformController.InitAnimationData(this);
+    initAnimatonData = () =>{
+        PlatformController.initAnimationData(this);
+        ClawAController.initAnimationData(this);
+        ClawBController.initAnimationData(this);
     }
 
     create(){
@@ -54,57 +68,76 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         this.Board = new BoardController(this);
 
-        this.StartGame();
+        this.startGame();
     }
 
-    StartGame(){
+    startGame = () =>{
+        this.view.setStatus("STANDBY");
         this.IsGameStarted = true;
 
-        this.Board.ShowCorrectBox();
-        this.Delay(3000, ()=>{
-            this.Board.CloseAllBox();
-            this.Check();
-        });
+        this.Board.Prologue(()=>{
+            Helper.delay(this, 500, ()=>{
+                this.Board.ShowCorrectBox();
+                Helper.delay(this, gameplaydata.waitDurationPerMove, ()=>{
+                    this.Board.CloseAllBox();
+                    this.check();
+                });
+            })
+
+        })
     }
 
-    Check = ()=>{ 
-        this.PhaseValidation();
-        this.Delay(1000, this.StartBoardRotationPhase)
-        //this.StartBoardRotationPhase();
-    }
-
-    StartBoardRotationPhase = ()=>{
-        this.MoveCount += 1;
-
+    check = ()=>{ 
+        if(!this.IsGameStarted)
+            return;
         
-        this.Board.StartRotationPhase(this.CurrentPhase.MaxRotation, this.CurrentPhase.SpeedAlpha, this.PhaseFinishEvent)
+        this.phaseValidation();
+        Helper.delay(this, 1000, this.startBoardRotationPhase)
     }
 
-    PhaseFinishEvent = ()=>{
-        this.Board.OnceWaitingForAnswer(this.AnswerEvent);
+    startBoardRotationPhase = ()=>{
+        this.MoveCount += 1;
+        
+        this.Board.StartRotationPhase(this.CurrentPhase.MaxRotation, this.CurrentPhase.SpeedAlpha, this.phaseFinishEvent)
+        this.view.setStatus("SHUFFLING");
     }
 
-    AnswerEvent = (isCorrect)=>{
+    phaseFinishEvent = ()=>{
+        this.view.setStatus("CHOOSE!!!");
+        this.Board.OnceWaitingForAnswer(this.answerEvent);
+    }
+
+    answerEvent = (isCorrect)=>{
         if(isCorrect){
+            this.view.setStatus("^^");
             this.CorrectMoveCount += 1;
             this.CorrectMoveChainCount += 1;
             this.Score += this.CurrentPhase.ScorePoint;
-            this.Delay(gameplaydata.waitDurationPerMove, ()=>{
-                this.Board.CloseAllBox();
-                this.Check();
-            });
+            
+            if(this.Score >= gameplaydata.TargetPoint){
+                this.win();
+            }else{
+                Helper.delay(this, gameplaydata.waitDurationPerMove, ()=>{
+                    this.Board.CloseAllBox();
+                    this.check();
+                });
+            }
+            
+            this.sound.play('correct');
         }else{
+            this.view.setStatus("*_*");
             this.CorrectMoveChainCount -= 1;
             this.CorrectMoveChainCount = Phaser.Math.Clamp(this.CorrectMoveChainCount, 0, Infinity);
-            this.Delay(gameplaydata.waitDurationPerMove, ()=>{
+            Helper.delay(this, gameplaydata.waitDurationPerMove, ()=>{
                 this.Board.ShowCorrectBox();
-                this.Delay(gameplaydata.waitDurationPerMove, ()=>{
+                Helper.delay(this, gameplaydata.waitDurationPerMove, ()=>{
                     this.Board.CloseAllBox();
-                    this.Check();
+                    this.check();
                 });
             });
-        }
 
+            this.sound.play('wrong');
+        }
 
     }
 
@@ -123,13 +156,11 @@ export default class GameplaySceneController extends Phaser.Scene {
         //Isgameover
         if(this.Timer <= 0){       
             this.Timer = 0;
-            this.Timesout();
-        }else if(this.Score >= gameplaydata.TargetPoint){
-            this.Win();
+            this.timesout();
         }
     }
 
-    PhaseValidation(){
+    phaseValidation = () =>{
         //validate phase
         if(this.CurrentPhaseIdx < gameplaydata.Phases.length - 1){
             let newPhaseIdx = this.CurrentPhaseIdx;
@@ -153,38 +184,44 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
     }
 
-    Timesout(){
-        this.view.TimesOut();
-        this.Endgame();
+    timesout = () =>{
+        this.view.setStatus("TIMEOUT");
+        this.sound.play('timeout');
 
-        this.Delay(3000, this.ShowResult);
+        this.view.TimesOut();
+        this.endgame();
+
+        Helper.delay(this, 3000, this.showResult);
     }
 
-    Win(){
+    win = () =>{
+        this.view.setStatus("WIN");
         this.IsGameWin = true;
 
-        this.Endgame();
-        this.ShowResult();
+        this.endgame();
+        this.showResult();
     }
 
-    Endgame(){
+    endgame = () =>{
         this.IsGameStarted = false;
         this.Board.Disable();
     }
 
-    Restart = ()=>{
+    restart = ()=>{
         this.scene.restart();
     }
 
-    BackToTitle = ()=>{
+    backToTitle = ()=>{
+        this.Bgm.stop();
+
         this.scene.launch('TitleScene');
         this.scene.stop();
     }
 
-    ShowResult = ()=>{
+    showResult = ()=>{
         this.VoucherView = new VoucherView(this);
-        this.VoucherView.OnClickMainLagi(this.Restart);
-        this.VoucherView.OnClickClose(this.BackToTitle);
+        this.VoucherView.OnClickMainLagi(this.restart);
+        this.VoucherView.OnClickClose(this.backToTitle);
         
         let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
 
@@ -213,22 +250,6 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
         
         this.VoucherView.Open();
-    }
-
-    /** 
-    * @param {number} duration
-    * @param {any} event 
-    * @param {Boolean} isLooping
-    * @return {Phaser.Time.TimerEvent} 
-    */
-    Delay(duration, event, isLooping = false){
-        let delay = this.time.addEvent({ 
-            delay: duration, 
-            callback: event, 
-            callbackScope: this, 
-            loop: isLooping 
-        });
-
-        return delay;
+        this.sound.play('transition');
     }
 }

@@ -4,6 +4,7 @@ import LoadingVoucherController from './subloader/loading_voucher_controller';
 import LoadingTitleController from './subloader/loading_title_controller';
 import LoadingGameplayController from './subloader/loading_gameplay_controller';
 import LoadingAudioController from './subloader/loading_audio_controller';
+import GameplayData from '../../gameplaydata';
 
 export default class LoadingSceneController extends Phaser.Scene{
     constructor(){
@@ -46,7 +47,7 @@ export default class LoadingSceneController extends Phaser.Scene{
     OnCompleteLoad = () =>{
         this.load.removeAllListeners();
 
-        this.scene.start('TitleScene');
+        this.scene.start(GameplayData.SceneAfterLoading);
     }
 
     LoadBootResouces(){

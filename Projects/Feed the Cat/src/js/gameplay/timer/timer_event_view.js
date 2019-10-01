@@ -1,4 +1,5 @@
 import Text from '../../module/objects/text';
+import Image from '../../module/objects/image';
 
 export default class TimerEventView
 {
@@ -18,10 +19,9 @@ export default class TimerEventView
 	
 	createHUD()
 	{
-		//this.timerText = this.game.add.text(0,0, "00.00", {font : "Panton-Bold", fontSize: 20 , fill :"#ff9d00", align:"center"});
-		
-		// this.TitleText = new Text(this.scene, this.TitleBox.x, this.TitleBox.y, "Voucher", 
-        //    {align:'center', fontFamily: 'panton', color: '#000000'}).setFontSizeR(45);
+		this.timerPanel = new Image(this.game, this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight * 0.00, 'timer_ui');
+		this.timerPanel.setOrigin(1, 0);
+      	this.timerPanel.setDisplayWidth(this.ScreenUtility.GameWidth * 0.4, true);				
 		
 		this.timer1stDigitText = new Text(this.game, 0,0, "0", {fontFamily : "panton", color :"#ffffff", align:"center"}).setFontSizeR(120);
 		this.timer2ndDigitText = new Text(this.game, 0,0, "0", {fontFamily : "panton", color :"#ffffff", align:"center"}).setFontSizeR(120);
@@ -40,6 +40,12 @@ export default class TimerEventView
 		this.timerPeriodText.setOrigin(0.5, 0.5);
 		this.timer3rdDigitText.setOrigin(0.5, 0.5);
 		this.timer4thDigitText.setOrigin(0.5, 0.5);
+		
+		this.timer1stDigitText.setPosition(this.timerPanel.x - this.timerPanel.displayWidth * 0.705, this.timerPanel.y + this.timerPanel.displayHeight * 0.44);
+		this.timer2ndDigitText.setPosition(this.timerPanel.x - this.timerPanel.displayWidth * 0.555, this.timerPanel.y + this.timerPanel.displayHeight * 0.44);
+		this.timerPeriodText.setPosition(this.timerPanel.x - this.timerPanel.displayWidth * 0.450, this.timerPanel.y + this.timerPanel.displayHeight * 0.44);
+		this.timer3rdDigitText.setPosition(this.timerPanel.x - this.timerPanel.displayWidth * 0.335, this.timerPanel.y + this.timerPanel.displayHeight * 0.44);
+		this.timer4thDigitText.setPosition(this.timerPanel.x - this.timerPanel.displayWidth * 0.185, this.timerPanel.y + this.timerPanel.displayHeight * 0.44);		
 		
 		//this.timer1stDigitText.fontSize = Global.screenUtility.correctSize(this.game, 80);
 		//this.timer2ndDigitText.fontSize = Global.screenUtility.correctSize(this.game, 80);

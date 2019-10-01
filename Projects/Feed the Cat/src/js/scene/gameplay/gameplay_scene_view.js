@@ -35,22 +35,16 @@ export default class GameplaySceneView {
 		
 		this.scoreOrnament = new Image(this.scene, 0, 0, 'score_ui_ornament');
 		this.scoreOrnament.setOrigin(0, 0);
-      	this.scoreOrnament.setDisplayWidth(this.ScreenUtility.GameWidth * 0.6, true);			
-		
-		this.scorePanel = new Image(this.scene, this.ScreenUtility.GameWidth * 0.00, this.ScreenUtility.GameHeight * 0.00, 'score_ui');
-		this.scorePanel.setOrigin(0, 0);
-      	this.scorePanel.setDisplayWidth(this.ScreenUtility.GameWidth * 0.35, true);
-		
-		this.timerPanel = new Image(this.scene, this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight * 0.00, 'timer_ui');
-		this.timerPanel.setOrigin(1, 0);
-      	this.timerPanel.setDisplayWidth(this.ScreenUtility.GameWidth * 0.4, true);	
-		
-		this.scoreOrnament.setPosition(this.scorePanel.x, this.scorePanel.y);
+      	this.scoreOrnament.setDisplayWidth(this.ScreenUtility.GameWidth * 0.6, true);
+
+		//this.scoreOrnament.setPosition(this.scorePanel.x, this.scorePanel.y);
 	}
 	
 	initMinion()
 	{
 		this.afterMinionResponseEvent = null;
+		this.afterMinionYummyResponseEvent = null;
+		this.afterMinionYuckyResponseEvent = null;
 		
 		this.initMinionAnimation();
 
@@ -64,6 +58,23 @@ export default class GameplaySceneView {
 			
 			if (anim.key != "minion_eat" && anim.key != "minion_idle")
 			{
+				if (anim.key == "minion_yummy")
+				{
+					if (this.afterMinionYummyResponseEvent) 
+					{
+						let isReturn = this.afterMinionYummyResponseEvent();
+						if (isReturn) return;
+					}
+				}
+				else if (anim.key == "minion_yucky")
+				{
+					if (this.afterMinionYuckyResponseEvent)
+					{
+						let isReturn = this.afterMinionYuckyResponseEvent();
+						if (isReturn) return;
+					}
+				}
+				
 				if (this.afterMinionResponseEvent) this.afterMinionResponseEvent();
 			}
 			
@@ -71,9 +82,11 @@ export default class GameplaySceneView {
 		}, this);			
 	}
 	
-	setMinionEvents(afterMinionResponseEvent)
+	setMinionEvents(afterMinionResponseEvent, afterMinionYummyResponseEvent=null, afterMinionYuckyResponseEvent=null)
 	{
 		this.afterMinionResponseEvent = afterMinionResponseEvent;
+		this.afterMinionYummyResponseEvent = afterMinionYummyResponseEvent;
+		this.afterMinionYuckyResponseEvent = afterMinionYuckyResponseEvent;		
 	}
 	
 	initMinionAnimation()
@@ -81,9 +94,9 @@ export default class GameplaySceneView {
 		this.scene.anims.create({
 			key: 'minion_idle',
 			frames: this.scene.anims.generateFrameNumbers('minion_player', { start: 0, end: 8}),
-			frameRate: 30,
+			frameRate: 20,
 			repeat: -1
-		});		
+		});	
 		
 		this.scene.anims.create({
 			key: 'minion_eat',

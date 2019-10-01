@@ -5,7 +5,9 @@ import VoucherData from '../../voucherdata';
 import GameplayData from '../../gameplaydata';
 import Image from '../../module/objects/image';
 
+import ScoreController from '../../gameplay/score/score_controller';
 import TimerEventController from '../../gameplay/timer/timer_event_controller';
+import LifeController from '../../gameplay/life/life_controller';
 
 export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
@@ -34,24 +36,12 @@ export default class GameplaySceneController extends Phaser.Scene {
 		this.itemType = -1;
 		this.isGameOver = false;
 		
+		this.targetGoal = GameplayData.TargetGoal;
+		this.progressGoal = 0;
+		
 		this.initEdible();
     }
 
-	createTimer()
-	{
-		this.gameTimer = new TimerEventController(this);		
-		this.gameTimer.createView();
-		this.gameTimerView = this.gameTimer.view;
-		
-		this.panelTimer = this.view.timerPanel;
-		
-		this.gameTimerView.timer1stDigitText.setPosition(this.panelTimer.x - this.panelTimer.displayWidth * 0.705, this.panelTimer.y + this.panelTimer.displayHeight * 0.44);
-		this.gameTimerView.timer2ndDigitText.setPosition(this.panelTimer.x - this.panelTimer.displayWidth * 0.555, this.panelTimer.y + this.panelTimer.displayHeight * 0.44);
-		this.gameTimerView.timerPeriodText.setPosition(this.panelTimer.x - this.panelTimer.displayWidth * 0.450, this.panelTimer.y + this.panelTimer.displayHeight * 0.44);
-		this.gameTimerView.timer3rdDigitText.setPosition(this.panelTimer.x - this.panelTimer.displayWidth * 0.335, this.panelTimer.y + this.panelTimer.displayHeight * 0.44);
-		this.gameTimerView.timer4thDigitText.setPosition(this.panelTimer.x - this.panelTimer.displayWidth * 0.185, this.panelTimer.y + this.panelTimer.displayHeight * 0.44);		
-	}
-	
 	initInput()
 	{
 		this.input.on('pointerdown', (pointer) => {
@@ -108,12 +98,25 @@ export default class GameplaySceneController extends Phaser.Scene {
 	
 	yummyEv()
 	{
+		this.progressGoal++;
+		this.scoreObj.addScore(GameplayData.BaseScore);
 		this.minion.anims.play("minion_yummy");
+		
+		if (this.progressGoal >= this.targetGoal)
+		{
+			this.prepareWinGame();
+		}
 	}
 	
 	yuckEv()
 	{
+		this.lifeObj.reduceLife(1);
 		this.minion.anims.play("minion_yucky");
+		
+		if (this.lifeObj.curLife == 0)
+		{
+			this.prepareGameOver();
+		}		
 	}	
 	
 	initEdible()
@@ -261,19 +264,75 @@ export default class GameplaySceneController extends Phaser.Scene {
 		return outputType;
 	}
 
+	prepareGameOver()
+	{
+		this.gameTimer.pause();
+		this.spawnTimer.pause();	
+		if (this.droppingItem) this.resetBody(this.droppingItem);
+	}
+	
+	prepareWinGame()
+	{
+		this.gameTimer.pause();
+		this.spawnTimer.pause();
+		if (this.droppingItem) this.resetBody(this.droppingItem);		
+	}
 	
     InitAudio(){
 
     }
+	
+	createTimer()
+	{
+		this.gameTimer = new TimerEventController(this);		
+		this.gameTimer.createView();
+		this.gameTimerView = this.gameTimer.view;	
+	}
+	
+	createLife()
+	{
+        this.lifeObj = new LifeController(this);
+		this.lifeObj.createView();		
+	}
+	
+	createScore()
+	{
+        this.scoreObj = new ScoreController(this);
+		this.scoreObj.createView();				
+	}
 
     create(){
         this.view = new GameplaySceneView(this).create();
 		this.createTimer();
-		
+						
 		this.minion = this.view.minion;
 		this.view.setMinionEvents(() => {
 			this.prepareSpawnItem();
+		}, () => {
+			if (this.progressGoal < this.targetGoal)
+			{
+				return false;
+			}
+			else
+			{
+				this.WinGame();
+				return true;
+			}			
+		}, () => {
+			if (this.lifeObj.checkIfLifeZero())
+			{
+				this.GameOver();
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+				
 		});
+				
+		this.createScore();
+		this.createLife();
 		
         this.StartGame();
     }
@@ -305,6 +364,14 @@ export default class GameplaySceneController extends Phaser.Scene {
 		this.updateEating();
     }
 
+	WinGame(){		
+		this.IsGameWin = true;
+        this.IsGameStarted = false;
+		this.isGameOver = true;
+		
+        this.ShowResult();		
+	}
+	
     GameOver(){
 		this.IsGameWin = false;
         this.IsGameStarted = false;
@@ -348,10 +415,19 @@ export default class GameplaySceneController extends Phaser.Scene {
                 voucherData.Title, 
                 voucherData.Description
             );
-        }else{
+        }
+		else if (this.gameTimer.time <= 0){
             this.VoucherView.DisableVoucherCode()
             this.VoucherView.SetDescription('voucher_headertimeout', 
                 "Timeout", 
+                VoucherData.VoucherTimeout.Title, 
+                VoucherData.VoucherTimeout.Description
+            );
+        }
+		else{
+            this.VoucherView.DisableVoucherCode()
+            this.VoucherView.SetDescription('voucher_headertimeout', 
+                "Failed", 
                 VoucherData.VoucherTimeout.Title, 
                 VoucherData.VoucherTimeout.Description
             );

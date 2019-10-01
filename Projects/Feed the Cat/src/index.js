@@ -4,6 +4,7 @@ import BootScene from '../src/Js/Scene/boot/boot_scene_controller';
 import LoadingScene from '../src/Js/scene/loading/loading_scene_controller';
 import TitleScene from '../src/Js/Scene/title/title_scene_controller';
 import GameplayScene from '../src/Js/Scene/gameplay/gameplay_scene_controller';
+import TestScene from '../src/Js/Scene/test/test_scene_controller';
 
 let actualWidth = window.innerWidth < 480 ? window.innerWidth * window.devicePixelRatio : window.innerWidth;
 let actualHeight = window.innerWidth < 480 ? window.innerHeight * window.devicePixelRatio : window.innerHeight;
@@ -30,7 +31,8 @@ var config = {
 		BootScene,
 		LoadingScene, 
 		TitleScene,
-		GameplayScene
+		GameplayScene,
+		TestScene
 	],
 	dom: {
 		createContainer: true

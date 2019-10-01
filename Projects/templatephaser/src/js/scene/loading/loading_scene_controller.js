@@ -34,9 +34,9 @@ export default class LoadingSceneController extends Phaser.Scene{
     }
 
     LoadBootResoucesComplete = () =>{
-        this.view.InitLoading();
+        this.view.initLoading();
         this.load.on('progress', function (value) {
-            this.view.SetProgressText(value);
+            this.view.setProgressText(value);
         },this);
         this.load.once('complete', this.OnCompleteLoad);  
 

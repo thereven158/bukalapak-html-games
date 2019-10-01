@@ -19,7 +19,7 @@ export default class LoadingSceneView{
       return this;
   }
 
-    InitLoading(){
+    initLoading = ()=>{
       this.Background =  new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'bg_loading');
       this.Background.setDisplaySize(this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight);
       
@@ -43,7 +43,7 @@ export default class LoadingSceneView{
       this.LoadingText.setOrigin(0.5,0.5);
     }
     
-    SetProgressText(value){
+    setProgressText = (value) =>{
         this.FullBar.displayWidth = value * this.FullBarWidth;
     }
 };

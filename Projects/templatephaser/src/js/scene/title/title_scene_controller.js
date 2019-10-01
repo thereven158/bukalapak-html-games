@@ -13,35 +13,35 @@ export default class TitleSceneController extends Phaser.Scene {
     init(data){
         console.log('title screen')
 
-        this.InitTitle();
-        this.InitTitleData(data);
-        this.InitAudio();
+        this.initTitle();
+        this.initTitleData(data);
+        this.initAudio();
     }
 
-    InitTitle(){
+    initTitle = ()=>{
         ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
     }
 
-    InitTitleData(data){
+    initTitleData(data){
 
     }
 
-    InitAudio(){
+    initAudio = ()=>{
 
     }
 
-    create(){
+    create = ()=>{
         this.view = new TitleSceneView(this).create();
-        this.view.OnClickPlay(this.ClickPlay);
+        this.view.OnClickPlay(this.clickPlay);
 
     }
 
-    update(){
+    update = ()=>{
 
     }
 
-    ClickPlay = ()=>{
+    clickPlay = ()=>{
         this.scene.start('GameScene')
     }
 }

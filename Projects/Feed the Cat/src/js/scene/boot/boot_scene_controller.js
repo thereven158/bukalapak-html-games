@@ -1,5 +1,6 @@
 import LoaderController from '../../module/loader/loader_controller';
 import ScreenUtility from '../../module/screen/screen_utility';
+import MusicPlayer from '../../module/music_player/music_player';
 import { DeviceHelper } from '../../helper/device_Helper';
 import { CANVAS } from 'phaser';
 
@@ -43,7 +44,6 @@ export default class BootSceneController extends Phaser.Scene{
     InitGame(){
 
     }
-
     InitScreen(){
         ScreenUtility.getInstance().Init(this);
         ScreenUtility.ResetGameScreen();
@@ -51,6 +51,8 @@ export default class BootSceneController extends Phaser.Scene{
     }
     
     InitAudio(){
+		MusicPlayer.getInstance().Init(this);
+		
         this.sound.mute = !this.IsAudioOn;
 
         this.game.events.on('hidden', () =>{

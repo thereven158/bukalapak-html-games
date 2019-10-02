@@ -9,6 +9,8 @@ import ScoreController from '../../gameplay/score/score_controller';
 import TimerEventController from '../../gameplay/timer/timer_event_controller';
 import LifeController from '../../gameplay/life/life_controller';
 
+import MusicPlayer from '../../module/music_player/music_player';
+
 export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'GameScene'});
@@ -49,6 +51,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 			
 			if (this.minion.anims.getCurrentKey() == "minion_idle")
 			{
+				this.sound.play("master_sfx");
 				this.eatSomething();
 			}
     	}, this);
@@ -63,7 +66,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 	{
 		if (this.minion.anims.getCurrentKey() == "minion_eat")
 		{
-			if (this.minion.anims.currentFrame.textureFrame == 11) {
+			if (this.minion.anims.currentFrame.textureFrame == "Artboard 17.png") {
 				this.checkItemDistance();
 			}
 		}
@@ -98,6 +101,8 @@ export default class GameplaySceneController extends Phaser.Scene {
 	
 	yummyEv()
 	{
+		this.sound.play("ingame_upak_munch_sfx", {volume:1});
+		
 		this.progressGoal++;
 		this.scoreObj.addScore(GameplayData.BaseScore);
 		this.minion.anims.play("minion_yummy");
@@ -110,6 +115,8 @@ export default class GameplaySceneController extends Phaser.Scene {
 	
 	yuckEv()
 	{
+		this.sound.play("ingame_upak_hit_sfx", {volume:1});
+		
 		this.lifeObj.reduceLife(1);
 		this.minion.anims.play("minion_yucky");
 		
@@ -170,7 +177,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 			{
 				let endY = this.ScreenUtility.GameHeight * 1.1 + this.droppingItem.height;
 				
-				this.physics.moveTo(item, this.ScreenUtility.GameWidth * 0.5, endY, 1000);	
+				this.physics.moveTo(item, this.ScreenUtility.GameWidth * 0.5, endY, 1000, 1000);	
 				
 				if (item.y >= endY)
 				{
@@ -279,7 +286,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 	}
 	
     InitAudio(){
-
+		MusicPlayer.getInstance().PlayMusic('ingame_bgm');	
     }
 	
 	createTimer()
@@ -341,7 +348,11 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.IsGameStarted = true;
 		
 		this.gameTimer.activateTimer(GameplayData.GameTime, () => {
-			this.GameOver();
+			this.sound.play("ingame_timeout_sfx");
+			this.prepareGameOver();
+			window.setTimeout(() => {
+				this.GameOver();
+			}, 1000);		
 		}, false);
 		
 		this.prepareSpawnItem();
@@ -401,6 +412,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
 
         if(this.IsGameWin){
+			this.sound.play("ingame_success_sfx", {volume:1});
             this.VoucherView.ShowVoucherCode(voucherData.Code, {
                 titleInfo :  voucherData.InfoTitle,
                 description : voucherData.InfoDescription,
@@ -417,6 +429,7 @@ export default class GameplaySceneController extends Phaser.Scene {
             );
         }
 		else if (this.gameTimer.time <= 0){
+			this.sound.play("ingame_fail_sfx", {volume:1});
             this.VoucherView.DisableVoucherCode()
             this.VoucherView.SetDescription('voucher_headertimeout', 
                 "Timeout", 
@@ -425,6 +438,7 @@ export default class GameplaySceneController extends Phaser.Scene {
             );
         }
 		else{
+			this.sound.play("ingame_fail_sfx", {volume:1});
             this.VoucherView.DisableVoucherCode()
             this.VoucherView.SetDescription('voucher_headertimeout', 
                 "Failed", 

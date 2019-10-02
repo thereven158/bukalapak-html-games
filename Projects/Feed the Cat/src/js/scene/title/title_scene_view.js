@@ -25,7 +25,8 @@ export default class TitleSceneView {
       	this.background.setDisplaySize(this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight);
 		
 		this.lightEffect = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.09, 'light');
-		this.lightEffect.setOrigin(0.5, 0.5);	
+		this.lightEffect.setOrigin(0.5, 0.5);
+		this.lightEffect.setDisplayWidth(this.ScreenUtility.GameWidth * 1, true);	
       	this.lightEffect.alpha = 0.2;
 		var tween = this.scene.tweens.add({
 			targets: this.lightEffect,

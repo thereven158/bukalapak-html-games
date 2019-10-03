@@ -64,12 +64,12 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.physics.add.collider(this.view.ball, this.view.paddle, this.HitPaddle, null, this);
         this.physics.add.collider(this.view.ball, this.view.border, null, null, this);
 
-        this.input.on('pointermove', function (pointer) {
+        this.input.setDraggable(this.view.paddle);
 
-            this.view.paddle.x = Phaser.Math.Clamp(pointer.x, 
-              0, 
-              this.ScreenUtility.GameWidth);
-    
+        this.input.on('drag', function (pointer, gameObject, dragX) {
+
+            gameObject.x = dragX;
+
             if (this.view.ball.getData('onPaddle'))
             {
                 this.view.ball.x = this.view.paddle.x;
@@ -245,7 +245,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         if(this.IsGameStarted){
             this.view.ball.setVelocity(0);
             this.view.ball.setPosition(this.view.paddle.x, 
-            this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight * 0.6 * 0.55);
+            this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight * 0.6 * 0.575);
             this.view.ball.setData('onPaddle', true);
         }
         else this.view.ball.destroy();

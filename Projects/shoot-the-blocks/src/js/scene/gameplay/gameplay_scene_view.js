@@ -63,11 +63,18 @@ export default class GameplaySceneView {
         this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight / 2.5, 
         'paddle')
         .setImmovable();
+      this.paddle.setInteractive();
       this.paddle.displayWidth = this.ScreenUtility.GameWidth * 0.33;
       this.paddle.displayHeight = this.paddle.displayWidth * (this.paddle.height / this.paddle.width);
 
+      this.lineFail = new Image(this.scene, 
+        this.paddle.x, 
+        this.paddle.y + this.paddle.displayHeight * 1.2, 
+        'line-fail');
+      this.lineFail.setDisplayWidth(this.ScreenUtility.GameWidth * 1.2, true);
+
       this.ball = this.scene.physics.add.image(this.ScreenUtility.CenterX, 
-        this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight * 0.6 * 0.55, 
+        this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight * 0.6 * 0.575, 
         'ball')
       .setCollideWorldBounds(true)
       .setBounce(1);
@@ -81,7 +88,7 @@ export default class GameplaySceneView {
      CreateBlocks(){
       this.yellowBlock = this.scene.physics.add.staticGroup({
         key: 'block-yellow',
-        repeat: 5,
+        repeat: 6,
         setXY: {
           x: 82,
           y: this.timerWindow.displayHeight + this.timerWindow.displayHeight * 0.9,
@@ -95,7 +102,7 @@ export default class GameplaySceneView {
 
       this.redBlock = this.scene.physics.add.staticGroup({
         key: 'block-magenta',
-        repeat: 5,
+        repeat: 6,
         setXY: {
           x: this.yellowBlockChild[0].x,
           y: this.yellowBlockChild[0].y + this.yellowBlockChild[0].displayHeight,
@@ -109,7 +116,7 @@ export default class GameplaySceneView {
       
       this.yellowBlock2 = this.scene.physics.add.staticGroup({
         key: 'block-yellow',
-        repeat: 5,
+        repeat: 6,
         setXY: {
           x: this.redBlockChild[0].x,
           y: this.redBlockChild[0].y + this.redBlockChild[0].displayHeight
@@ -123,7 +130,7 @@ export default class GameplaySceneView {
 
       this.blueBlock = this.scene.physics.add.staticGroup({
         key: 'block-aqua',
-        repeat: 5,
+        repeat: 6,
         setXY: {
           x: this.yellowBlock2Child[0].x,
           y: this.yellowBlock2Child[0].y + this.yellowBlock2Child[0].displayHeight
@@ -139,7 +146,7 @@ export default class GameplaySceneView {
 
      setChildrenDisplay(group, children){
       for(var i = 0; i < children.length; i++){
-        let width = this.ScreenUtility.GameWidth * 0.1675;
+        let width = this.ScreenUtility.GameWidth * 0.1425;
         let height = width * (children[i].height / children[i].width);
         children[i].setDisplaySize(width, height);
         children[i].body.setSize(width, height);

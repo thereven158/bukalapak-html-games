@@ -7,8 +7,9 @@ export default class Button extends Phaser.GameObjects.Container{
     * @param {Number} x
     * @param {Number} y
     * @param {String} texture
+    * @param {Number} frame
     */
-    constructor(scene, x, y, texture){
+    constructor(scene, x, y, texture, frame = 0){
         super(scene, x, y);
         
         this.scene = scene;
@@ -18,16 +19,33 @@ export default class Button extends Phaser.GameObjects.Container{
         this.IsEnabled = true;
         this.IsAudioActive = true;
 
-        this.NormalTexture = texture;
-        this.HighlightTexture = null;
-        this.DisabledTexture = null;
+        this.NormalTexture = {
+            texture : texture,
+            frame : frame
+        };
 
-        this.Image = new Image(this.scene, 0, 0, this.NormalTexture);
+        this.HighlightTexture = {
+            texture : null,
+            frame : 0
+        };
+
+        this.PressedTexture = {
+            texture : null,
+            frame : 0
+        };
+
+        this.DisabledTexture = {
+            texture : null,
+            frame : 0
+        };
+
+        this.Image = new Image(this.scene, 0, 0, this.NormalTexture.texture, this.NormalTexture.frame );
         this.Image.setInteractive();
         this.add(this.Image);
 
         this.IsClicked = false;
 
+        this.Image.on('pointerenter', this.pointerEnter, this);
         this.Image.on('pointerdown', this.pointerDown, this);
         this.Image.on('pointerout', this.pointerOut, this);
         
@@ -35,17 +53,29 @@ export default class Button extends Phaser.GameObjects.Container{
 
         this.EventList = {
             onClick: "onClick",
+            onPointerDown: "onPointerEnter",
 			onPointerDown: "onPointerDown",
 			onPointerUp: "onPointerUp",
 		}
+    }
+
+    pointerEnter = (pointer) =>{
+        if(!this.IsEnabled)
+            return;
+
+        if(this.HighlightTexture.texture != null){
+            this.Image.setTexture(this.HighlightTexture.texture, this.HighlightTexture.frame);
+        }
+        
+        this.emit(this.EventList.onPointerEnter);
     }
 
     pointerDown = (pointer) =>{
         if(!this.IsEnabled)
             return;
 
-        if(this.HighlightTexture != null){
-            this.Image.texture = this.HighlightTexture;
+        if(this.PressedTexture.texture != null){
+            this.Image.setTexture(this.PressedTexture.texture, this.PressedTexture.frame);
         }
         
         this.IsClicked = true;
@@ -56,9 +86,7 @@ export default class Button extends Phaser.GameObjects.Container{
         if(!this.IsEnabled)
             return;
 
-        if(this.HighlightTexture != null){
-            this.Image.texture = this.NormalTexture;
-        }
+        this.Image.setTexture(this.NormalTexture.texture, this.NormalTexture.frame);
 
         this.emit(this.EventList.onPointerUp);
         
@@ -95,6 +123,30 @@ export default class Button extends Phaser.GameObjects.Container{
         this.Image.texture = (this.DisabledTexture != null && !active) ? this.DisabledTexture : this.NormalTexture;
     }
 
+    /** 
+    * @param {String} texture 
+    */
+    setHighlightTexture = (texture, frame = 0) =>{
+        this.HighlightTexture.texture = texture;
+        this.HighlightTexture.frame = frame;
+    }
+
+    /** 
+    * @param {String} texture 
+    */
+    setPressedTexture = (texture, frame = 0) =>{
+        this.PressedTexture.texture = texture;
+        this.PressedTexture.frame = frame;
+    }
+
+    /** 
+    * @param {String} texture 
+    */
+    setDisabledTexture = (texture, frame = 0) =>{
+        this.DisabledTexture.texture = texture;
+        this.DisabledTexture.frame = frame;
+    }
+
     removeOnCLickListener(){
         this.removeListener(this.EventList.onClick);
     }
@@ -105,6 +157,10 @@ export default class Button extends Phaser.GameObjects.Container{
 
     onceClick(event){
         this.once(this.EventList.onClick, event);
+    }
+
+    onPointerEnter(event){
+        this.on(this.EventList.onPointerEnter, event, this);
     }
 
     onPointerDown(event){

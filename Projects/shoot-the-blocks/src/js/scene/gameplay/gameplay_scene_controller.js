@@ -51,7 +51,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.view = new GameplaySceneView(this);
         this.view.create();
 
-        this.timerEvent = this.time.delayedCall(90000, this.onEvent, [], this);
+        this.timerEvent = this.time.delayedCall(60000, this.onEvent, [], this);
 
         this.physics.world.setBoundsCollision(true, true, true, false);
         this.view.paddle.setCollideWorldBounds(true);
@@ -101,21 +101,13 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
 
         if(this.IsGameStarted){
-            this.countDown = 20 - this.timerEvent.getElapsedSeconds();
+            this.countDown = 60 - this.timerEvent.getElapsedSeconds();
             this.view.textTimer.setText('' + this.countDown.toString().substr(0, 5));
         }
 
         if(this.countDown == 0 && this.IsGameStarted){
-            console.log("check");
             this.TimesRanOut();
         }
-    }
-
-    GameOver(){
-        this.IsGameStarted = false;
-        this.IsGameWin = false;
-
-        this.DelayCallbackEvent();
     }
 
     Restart = ()=>{
@@ -130,7 +122,7 @@ export default class GameplaySceneController extends Phaser.Scene {
     ShowResult = ()=>{
         this.VoucherView = new VoucherView(this);
         this.VoucherView.OnClickMainLagi(this.Restart);
-        this.VoucherView.OnClickClose(this.BackToTitle);
+        this.VoucherView.OnClickClose(this.Restart);
         
         let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
 
@@ -149,7 +141,15 @@ export default class GameplaySceneController extends Phaser.Scene {
                 voucherData.Title, 
                 voucherData.Description
             );
-        }else{
+        }else if(this.IsGameOver){
+            this.VoucherView.DisableVoucherCode()
+            this.VoucherView.SetDescription('voucher_headertimeout', 
+                "Game Over", 
+                VoucherData.VoucherTimeout.Title, 
+                VoucherData.VoucherTimeout.Description
+            );
+        }
+        else{
             this.VoucherView.DisableVoucherCode()
             this.VoucherView.SetDescription('voucher_headertimeout', 
                 "Timeout", 
@@ -166,14 +166,26 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.IsGameStarted = false;
         this.IsGameWin = false;
         this.timesUpFsx.play();
-        this.view.TimesUp();
+        this.view.ball.destroy();
+        this.view.TimesUpBanner();
         this.DelayCallbackEvent();
     }
 
     Win(){
         this.IsGameWin = true;
-        this.lastHitSfx.play();
         this.IsGameStarted = false;
+        this.lastHitSfx.play();
+        this.view.ball.destroy();
+        this.view.WinBanner();
+        this.DelayCallbackEvent();
+    }
+
+    GameOver(){
+        this.IsGameStarted = false;
+        this.IsGameWin = false;
+        this.IsGameOver = true;
+        this.view.LoseBanner();
+
         this.DelayCallbackEvent();
     }
 
@@ -198,7 +210,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         //     this.view.yellowBlock2.countActive() == 0 && 
         //     this.view.redBlock.countActive() == 0 && 
         //     this.view.blueBlock.countActive() == 0)
-        if (this.view.blueBlock.countActive() == 0)
+        if (this.view.blueBlock.countActive() == 0  && this.IsGameStarted)
         {
             this.Win();
         }
@@ -213,13 +225,13 @@ export default class GameplaySceneController extends Phaser.Scene {
         {
             //  Ball is on the left-hand side of the paddle
             this.diff = paddle.x - ball.x;
-            ball.setVelocityX(-10 * this.diff);
+            ball.setVelocityX(-5 * this.diff);
         }
         else if (this.view.ball.x > this.view.paddle.x)
         {
             //  Ball is on the right-hand side of the paddle
             this.diff = this.view.ball.x - this.view.paddle.x;
-            this.view.ball.setVelocityX(10 * this.diff);
+            this.view.ball.setVelocityX(5 * this.diff);
         }
         else
         {
@@ -230,19 +242,22 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     ResetBall(){
-        this.view.ball.setVelocity(0);
-        this.view.ball.setPosition(this.view.paddle.x, 
-        this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight / 3);
-        this.view.ball.setData('onPaddle', true);
+        if(this.IsGameStarted){
+            this.view.ball.setVelocity(0);
+            this.view.ball.setPosition(this.view.paddle.x, 
+            this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight * 0.6 * 0.55);
+            this.view.ball.setData('onPaddle', true);
+        }
+        else this.view.ball.destroy();
+        
     }
 
     HpDown(){
         this.life -= 1;
-        if(this.life == 0){
+        if(this.life == 0 && this.IsGameStarted){
             this.hpOutSfx.play();
             this.view.life1.setTexture('unlife');
             this.GameOver();
-            // this.TimesRanOut();
         }
         else if(this.life == 1){
             this.hpDownSfx.play();

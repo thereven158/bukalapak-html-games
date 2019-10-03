@@ -21,7 +21,7 @@ export default class LoadingAudioController {
         this.scene.load.image('line-fail',this.scene.CreatePath('/images/Line-Fail.png'));
         this.scene.load.image('timer-window',this.scene.CreatePath('/images/Timer-UI-Window.png'));
         this.scene.load.image('top-border',this.scene.CreatePath('/images/Top-Border.png'));
-        this.scene.load.image('times-up',this.scene.CreatePath('/images/ui-times-up.png'));
+        this.scene.load.image('times-up',this.scene.CreatePath('/images/banner-timeout.png'));
 
         // this.scene.load.audio('transition', this.scene.CreatePath('/audio/ui_slide.mp3'));
      }

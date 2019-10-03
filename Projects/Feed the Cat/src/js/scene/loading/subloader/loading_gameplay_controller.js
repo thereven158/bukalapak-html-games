@@ -13,7 +13,7 @@ export default class LoadingGameplayController {
 		 this.scene.load.image('gameplay_background', this.scene.CreatePath('/images/In-game/BG.png'));			 
 		 this.scene.load.image('wrench', this.scene.CreatePath('/images/In-game/Wrench.png'));
 		 
-		 //this.scene.load.spritesheet('minion_player', this.scene.CreatePath('/images/In-game/Sprite.png'), {frameWidth:4320/8, frameHeight:2400/3, endFrame: 21});
+		 this.scene.load.image('bottom_table', this.scene.CreatePath('/images/In-game/table.png'));
 		 this.scene.load.atlas('minion_player', this.scene.CreatePath('/images/In-game/upak.png'), this.scene.CreatePath('/images/In-game/upak.json'), Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 		 
 		 this.loadTopUiGraphics();

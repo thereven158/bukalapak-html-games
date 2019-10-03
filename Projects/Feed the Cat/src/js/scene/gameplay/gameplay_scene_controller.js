@@ -66,7 +66,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 	{
 		if (this.minion.anims.getCurrentKey() == "minion_eat")
 		{
-			if (this.minion.anims.currentFrame.textureFrame == "Artboard 17.png") {
+			if (this.minion.anims.currentFrame.textureFrame == "Artboard 40.png") {
 				this.checkItemDistance();
 			}
 		}
@@ -77,6 +77,8 @@ export default class GameplaySceneController extends Phaser.Scene {
 		if (!this.droppingItem) return;
 		
 		let distance = (this.minion.y-this.minion.displayHeight * 0.2) - this.droppingItem.y;
+		
+		//console.log(distance);
 		
 		if (distance >= 0 && distance <= 200)
 		{
@@ -177,7 +179,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 			{
 				let endY = this.ScreenUtility.GameHeight * 1.1 + this.droppingItem.height;
 				
-				this.physics.moveTo(item, this.ScreenUtility.GameWidth * 0.5, endY, 1000, 1000);	
+				this.physics.moveTo(item, this.ScreenUtility.GameWidth * 0.5, endY, 1000);	
 				
 				if (item.y >= endY)
 				{
@@ -273,6 +275,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 
 	prepareGameOver()
 	{
+		this.minion.anims.pause();
 		this.gameTimer.pause();
 		this.spawnTimer.pause();	
 		if (this.droppingItem) this.resetBody(this.droppingItem);

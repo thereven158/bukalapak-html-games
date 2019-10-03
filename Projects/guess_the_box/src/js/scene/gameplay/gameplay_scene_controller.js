@@ -200,6 +200,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         this.endgame();
         this.showResult();
+        this.sound.play('victory');
     }
 
     endgame = () =>{

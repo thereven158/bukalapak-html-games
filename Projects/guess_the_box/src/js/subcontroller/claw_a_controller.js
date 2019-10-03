@@ -54,12 +54,12 @@ export default class ClawAController extends Sprite{
 
     //to be initiated once by the current scene class
     static initAnimationData = (scene) =>{
-        AnimationHelper.AddSequence(scene, ClawAnimationList.ab, 'claw_a', 0, 5, 20, false);
-        AnimationHelper.AddSequence(scene, ClawAnimationList.ac, 'claw_a', 0, 9, 15, false);
-        AnimationHelper.AddFrames(scene, ClawAnimationList.ba, 'claw_a', [5, 4, 3, 2, 1, 0], 20, false);
-        AnimationHelper.AddSequence(scene, ClawAnimationList.bc, 'claw_a', 5 ,9, 20, false);
-        AnimationHelper.AddFrames(scene, ClawAnimationList.ca, 'claw_a', [9, 8, 7, 6, 5, 4, 3, 2, 1, 0], 15, false);
-        AnimationHelper.AddFrames(scene, ClawAnimationList.cb, 'claw_a', [9, 8, 7, 6, 5], 20, false);
+        AnimationHelper.AddSequence(scene, ClawAnimationList.ab, 'claw_a', 0, 5, 18, false);
+        AnimationHelper.AddSequence(scene, ClawAnimationList.ac, 'claw_a', 0, 9, 12, false);
+        AnimationHelper.AddFrames(scene, ClawAnimationList.ba, 'claw_a', [5, 4, 3, 2, 1, 0], 18, false);
+        AnimationHelper.AddSequence(scene, ClawAnimationList.bc, 'claw_a', 5 ,9, 18, false);
+        AnimationHelper.AddFrames(scene, ClawAnimationList.ca, 'claw_a', [9, 8, 7, 6, 5, 4, 3, 2, 1, 0], 12, false);
+        AnimationHelper.AddFrames(scene, ClawAnimationList.cb, 'claw_a', [9, 8, 7, 6, 5], 18, false);
     }
 
     start = () =>{
@@ -72,7 +72,7 @@ export default class ClawAController extends Sprite{
             if(this.CurrentAnimationFlow >= this.ClawAnimationFlow.length){
                 this.CurrentAnimationFlow = 0;
             }
-            Helper.delay(this.scene, Phaser.Math.Between(1000, 3000), this.check);
+            Helper.delay(this.scene, Phaser.Math.Between(2000, 5000), this.check);
             //this.check();
         }, this);
     }

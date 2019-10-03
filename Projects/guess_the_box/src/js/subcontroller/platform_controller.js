@@ -7,6 +7,7 @@ import Image from "../module/objects/image";
 
 var BoxAnimationList = {
     Idle:'BoxIdle',
+    IdleTrue:'BoxIdleTrue',
     OpenTrue:'BoxOpenTrue',
     OpenFalse:'BoxOpenFalse',
     CloseTrue:'BoxCloseTrue',
@@ -54,7 +55,7 @@ export default class PlatformController extends Phaser.GameObjects.Container{
 
         this.Box = new Sprite(this.scene, 0, 0, 'box').setInteractive();
         this.Box.setDisplayWidth(this.ScreenUtility.GameWidth * 0.6, true);
-        this.Box.setOrigin(0.5,0.82);
+        this.Box.setOrigin(0.5,0.87);
         //this.Box.on('pointerdown', this.Select, this);
         this.add(this.Box);
     
@@ -62,6 +63,7 @@ export default class PlatformController extends Phaser.GameObjects.Container{
         this.TouchArea.setAlpha(0.001)
         this.TouchArea.setOrigin(0.5,1.2);
         this.TouchArea.on('pointerdown', this.Select, this);
+        this.TouchArea.setDepth(1);
         this.add(this.TouchArea);
 
         this.scene.add.existing(this);
@@ -80,9 +82,11 @@ export default class PlatformController extends Phaser.GameObjects.Container{
     //to be initiated once by the current scene class
     static initAnimationData = (scene) =>{
         AnimationHelper.AddFrames(scene, BoxAnimationList.Idle, 'box', [0], 20, true);
+        AnimationHelper.AddSequence(scene, BoxAnimationList.IdleTrue, 'box', 20,24, 15, true);
         AnimationHelper.AddSequence(scene, BoxAnimationList.OpenTrue, 'box', 10, 14, 30, false);
         AnimationHelper.AddSequence(scene, BoxAnimationList.OpenFalse, 'box', 0, 4, 30, false);
         AnimationHelper.AddSequence(scene, BoxAnimationList.CloseTrue, 'box', 15, 19, 30, false);
+        AnimationHelper.AddSequence(scene, BoxAnimationList.CloseFalse, 'box', 5, 9, 30, false);
         AnimationHelper.AddSequence(scene, BoxAnimationList.CloseFalse, 'box', 5, 9, 30, false);
 
         AnimationHelper.AddFrames(scene, PlatformAnimationList.Idle, 'platform', [0], 15, true);
@@ -149,7 +153,14 @@ export default class PlatformController extends Phaser.GameObjects.Container{
             return;
 
         this.IsOpened = true;
-        this.Box.play((this.IsTrueBox) ? this.BoxAnimationList.OpenTrue:this.BoxAnimationList.OpenFalse)
+        if(this.IsTrueBox){
+            this.Box.play(this.BoxAnimationList.OpenTrue).once('animationcomplete', ()=>{
+                this.Box.play(this.BoxAnimationList.IdleTrue);
+            }, this);
+        }else{
+            this.Box.play(this.BoxAnimationList.OpenFalse);
+        }
+
         this.scene.sound.play('box');
     }
 

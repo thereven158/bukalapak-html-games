@@ -73,7 +73,7 @@ export default class ClawBController extends Sprite{
             if(this.CurrentAnimationFlow >= this.ClawAnimationFlow.length){
                 this.CurrentAnimationFlow = 0;
             }
-            Helper.delay(this.scene, Phaser.Math.Between(1000, 3000), this.check);
+            Helper.delay(this.scene, Phaser.Math.Between(2000, 5000), this.check);
             //this.check();
         }, this);
     }

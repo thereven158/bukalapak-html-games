@@ -21,6 +21,7 @@ export default class LoadingAudioController {
 
         this.scene.load.audio('move', this.scene.CreatePath('/audio/ingame_move.mp3'));
 
+        this.scene.load.audio('victory', this.scene.CreatePath('/audio/ingame_victory.mp3'));
         this.scene.load.audio('timeout', this.scene.CreatePath('/audio/ingame_timeout.mp3'));
 
         this.scene.load.audio('transition', this.scene.CreatePath('/audio/ui_slide.mp3'));

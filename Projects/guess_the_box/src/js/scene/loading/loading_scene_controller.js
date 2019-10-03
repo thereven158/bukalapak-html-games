@@ -31,7 +31,7 @@ export default class LoadingSceneController extends Phaser.Scene{
         this.load.once('complete', this.LoadBootResoucesComplete);  
         this.LoadBootResouces();
    
-    }
+    } 
 
     LoadBootResoucesComplete = () =>{
         this.view.InitLoading();

@@ -13,13 +13,18 @@ let isLandscape = window.innerWidth > window.innerHeight;
 if(isLandscape){
 	  actualWidth = actualHeight * (3/4);
 }
-let isTabs = window.innerWidth > 1000;
-if(isTabs || window.innerWidth == 768){
+let isTabs = window.innerWidth / window.innerHeight == 3/4;
+if(isTabs || window.innerWidth == 768 || window.innerWidth > 1000){
 	actualWidth = actualWidth * (3/4);
 }
 
 console.log("window inner width: " + window.innerWidth);
 console.log("actual width: " + actualWidth);
+
+console.log("window inner height: " + window.innerHeight);
+console.log("actual height: " + actualHeight);
+
+console.log(window.innerWidth / window.innerHeight)
 console.log(window.devicePixelRatio);
 
 var config = {
@@ -52,7 +57,7 @@ var config = {
 	physics: {
         default: 'arcade',
         arcade: {
-            debug: true
+            debug: false
         }
 	},
 	autoRound: false

@@ -46,7 +46,7 @@ export default class LoadingSceneController extends Phaser.Scene{
     OnCompleteLoad = () =>{
         this.load.removeAllListeners();
 
-        this.scene.start('TitleScene');
+        this.scene.start('GameScene');
     }
 
     LoadBootResouces(){

@@ -12,7 +12,13 @@ export default class Image extends Phaser.GameObjects.Image{
         super(scene, x, y, texture, frame);
 
         this.scene = scene;
-        this.ScalePercentage = ScreenUtility.getInstance().ScalePercentage;
+        this.ScreenUtility = ScreenUtility.getInstance();
+        this.ScalePercentage = this.ScreenUtility.ScalePercentage;
+
+        /** @type {Number} */
+        this.WidthAspectRatio = this.width / this.height;
+        /** @type {Number} */
+        this.HeightAspectRatio = this.height / this.width;
 
         this.scene.add.existing(this);
         this.setToResponsiveScale();
@@ -22,14 +28,14 @@ export default class Image extends Phaser.GameObjects.Image{
     * @param {Number} size
     */
     matchHeightToAspectRatio(size){
-        this.displayHeight = size * (this.height / this.width);
+        this.displayHeight = size * this.HeightAspectRatio;
     }
 
     /** 
     * @param {Number} size
     */
     matchWidthToAspectRatio(size){
-        this.displayWidth = size * (this.width / this.height);
+        this.displayWidth = size * this.WidthAspectRatio;
     }
 
     /** 
@@ -75,7 +81,31 @@ export default class Image extends Phaser.GameObjects.Image{
         return this;
     }
 
-    ResetScale(){
+    /** 
+    * @param {Number} maxWidth
+    * @param {Number} maxHeight 
+    */
+    setMaxPreferredDisplaySize = (maxWidth, maxHeight) =>{
+        if(maxWidth * this.HeightAspectRatio > maxHeight){
+            this.setDisplayHeight(maxHeight, true);
+        }else{
+            this.setDisplayWidth(maxWidth, true);
+        }
+    }
+    
+    /** 
+    * @param {Number} maxWidth
+    * @param {Number} maxHeight 
+    */
+    setMinPreferredDisplaySize = (maxWidth, maxHeight) =>{
+        if(maxWidth * this.HeightAspectRatio < maxHeight){
+            this.setDisplayHeight(maxHeight, true);
+        }else{
+            this.setDisplayWidth(maxWidth, true);
+        }
+    }
+
+    resetScale(){
         this.setScale(1);
     }
 }

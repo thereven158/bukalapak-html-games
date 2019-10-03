@@ -3,6 +3,9 @@ import ScreenUtility from '../../module/screen/screen_utility';
 import VoucherView from '../../view/popup_voucher_view';
 import VoucherData from '../../voucherdata';
 
+import gameplaydata from '../../gameplaydata';
+import BoardController from '../../subcontroller/board_controller';
+
 export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'GameScene'});
@@ -25,6 +28,9 @@ export default class GameplaySceneController extends Phaser.Scene {
     initGameData = ()=>{
         this.IsGameStarted = false;
         this.IsGameWin = true;
+
+        this.Score = 0;
+        this.Timer = gameplaydata.GameTime;
     }
 
     initAudio = ()=>{
@@ -34,13 +40,15 @@ export default class GameplaySceneController extends Phaser.Scene {
     create = ()=>{
         this.view = new GameplaySceneView(this).create();
 
+        this.board = new BoardController(this);
+
         this.startGame();
     }
 
     startGame = ()=>{
         this.IsGameStarted = true;
 
-        this.gameOver();
+        //this.gameOver();
     }
 
     update(timestep, delta){
@@ -48,16 +56,18 @@ export default class GameplaySceneController extends Phaser.Scene {
             this.gameUpdate(timestep, delta);
         }
 
+        this.board.update(timestep, delta);
+        this.view.update();
     }
 
     gameUpdate(timestep, delta){
+        this.Timer -= (1 * delta) / 1000;
 
-    }
-
-    gameOver = ()=>{
-        this.IsGameStarted = false;
-
-        this.showResult();
+        //Isgameover
+        if(this.Timer <= 0){       
+            this.Timer = 0;
+            this.timesout();
+        }
     }
 
     restart = ()=>{
@@ -67,6 +77,20 @@ export default class GameplaySceneController extends Phaser.Scene {
     backToTitle = ()=>{
         this.scene.launch('TitleScene');
         this.scene.stop();
+    }
+
+    win = ()=>{
+        
+    }
+
+    timesout = ()=>{
+        this.gameOver();
+    }
+
+    gameOver = ()=>{
+        this.IsGameStarted = false;
+
+        this.showResult();
     }
 
     showResult = ()=>{

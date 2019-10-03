@@ -67,8 +67,8 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.input.on('pointermove', function (pointer) {
 
             this.view.paddle.x = Phaser.Math.Clamp(pointer.x, 
-              this.ScreenUtility.GameWidth - this.ScreenUtility.GameWidth + 150, 
-              this.ScreenUtility.GameWidth - 150);
+              0, 
+              this.ScreenUtility.GameWidth);
     
             if (this.view.ball.getData('onPaddle'))
             {

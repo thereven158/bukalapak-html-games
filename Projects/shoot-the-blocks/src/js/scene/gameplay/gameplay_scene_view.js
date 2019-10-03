@@ -139,12 +139,13 @@ export default class GameplaySceneView {
 
      setChildrenDisplay(group, children){
       for(var i = 0; i < children.length; i++){
-        // let width = this.ScreenUtility.GameWidth * 0.1675;
-        // let height = width * (children[i].height / children[i].width);
-        // children[i].setDisplaySize(width, height);
+        let width = this.ScreenUtility.GameWidth * 0.1675;
+        let height = width * (children[i].height / children[i].width);
+        children[i].setDisplaySize(width, height);
+        children[i].body.setSize(width, height);
 
-        children[i].displayWidth = this.ScreenUtility.GameWidth * 0.1675;
-        children[i].displayHeight = children[i].displayWidth * (children[i].height / children[i].width);
+        // children[i].displayWidth = this.ScreenUtility.GameWidth * 0.1675;
+        // children[i].displayHeight = children[i].displayWidth * (children[i].height / children[i].width);
         if (i == 0)
           children[i].setPosition(0 + children[i].displayWidth/2, children[i].y);
         else{

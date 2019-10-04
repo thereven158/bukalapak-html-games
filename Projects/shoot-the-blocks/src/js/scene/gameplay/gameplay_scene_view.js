@@ -74,7 +74,7 @@ export default class GameplaySceneView {
       this.lineFail.setDisplayWidth(this.ScreenUtility.GameWidth * 1.2, true);
 
       this.ball = this.scene.physics.add.image(this.ScreenUtility.CenterX, 
-        this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight * 0.6 * 0.575, 
+        this.paddle.y - this.paddle.displayHeight * 1.1, 
         'ball')
       .setCollideWorldBounds(true)
       .setBounce(1);
@@ -94,6 +94,7 @@ export default class GameplaySceneView {
           y: this.timerWindow.displayHeight + this.timerWindow.displayHeight * 0.9,
         }
       });
+      this.yellowBlock.setDepth(1);
 
       this.yellowBlockChild = this.yellowBlock.getChildren();
       this.setChildrenDisplay(this.yellowBlock, this.yellowBlockChild);
@@ -137,6 +138,7 @@ export default class GameplaySceneView {
         }
       });
 
+      this.blueBlock.setDepth(1);
       this.blueBlockChild = this.blueBlock.getChildren();
       this.setChildrenDisplay(this.blueBlock, this.blueBlockChild);
 

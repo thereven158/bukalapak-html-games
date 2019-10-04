@@ -13,8 +13,8 @@ let isLandscape = window.innerWidth > window.innerHeight;
 if(isLandscape){
 	  actualWidth = actualHeight * (3/4);
 }
-let isTabs = window.innerWidth / window.innerHeight == 3/4;
-if(isTabs || window.innerWidth == 768 || window.innerWidth > 1000){
+let isTabs = window.innerWidth / window.innerHeight >= 2/3;
+if(isTabs || window.innerWidth == 768 || window.innerWidth > 1000 || window.innerWidth == 375 / 667){
 	actualWidth = actualWidth * (3/4);
 }
 

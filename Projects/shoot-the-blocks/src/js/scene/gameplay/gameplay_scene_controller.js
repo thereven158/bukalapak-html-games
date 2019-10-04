@@ -5,7 +5,6 @@ import ScreenUtility from '../../module/screen/screen_utility';
 import VoucherView from '../../view/popup_voucher_view';
 import VoucherData from '../../voucherdata';
 
-
 export default class GameplaySceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'GameScene'});
@@ -47,11 +46,12 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.IsWinning = false;
     }
 
+
     create(){
         this.view = new GameplaySceneView(this);
         this.view.create();
 
-        this.timerEvent = this.time.delayedCall(60000, this.onEvent, [], this);
+        this.timerEvent = this.time.delayedCall(90000, this.onEvent, [], this);
 
         this.physics.world.setBoundsCollision(true, true, true, false);
         this.view.paddle.setCollideWorldBounds(true);
@@ -68,24 +68,34 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         this.input.on('drag', function (pointer, gameObject, dragX) {
 
-            gameObject.x = dragX;
+            this.view.paddle.x = Phaser.Math.Clamp(pointer.x, 
+                0 + this.view.paddle.displayWidth / 2, 
+                this.ScreenUtility.GameWidth - this.view.paddle.displayWidth / 2);
 
             if (this.view.ball.getData('onPaddle'))
             {
+                this.view.ball.body.enable = false;
                 this.view.ball.x = this.view.paddle.x;
             }
     
         }, this);
-
-        this.input.on('pointerup', function (pointer) {
+        
+        this.input.on('dragend', function (pointer, gameObject) {
 
             if (this.view.ball.getData('onPaddle'))
             {
+                this.view.ball.body.enable = true;
                 this.view.ball.setVelocity(0, -600);
                 this.view.ball.setData('onPaddle', false);
             }
-
+    
         }, this);
+
+        this.anims.create({
+            key: 'blast-block',
+            frames: this.anims.generateFrameNumbers('blast', {start: 0, end: 24}),
+            frameRate: 50
+        })
 
         this.StartGame();
     }
@@ -101,7 +111,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
 
         if(this.IsGameStarted){
-            this.countDown = 60 - this.timerEvent.getElapsedSeconds();
+            this.countDown = 90 - this.timerEvent.getElapsedSeconds();
             this.view.textTimer.setText('' + this.countDown.toString().substr(0, 5));
         }
 
@@ -201,16 +211,22 @@ export default class GameplaySceneController extends Phaser.Scene {
     HitBlocks = (ball, blocks) =>
     {
         this.blockHitSfx.play();
-        blocks.disableBody(true, true);
+        blocks.setDepth(3);
+        blocks.play('blast-block', false);
+        blocks.once('animationcomplete', () => {
+            blocks.disableBody(true, true);
+        });
+        
         this.score +=1;
+        console.log(this.score);
 
         ball.setVelocityY(700);
-        // if (this.view.blocks.countActive() == 0)
         // if (this.view.yellowBlock.countActive() == 0 &&
         //     this.view.yellowBlock2.countActive() == 0 && 
         //     this.view.redBlock.countActive() == 0 && 
         //     this.view.blueBlock.countActive() == 0)
-        if (this.view.blueBlock.countActive() == 0  && this.IsGameStarted)
+        // if (this.view.blueBlock.countActive() == 0  && this.IsGameStarted)
+        if(this.score >= 28)
         {
             this.Win();
         }
@@ -245,8 +261,9 @@ export default class GameplaySceneController extends Phaser.Scene {
         if(this.IsGameStarted){
             this.view.ball.setVelocity(0);
             this.view.ball.setPosition(this.view.paddle.x, 
-            this.ScreenUtility.CenterY + this.ScreenUtility.GameHeight * 0.6 * 0.575);
+            this.view.paddle.y - this.view.paddle.displayHeight * 1.4);
             this.view.ball.setData('onPaddle', true);
+            this.view.ball.body.enable = false;
         }
         else this.view.ball.destroy();
         

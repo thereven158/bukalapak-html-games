@@ -13,6 +13,7 @@ export default class LoadingTitleController {
 		 this.scene.load.image('light', this.scene.CreatePath('/images/Main Menu/Light.png'));
 		 this.scene.load.image('minion_feed', this.scene.CreatePath('/images/Main Menu/Minion-feed.png'));
 		 this.scene.load.image('title_logo', this.scene.CreatePath('/images/Main Menu/Title.png'));
-		 this.scene.load.image('title_background', this.scene.CreatePath('/images/Main Menu/title-BG.png'));
+		 this.scene.load.image('title_background', this.scene.CreatePath('/images/Main Menu/title-BG.png'));		 
+		 this.scene.load.image('title_table', this.scene.CreatePath('/images/Main Menu/title-table.png'));
      }
 }

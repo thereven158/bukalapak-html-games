@@ -51,6 +51,11 @@ export default class SlifeView
 	
 	resizeHUD()
 	{
+		this.resizeLifes();
+	}
+	
+	resizeLifes()
+	{
 		for (let i=0;i<this.totalLife;i++) 
 		{
 			this.lifeIcons[i].setOrigin(0.5, 0.5);
@@ -72,8 +77,7 @@ export default class SlifeView
 		{
 			if (i==middleIndex) continue;
 			this.lifeIcons[i].x += deltaX;
-		}
-
+		}		
 	}
 
 	updateLife(lifeRemaining)

@@ -43,7 +43,7 @@ export default class ScoreView
 		
 		for (let i=0;i<this.totalChar;i++) 
 		{
-			this.charTexts[i].setPosition(this.panel.x + this.panel.displayWidth * (deltaDistance * i), this.panel.y + this.panel.displayHeight * 0.64);
+			this.charTexts[i].setPosition(this.panel.x + this.panel.displayWidth * (deltaDistance * i), this.panel.y + this.panel.displayHeight * 0.7);
 		}
 		
 		let middleIndex = (this.totalChar+1)/2;

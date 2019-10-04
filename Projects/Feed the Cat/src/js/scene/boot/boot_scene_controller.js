@@ -57,7 +57,6 @@ export default class BootSceneController extends Phaser.Scene{
 
         this.game.events.on('hidden', () =>{
             this.sound.mute = true;
-            console.log("test");
         },this)
 
         this.game.events.on('visible', () =>{

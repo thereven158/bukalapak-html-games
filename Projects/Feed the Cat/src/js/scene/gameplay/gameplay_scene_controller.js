@@ -38,6 +38,15 @@ export default class GameplaySceneController extends Phaser.Scene {
 		this.itemType = -1;
 		this.isGameOver = false;
 		
+		let defaultSizeRatio = this.ScreenUtility.GameDefaultWidth/this.ScreenUtility.GameDefaultHeight;		
+		let curSizeRatio = this.ScreenUtility.GameWidth/this.ScreenUtility.GameHeight;
+		
+		let defaultAndCurSizeRatio = defaultSizeRatio/curSizeRatio;
+		
+		//console.log(defaultSizeRatio, curSizeRatio, defaultAndCurSizeRatio);
+		
+		this.ballSpeed = GameplayData.ItemDropSpeed * defaultAndCurSizeRatio;
+		
 		this.targetGoal = GameplayData.TargetGoal;
 		this.progressGoal = 0;
 		
@@ -66,7 +75,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 	{
 		if (this.minion.anims.getCurrentKey() == "minion_eat")
 		{
-			if (this.minion.anims.currentFrame.textureFrame == "Artboard 40.png") {
+			if (this.minion.anims.currentFrame.textureFrame == "Artboard 39.png") {
 				this.checkItemDistance();
 			}
 		}
@@ -142,11 +151,13 @@ export default class GameplaySceneController extends Phaser.Scene {
 		
 		this.edibleImage = new Image(this, this.ScreenUtility.GameWidth * 0.5, 0, 'ball');
 		this.edibleImage.setOrigin(0.5, 1);
-      	this.edibleImage.setDisplayWidth(this.ScreenUtility.GameWidth * 0.25, true);		
+      	//this.edibleImage.setDisplayWidth(this.ScreenUtility.GameWidth * 0.25, true);		
+		this.edibleImage.setMaxPreferredDisplaySize(this.ScreenUtility.GameWidth * 0.25, this.ScreenUtility.GameHeight * 0.15);
 		
 		this.inedibleImage = new Image(this, this.ScreenUtility.GameWidth * 0.5, 0, 'wrench');
 		this.inedibleImage.setOrigin(0.5, 1);
-      	this.inedibleImage.setDisplayWidth(this.ScreenUtility.GameWidth * 0.45, true);
+      	//this.inedibleImage.setDisplayWidth(this.ScreenUtility.GameWidth * 0.45, true);
+		this.inedibleImage.setMaxPreferredDisplaySize(this.ScreenUtility.GameWidth * 0.45, this.ScreenUtility.GameHeight * 0.3);
 		
 		this.droppingItem = null;
 		
@@ -179,7 +190,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 			{
 				let endY = this.ScreenUtility.GameHeight * 1.1 + this.droppingItem.height;
 				
-				this.physics.moveTo(item, this.ScreenUtility.GameWidth * 0.5, endY, 1000);	
+				this.physics.moveTo(item, this.ScreenUtility.GameWidth * 0.5, endY, this.ballSpeed);	
 				
 				if (item.y >= endY)
 				{
@@ -274,8 +285,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 	}
 
 	prepareGameOver()
-	{
-		this.minion.anims.pause();
+	{		
 		this.gameTimer.pause();
 		this.spawnTimer.pause();	
 		if (this.droppingItem) this.resetBody(this.droppingItem);
@@ -325,12 +335,14 @@ export default class GameplaySceneController extends Phaser.Scene {
 			}
 			else
 			{
+				this.minion.anims.pause();
 				this.WinGame();
 				return true;
 			}			
 		}, () => {
 			if (this.lifeObj.checkIfLifeZero())
 			{
+				this.minion.anims.pause();
 				this.GameOver();
 				return true;
 			}
@@ -343,6 +355,9 @@ export default class GameplaySceneController extends Phaser.Scene {
 				
 		this.createScore();
 		this.createLife();
+		
+		this.lifeObj.view.panel.y = this.scoreObj.view.panel.y +  this.scoreObj.view.panel.displayHeight - this.lifeObj.view.panel.displayHeight;
+		this.lifeObj.view.resizeLifes();
 		
         this.StartGame();
     }

@@ -49,7 +49,13 @@ export default class TitleSceneView {
 		
 		this.buttonPlay = new Button(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.88, 'start_button');
 		this.buttonPlay.setOrigin(0.5, 1);	
-      	this.buttonPlay.Image.setMaxPreferredDisplaySize(this.ScreenUtility.GameWidth * 0.6, this.ScreenUtility.GameHeight * 0.1);					
+      	this.buttonPlay.Image.setMaxPreferredDisplaySize(this.ScreenUtility.GameWidth * 0.6, this.ScreenUtility.GameHeight * 0.1);
+		
+		this.bottomTable = new Image(this.scene, this.buttonPlay.x, this.buttonPlay.y-this.buttonPlay.Image.displayHeight*0.75, 'title_table');
+		this.bottomTable.setOrigin(0.5, 0);	
+      	this.bottomTable.setDisplayWidth(this.ScreenUtility.GameWidth, true);
+		
+		this.buttonPlay.setDepth(10);
     }
 
     OnClickPlay(event){

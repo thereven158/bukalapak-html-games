@@ -43,7 +43,7 @@ export default class GameplaySceneView {
 	initMinion()
 	{
 		this.bottomTable = new Image(this.scene, this.ScreenUtility.GameWidth * 0.5, this.ScreenUtility.GameHeight * 0.85, 'bottom_table');
-		this.bottomTable.setOrigin(0.5, 0);
+		this.bottomTable.setOrigin(0.5, -0.027);
       	this.bottomTable.setDisplayWidth(this.ScreenUtility.GameWidth, true);
 		//this.bottomTable.setMaxPreferredDisplaySize(this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight * 0.2);
 		
@@ -99,28 +99,28 @@ export default class GameplaySceneView {
 	{
 		this.scene.anims.create({
 			key: 'minion_idle',
-			frames: this.scene.anims.generateFrameNumbers('minion_player', { frames: ["Artboard 28.png","Artboard 29.png","Artboard 30.png","Artboard 31.png","Artboard 32.png","Artboard 33.png","Artboard 34.png","Artboard 35.png"]}),
+			frames: this.scene.anims.generateFrameNumbers('minion_player', { frames: ["Artboard 28.png","Artboard 29.png","Artboard 30.png","Artboard 31.png","Artboard 32.png","Artboard 33.png","Artboard 34.png","Artboard 35.png","Artboard 36.png"]}),
 			frameRate: 20,
 			repeat: -1
 		});	
 		
 		this.scene.anims.create({
 			key: 'minion_eat',
-			frames: this.scene.anims.generateFrameNumbers('minion_player', { frames: ["Artboard 38.png","Artboard 39.png","Artboard 40.png","Artboard 40.png","Artboard 40.png"]}),
+			frames: this.scene.anims.generateFrameNumbers('minion_player', { frames: ["Artboard 37.png","Artboard 38.png","Artboard 39.png","Artboard 39.png","Artboard 39.png"]}),
 			frameRate: 10,
 			repeat: 0,
 		});
 		
 		this.scene.anims.create({
 			key: 'minion_yummy',
-			frames: this.scene.anims.generateFrameNumbers('minion_player', { frames: ["Artboard 41.png","Artboard 42.png","Artboard 43.png","Artboard 43.png","Artboard 43.png"]}),
+			frames: this.scene.anims.generateFrameNumbers('minion_player', { frames: ["Artboard 40.png","Artboard 41.png","Artboard 42.png","Artboard 42.png","Artboard 42.png"]}),
 			frameRate: 5,
 			repeat: 0,
 		});
 		
 		this.scene.anims.create({
 			key: 'minion_yucky',
-			frames: this.scene.anims.generateFrameNumbers('minion_player', { frames: ["Artboard 45.png","Artboard 46.png","Artboard 47.png","Artboard 48.png","Artboard 49.png","Artboard 49.png","Artboard 49.png"]}),
+			frames: this.scene.anims.generateFrameNumbers('minion_player', { frames: ["Artboard 44.png","Artboard 45.png","Artboard 46.png","Artboard 47.png","Artboard 47.png","Artboard 47.png"]}),
 			frameRate: 5,
 			repeat: 0,
 		});		

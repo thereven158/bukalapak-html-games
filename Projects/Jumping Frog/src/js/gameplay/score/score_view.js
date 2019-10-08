@@ -29,7 +29,7 @@ export default class ScoreView
 		for (let i=0;i<this.totalChar;i++)
 		{
 			this.charTexts.push(new Text(this.game, 0, 0, "0", {fontFamily : "panton_bold", color :"#f9d023", align:"center"}).setFontSizeR(70));
-		}		
+		}
 	}
 	
 	resizeHUD()

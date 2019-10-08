@@ -44,7 +44,7 @@ export default class BootSceneController extends Phaser.Scene{
 
     }
     InitScreen(){
-        ScreenUtility.getInstance().Init(this);
+        ScreenUtility.getInstance().init(this);
         ScreenUtility.ResetGameScreen();
    
     }

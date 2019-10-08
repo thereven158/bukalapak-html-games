@@ -20,7 +20,8 @@ export default class TitleSceneView {
 
     initScreen = ()=>{
 		this.background = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'title_background');
-      	this.background.setDisplaySize(this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight);
+      	this.background.setDisplayWidth(this.ScreenUtility.GameWidth, true);
+		if (this.background.height < this.ScreenUtility.GameHeight) this.background.setDisplayHeight(this.ScreenUtility.GameHeight, true);
 		
 		this.minionLogo = new Button(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.6, 'title_minion');
 		this.minionLogo.setOrigin(0.5, 0.5);	

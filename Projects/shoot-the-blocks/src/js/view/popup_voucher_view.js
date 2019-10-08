@@ -4,6 +4,7 @@ import Image from '../module/objects/image';
 import Text from '../module/objects/text';
 import ScreenUtility from '../module/screen/screen_utility';
 import VoucherInfoView from './popup_voucher_info_view';
+import VoucherData from '../voucherdata';
 
 export default class VoucherView extends Phaser.GameObjects.Container{
 /** @param {Phaser.scene} scene */
@@ -24,6 +25,8 @@ export default class VoucherView extends Phaser.GameObjects.Container{
     }
 
     InitView(){
+        let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
+
         this.setDepth(10);
         this.Blackground = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'bg_black').setInteractive();
 		this.Blackground.setDisplaySize(this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight);
@@ -69,7 +72,8 @@ export default class VoucherView extends Phaser.GameObjects.Container{
             ,{align:'center', fontFamily: 'panton_bold', color: '#000000'}).setFontSizeR(50);
         this.MainGroup.add(this.HeadText);
 
-        this.DescriptionText = new Text(this.scene, this.TitleBox.x, innerContentStartPosY + (innerContentHeight * 0.3), "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak"
+        this.DescriptionText = new Text(this.scene, this.TitleBox.x, innerContentStartPosY + (innerContentHeight * 0.3), 
+        voucherData.Description + ""
             ,{align:'center', fontFamily: 'panton', color: '#000000'}).setFontSizeR(30);
         this.DescriptionText.setWordWrapWidth(this.Background.displayWidth * (0.8));
         this.MainGroup.add(this.DescriptionText);

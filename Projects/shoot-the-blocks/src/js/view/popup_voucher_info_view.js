@@ -3,6 +3,7 @@ import Button from '../module/objects/button';
 import Image from '../module/objects/image';
 import Text from '../module/objects/text';
 import ScreenUtility from '../module/screen/screen_utility';
+import VoucherData from '../voucherdata';
 
 export default class VoucherInfoView extends Phaser.GameObjects.Container{
 /** @param {Phaser.Scene} scene */
@@ -19,6 +20,8 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
     }
 
     InitView(){
+        let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
+
         //background
         this.Blackground = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'bg_black').setInteractive();
 		this.Blackground.setDisplaySize(this.ScreenUtility.GameHeight, this.ScreenUtility.GameWidth);
@@ -57,13 +60,16 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         this.MainGroup.add(this.BtnClose);
 
         //content
-        this.TitleText = new Text(this.scene, this.ScreenUtility.GameWidth * 0.05, GetContentYPos(0.025), "Voucher gratis ongkir untuk pengguna baru"
+        this.TitleText = new Text(this.scene, this.ScreenUtility.GameWidth * 0.05, GetContentYPos(0.025), 
+            // "Voucher gratis ongkir untuk pengguna baru"
+            voucherData.InfoDescription + ""
             ,{align:'left', fontFamily: 'panton_bold', color: '#000000'}).setFontSizeR(55);
         this.TitleText.setOrigin(0, 0);
         this.TitleText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.945);
         this.MainGroup.add(this.TitleText);
 
-        this.DescriptionText = new Text(this.scene, this.TitleText.x, this.TitleText.y + this.TitleText.height * 1.1, "kamu dapat voucher gratis ongkir sampai Rp20.000 buat belanja di aplikasi buka lapak"
+        this.DescriptionText = new Text(this.scene, this.TitleText.x, this.TitleText.y + this.TitleText.height * 1.1, 
+            voucherData.Description + ""
             ,{align:'left', fontFamily: 'panton', color: '#000000'}).setFontSizeR(38);
         this.DescriptionText.setOrigin(0,0);
         this.DescriptionText.setWordWrapWidth(this.ScreenUtility.GameWidth * 0.935);
@@ -118,7 +124,9 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
         info1HeadText.setOrigin(0, 0.5);
         this.InfoGroup.add(info1HeadText);
 
-        this.Info1Text = new Text(this.scene, GetInfoContentXPos(0.05), 0, "1 - 30 Sep 2019"
+        this.Info1Text = new Text(this.scene, GetInfoContentXPos(0.05), 0, 
+        // "1 - 30 Sep 2019"
+        voucherData.ExpireDate + ""
             ,{align:'left', fontFamily: 'panton', color: '#000000'}).setFontSizeR(InfoTextSize);
         this.Info1Text.setOrigin(0, 0.5);
         this.InfoGroup.add(this.Info1Text);
@@ -186,8 +194,9 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
     }
 
     SetDescription(voucherCode, titleText, description, expireDate, minTransactionInfo, onlyAppliesInfo, termandconditions){
-        this.TitleText.runWordWrap(titleText);
-        this.DescriptionText.runWordWrap(description);
+        this.TitleText.setText(titleText);
+        this.DescriptionText.setText(description);
+
 
         this.Info3Text.setText(voucherCode);
 

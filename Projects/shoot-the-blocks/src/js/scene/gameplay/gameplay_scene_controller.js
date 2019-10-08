@@ -216,17 +216,15 @@ export default class GameplaySceneController extends Phaser.Scene {
         blocks.once('animationcomplete', () => {
             blocks.disableBody(true, true);
         });
-        
         this.score +=1;
-        console.log(this.score);
 
         ball.setVelocityY(700);
-        // if (this.view.yellowBlock.countActive() == 0 &&
-        //     this.view.yellowBlock2.countActive() == 0 && 
-        //     this.view.redBlock.countActive() == 0 && 
-        //     this.view.blueBlock.countActive() == 0)
+        if (this.view.yellowBlock.countActive() <= 1 &&
+            this.view.yellowBlock2.countActive() <= 1 && 
+            this.view.redBlock.countActive() <= 1 && 
+            this.view.blueBlock.countActive() <= 1)
         // if (this.view.blueBlock.countActive() == 0  && this.IsGameStarted)
-        if(this.score >= 28)
+        // if(this.score >= 28)
         {
             this.Win();
         }

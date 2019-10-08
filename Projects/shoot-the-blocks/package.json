@@ -1,10 +1,16 @@
 {
-	"name": "shoot-the-blocks",
+	"name": "tembak-bintang",
 	"version": "1.0.0",
 	"description": "A Phaser Project",
 	"main": "src/index.js",
 	"scripts": {
-		"build": "webpack --config webpack/webpack.prod.js --env.build=agate-dev",
+		"copy:asset": "npx copyfiles -u 1 \"src/assets/**/*.*\" dist/",
+		"copy:html": "npx copyfiles -u 1 \"html/**/*.*\" dist/",
+		"build": "webpack --config webpack/webpack.prod.js --env.build=agate-prod-a",
+		"build2:add": "webpack --config webpack/webpack.prod2.js --env.build=agate-prod-b && npx copyfiles -u 1 \"dist2/app.bundle2.js\" dist",
+		"build2:remove": "webpack --config webpack/webpack.cleandist2.js",
+		"build:bukalapak": "npm run build:full && npm run build2:add && npm run build2:remove",
+		"build:full": "npm run build && npm run copy:asset",
 		"dist": "npx http-server dist/ -p 5500 -e",
 		"dev": "webpack-dev-server --config webpack/webpack.dev.js --env.build=agate-dev --host=0.0.0.0"
 	},

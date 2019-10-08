@@ -186,8 +186,8 @@ export default class VoucherInfoView extends Phaser.GameObjects.Container{
     }
 
     SetDescription(voucherCode, titleText, description, expireDate, minTransactionInfo, onlyAppliesInfo, termandconditions){
-        this.TitleText.runWordWrap(titleText);
-        this.DescriptionText.runWordWrap(description);
+        this.TitleText.setText(titleText);
+        this.DescriptionText.setText(description);
 
         this.Info3Text.setText(voucherCode);
 

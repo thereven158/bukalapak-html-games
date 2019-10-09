@@ -1,4 +1,3 @@
-import { Math } from "phaser";
 import { DeviceHelper } from "../../helper/device_Helper";
 
 export default class ScreenUtility{

@@ -11,7 +11,7 @@ module.exports = (env) =>
 						mode: 'development',
 						devtool: 'eval-source-map',
 						devServer: {
-							contentBase: 'src'
+							contentBase: 'src/assets'
 						},
 						module: {
 							rules: [

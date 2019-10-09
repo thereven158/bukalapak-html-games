@@ -13,7 +13,7 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     init(data){
-        console.log('title screen')
+        //console.log('title screen')
 
         this.InitTitle();
         this.InitTitleData(data);

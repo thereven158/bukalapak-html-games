@@ -2,7 +2,6 @@ export default class AudioController{
     constructor(){
         /**@type {Boolean}*/
         this.IsAudioOn = true;
-
     }
 
     /**
@@ -46,4 +45,7 @@ export default class AudioController{
         this.IsAudioOn = isAudioOn;
         this.scene.sound.mute = !this.IsAudioOn;
     }
+    
+
+    
 }

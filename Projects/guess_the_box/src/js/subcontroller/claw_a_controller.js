@@ -44,11 +44,10 @@ export default class ClawAController extends Sprite{
     initClawData = () =>{
         this.CurrentAnimationFlow = 0;
         this.ClawAnimationFlow = [
-            ClawAnimationList.ab,
             ClawAnimationList.bc,
-            ClawAnimationList.ca,
-            ClawAnimationList.ac,
             ClawAnimationList.cb,
+            ClawAnimationList.ba,
+            ClawAnimationList.ab,
         ];
     }
 

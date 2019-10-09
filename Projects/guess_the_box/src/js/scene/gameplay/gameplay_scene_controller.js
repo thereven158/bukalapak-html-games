@@ -19,7 +19,8 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     init = () =>{
-        console.log('game screen')
+        //console.log('game screen')
+        
         this.initAnimatonData();
 
         this.initGame();
@@ -109,7 +110,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 
     answerEvent = (isCorrect)=>{
         if(isCorrect){
-            this.view.setStatus("^^");
+            this.view.setStatus("^_^");
             this.CorrectMoveCount += 1;
             this.CorrectMoveChainCount += 1;
             this.Score += this.CurrentPhase.ScorePoint;

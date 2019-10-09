@@ -28,7 +28,7 @@ export default class GameplaySceneView {
         }
         wall.setOrigin(0.5,1);
 
-        let clawA = new ClawAController(this.scene, this.ScreenUtility.GameWidth * -0.2, this.ScreenUtility.GameHeight * 0.35);
+        let clawA = new ClawAController(this.scene, this.ScreenUtility.GameWidth * -0.17, this.ScreenUtility.GameHeight * 0.35);
         clawA.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
         clawA.setOrigin(0,1);
 

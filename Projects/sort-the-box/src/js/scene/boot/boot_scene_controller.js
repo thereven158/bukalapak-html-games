@@ -18,7 +18,6 @@ export default class BootSceneController extends Phaser.Scene{
 
         AudioController.getInstance().init(this, true);
 
-
     }
  
     preload(){

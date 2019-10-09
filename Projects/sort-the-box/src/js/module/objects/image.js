@@ -94,14 +94,14 @@ export default class Image extends Phaser.GameObjects.Image{
     }
     
     /** 
-    * @param {Number} maxWidth
-    * @param {Number} maxHeight 
+    * @param {Number} minWidth
+    * @param {Number} minHeight 
     */
-    setMinPreferredDisplaySize = (maxWidth, maxHeight) =>{
-        if(maxWidth * this.HeightAspectRatio < maxHeight){
-            this.setDisplayHeight(maxHeight, true);
+    setMinPreferredDisplaySize = (minWidth, minHeight) =>{
+        if(minWidth * this.HeightAspectRatio < minHeight){
+            this.setDisplayHeight(minHeight, true);
         }else{
-            this.setDisplayWidth(maxWidth, true);
+            this.setDisplayWidth(minWidth, true);
         }
     }
 

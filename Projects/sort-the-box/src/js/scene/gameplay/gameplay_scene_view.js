@@ -45,14 +45,18 @@ export default class GameplaySceneView {
         this.Scorebar.setDisplayWidth(this.ScreenUtility.GameWidth, true);
         this.Scorebar.setDepth(1)
 
-        this.ScoreTxt = new Text(this.scene, this.Scorebar.displayWidth * 0.245, this.Scorebar.displayHeight * 0.63, this.scene.Score
+        this.ScoreTxt = new Text(this.scene, this.Scorebar.displayWidth * 0.21, this.Scorebar.displayHeight * 0.555, this.scene.Score
             ,{align:'center', fontFamily: 'panton_bold', color: '#eeca83'}).setFontSizeR(70);          
         this.ScoreTxt.setDepth(1)
 
 
-        this.TimerTxt = new Text(this.scene, this.Scorebar.displayWidth * 0.76, this.Scorebar.displayHeight * 0.38, this.scene.Timer
+        this.TimerTxt = new Text(this.scene, this.Scorebar.displayWidth * 0.825, this.Scorebar.displayHeight * 0.37, this.scene.Timer
             ,{align:'center', fontFamily: 'panton_bold', color: '#ffffff'}).setFontSizeR(110);
         this.TimerTxt.setDepth(1)
+
+        this.Status = new Image(this.scene, this.Scorebar.displayWidth * 0.506, this.Scorebar.displayHeight * 0.6, 'status', 0);
+        this.Status.setDisplayWidth(this.Scorebar.displayWidth * 0.105, true);
+        this.Status.setDepth(1)
     }
 
     update = ()=>{
@@ -60,11 +64,21 @@ export default class GameplaySceneView {
         this.ScoreTxt.setText(this.scene.Score);
     }
 
+    timesout = ()=>{
+        this.TimesOutRibbon = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'ui_timesout');
+        this.TimesOutRibbon.setDisplayWidth(this.ScreenUtility.GameWidth, true);
+        this.TimesOutRibbon.setDepth(1);
+    }
+
     onClickBlueButton = (event) =>{
-        this.Btn_blue.onClick(event);
+        this.Btn_blue.onPointerDown(event);
     }
 
     onClickRedButton = (event) =>{
-        this.Btn_red.onClick(event);
+        this.Btn_red.onPointerDown(event);
+    }
+
+    setStatus = (stateID)=>{
+        this.Status.setFrame(stateID);
     }
 };

@@ -81,6 +81,30 @@ export default class Sprite extends Phaser.GameObjects.Sprite{
         return this;
     }
 
+    /** 
+    * @param {Number} maxWidth
+    * @param {Number} maxHeight 
+    */
+    setMaxPreferredDisplaySize = (maxWidth, maxHeight) =>{
+        if(maxWidth * this.HeightAspectRatio > maxHeight){
+            this.setDisplayHeight(maxHeight, true);
+        }else{
+            this.setDisplayWidth(maxWidth, true);
+        }
+    }
+    
+    /** 
+    * @param {Number} minWidth
+    * @param {Number} minHeight 
+    */
+    setMinPreferredDisplaySize = (minWidth, minHeight) =>{
+        if(minWidth * this.HeightAspectRatio < minHeight){
+            this.setDisplayHeight(minHeight, true);
+        }else{
+            this.setDisplayWidth(minWidth, true);
+        }
+    }
+
     resetScale(){
         this.setScale(1);
     }

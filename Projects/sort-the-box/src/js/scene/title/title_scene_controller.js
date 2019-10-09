@@ -8,10 +8,11 @@ export default class TitleSceneController extends Phaser.Scene {
 	constructor() {
         super({key: 'TitleScene'});
         
+        this.Bgm;
     }
 
     init(data){
-        console.log('title screen')
+        //console.log('title screen')
 
         this.initTitle();
         this.initTitleData(data);
@@ -28,7 +29,14 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     initAudio = ()=>{
+        if(this.Bgm == undefined){
+            this.Bgm = this.sound.add('bgm_title', {
+                loop:-1,
+                volume: 1
+            });
+        }
 
+        this.Bgm.play();
     }
 
     create = ()=>{
@@ -42,6 +50,9 @@ export default class TitleSceneController extends Phaser.Scene {
     }
 
     clickPlay = ()=>{
+        this.Bgm.stop();
+        this.sound.play('start');
+
         this.scene.start('GameScene')
     }
 }

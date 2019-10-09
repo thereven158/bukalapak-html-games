@@ -95,7 +95,7 @@ export default class Button extends Phaser.GameObjects.Container{
 
             if(this.IsAudioActive){
                 //play audio button
-                //this.scene.game.sound.play('click');
+                this.scene.game.sound.play('click');
             }
 
             this.emit(this.EventList.onClick);

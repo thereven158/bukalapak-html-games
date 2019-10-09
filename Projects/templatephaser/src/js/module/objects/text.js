@@ -15,6 +15,7 @@ export default class Text extends Phaser.GameObjects.Text{
         this.scene = scene;
         this.ScalePercentage = ScreenUtility.getInstance().ScalePercentage;
 
+        this.setOrigin(0.5, 0.5);
         this.scene.add.existing(this);
     }
 

@@ -14,6 +14,12 @@ export default class GameplaySceneView {
 
     /** @return {GameplaySceneView} */
     create(){
+		this.afterDestroyEv = null;
+		let defaultSizeRatio = this.ScreenUtility.GameDefaultWidth/this.ScreenUtility.GameDefaultHeight;		
+		let curSizeRatio = this.ScreenUtility.GameWidth/this.ScreenUtility.GameHeight;
+		
+		this.defaultAndCurSizeRatio = defaultSizeRatio/curSizeRatio;
+						
         this.initScreen();
         
         return this;
@@ -50,16 +56,39 @@ export default class GameplaySceneView {
 			frames: this.scene.anims.generateFrameNumbers('player_sprite', { frames: [12, 13]}),
 			frameRate: 20,
 			loop: -1
-		});		
+		});
+		
+		this.scene.anims.create({
+			key: 'player_destroy',
+			frames: this.scene.anims.generateFrameNumbers('player_sprite', { frames: [14,15,16,17,18,19,20,21,22,23,24,25,26,27]}),
+			frameRate: 10,
+			loop: 0
+		});				
+		
+		this.player.on("animationcomplete", (anim) => {
+			if (anim.key == "player_destroy")
+			{
+				if (this.afterDestroyEv) 
+				{
+					let isReturn = this.afterDestroyEv();
+					if (isReturn) return;
+				}
+			}
+		}, this);		
 		
 		this.player.anims.play("player_idle");
+	}
+
+	setAfterMinionDestroyEvent(ev)
+	{
+		this.afterDestroyEv = ev;
 	}
 	
 	createAsteroid()
 	{
-		let asteroid = new Image(this.scene, 0, 0, 'asteroid_1');
+		let asteroid = new Image(this.scene, 0, 0, 'asteroid_'+Math.floor(1+Math.random()*3));
 		asteroid.setOrigin(0.5, 0.5);
-		asteroid.setDisplayWidth(this.ScreenUtility.GameWidth * 0.45, true);
+		asteroid.setDisplayWidth(this.ScreenUtility.GameWidth * 0.45 * this.defaultAndCurSizeRatio, true);
 		
 		return asteroid;
 	}

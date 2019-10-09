@@ -51,7 +51,7 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     gameUpdate(timestep, delta){
-
+        
     }
 
     gameOver = ()=>{

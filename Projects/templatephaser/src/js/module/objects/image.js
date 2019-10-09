@@ -12,7 +12,8 @@ export default class Image extends Phaser.GameObjects.Image{
         super(scene, x, y, texture, frame);
 
         this.scene = scene;
-        this.ScalePercentage = ScreenUtility.getInstance().ScalePercentage;
+        this.ScreenUtility = ScreenUtility.getInstance();
+        this.ScalePercentage = this.ScreenUtility.ScalePercentage;
 
         /** @type {Number} */
         this.WidthAspectRatio = this.width / this.height;
@@ -78,6 +79,30 @@ export default class Image extends Phaser.GameObjects.Image{
     setToResponsiveScale(percent = 1){
         this.setScale(this.ScalePercentage * percent);
         return this;
+    }
+
+    /** 
+    * @param {Number} maxWidth
+    * @param {Number} maxHeight 
+    */
+    setMaxPreferredDisplaySize = (maxWidth, maxHeight) =>{
+        if(maxWidth * this.HeightAspectRatio > maxHeight){
+            this.setDisplayHeight(maxHeight, true);
+        }else{
+            this.setDisplayWidth(maxWidth, true);
+        }
+    }
+    
+    /** 
+    * @param {Number} minWidth
+    * @param {Number} minHeight 
+    */
+    setMinPreferredDisplaySize = (minWidth, minHeight) =>{
+        if(minWidth * this.HeightAspectRatio < minHeight){
+            this.setDisplayHeight(minHeight, true);
+        }else{
+            this.setDisplayWidth(minWidth, true);
+        }
     }
 
     resetScale(){

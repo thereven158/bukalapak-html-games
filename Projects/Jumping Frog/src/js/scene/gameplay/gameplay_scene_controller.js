@@ -34,16 +34,17 @@ export default class GameplaySceneController extends Phaser.Scene {
 		let curSizeRatio = this.ScreenUtility.GameWidth/this.ScreenUtility.GameHeight;
 		
 		this.defaultAndCurSizeRatio = defaultSizeRatio/curSizeRatio;
-		
-		
-		
+				
         this.IsGameStarted = false;
         this.IsGameWin = true;
 		this.isGameOver = false;
 		this.isGameFinished = false;
 		
+		this.hasShifted = false;
+		
 		this.isMoving = false;
 		this.stepped = 0;
+		this.offsetIndex = -1;
 		
 		this.goalTarget = GameplayData.TargetGoal;
 		this.goalProgress = 0;
@@ -67,7 +68,16 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.view = new GameplaySceneView(this).create();
 		this.player = this.view.player;
 		this.player.setDepth(10);
-		this.view.setAfterMinionDestroyEvent(this.gameOver);
+		this.view.setAfterMinionDestroyEvent(() => {
+			if (this.goalProgress >= this.goalTarget)
+			{
+				this.prepareVictory();
+			}
+			else 
+			{
+				this.gameOver();			
+			}			
+		});
 		
 		this.initAsteroids();
 		this.view.initTopUiScreen();
@@ -97,7 +107,16 @@ export default class GameplaySceneController extends Phaser.Scene {
 			this.sound.play("ingame_timeout_sfx");
 			this.prepareGameOver();
 			window.setTimeout(() => {
-				this.gameOver();
+				
+			if (this.goalProgress >= this.goalTarget)
+			{
+				this.prepareVictory();
+			}
+			else 
+			{
+				this.gameOver();			
+			}
+			
 			}, 1000);		
 		}, false);		
 		
@@ -122,7 +141,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 
 	initAsteroids()
 	{	
-		this.defaultSpeed = 10;
+		this.defaultSpeed = GameplayData.BaseSpeed;
 		
 		this.nPosts = this.goalTarget;
 		this.startPoint = this.ScreenUtility.GameHeight * 0.7;
@@ -130,7 +149,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 		let asteroid = this.view.createAsteroid();
 		
 		//this.deltaPoint = this.ScreenUtility.GameHeight / this.nPosts;
-		this.deltaPoint = asteroid.height * 0.98 * this.defaultAndCurSizeRatio;
+		this.deltaPoint = asteroid.height * this.defaultAndCurSizeRatio;
 		asteroid.destroy();
 		
 		this.asteroids = [];
@@ -150,6 +169,8 @@ export default class GameplaySceneController extends Phaser.Scene {
 			let asteroid = this.asteroids[i];
 			asteroid.setPosition(this.ScreenUtility.GameWidth * 0.5, this.startPoint - this.deltaPoint * i);	
 			
+			//console.log(asteroid.y);
+			
 			this.initAsteroidPiece(asteroid, i);			
 		}
 		
@@ -159,13 +180,13 @@ export default class GameplaySceneController extends Phaser.Scene {
 	initAsteroidPiece(asteroid, index)
 	{
 		let speed = (Math.random()>0.5?this.defaultSpeed:-this.defaultSpeed);
-		let speedIncrementScale = 0.05;
+		let speedIncrementScale = GameplayData.SpeedIncrementScale;
 		
 		asteroid.xSpeed = speed + (speed * speedIncrementScale * index);
 				
 		if (asteroid.y < this.ScreenUtility.GameHeight * -0.2)
 		{
-			asteroid.visible = false;
+			//this.shiftAsteroid();
 		}
 		
 		asteroid.x = this.ScreenUtility.GameWidth * Math.random();	
@@ -184,7 +205,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 
 	moveAsteroid(asteroid)
 	{
-		asteroid.x += asteroid.xSpeed;
+		asteroid.x += asteroid.xSpeed * this.defaultAndCurSizeRatio;
 		
 		if (asteroid.x > this.ScreenUtility.GameWidth * 0.9)
 		{
@@ -200,16 +221,21 @@ export default class GameplaySceneController extends Phaser.Scene {
 
 	shiftAsteroid()
 	{
-		//let asteroid = this.asteroids.shift();
-		//asteroid.y = this.startPoint - this.deltaPoint * (this.nPosts - 2);
+		let asteroid = this.asteroids.shift();
+		asteroid.y = this.startPoint - this.deltaPoint * (this.nPosts - 2 - (this.offsetIndex-1));
 		
-		//this.asteroids.push(asteroid);
+		let speedIncrementScale = GameplayData.SpeedIncrementScale;
+		asteroid.xSpeed = Math.abs(this.asteroids[this.asteroids.length-1].xSpeed) + speedIncrementScale * this.defaultSpeed * (Math.random()>0.5?1:-1);		
+		
+		// speed + (speed * speedIncrementScale * this.goalProgress)
+		
+		this.asteroids.push(asteroid);
 		
 		//console.log(this.asteroids.length);
 	}
 
-	moveAsteroids()
-	{
+	moveVerticalAsteroids()
+	{		
 		for (let i=0;i<this.asteroids.length;i++)
 		{
 			let asteroid = this.asteroids[i];
@@ -231,11 +257,13 @@ export default class GameplaySceneController extends Phaser.Scene {
 					if (asteroid.y > this.ScreenUtility.GameHeight)
 					{
 						asteroid.visible = false;
-						this.shiftAsteroid();
+						
+						if (!this.hasShifted) this.hasShifted = true;
+						this.shiftAsteroid();						
 					}
 				}
 			});			
-		}
+		}	
 	}
 
 	moveStartLand()
@@ -260,13 +288,15 @@ export default class GameplaySceneController extends Phaser.Scene {
 	{
 		if (this.isMoving) return;
 		
+		this.sound.play("ingame_upak_jump_sfx", {volume:1});
+		
 		this.isMoving = true;
 		
 		this.player.anims.play("player_jump");
 		
 		if (this.stepped == 1)
 		{
-			this.moveAsteroids();
+			this.moveVerticalAsteroids();
 			this.moveStartLand();
 			
 			var tween = this.tweens.add({
@@ -284,7 +314,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 					}
 					else
 					{
-						this.triggerFailedLandingEvent();
+						this.triggerFailedLandingEvent();						
 					}
 				}
 			});						
@@ -319,14 +349,18 @@ export default class GameplaySceneController extends Phaser.Scene {
 	{
 		if (this.curAsteroid && !this.isMoving)
 		{
-			this.player.x += this.curAsteroid.xSpeed;
+			this.player.x += this.curAsteroid.xSpeed * this.defaultAndCurSizeRatio;
 		}
 	}
 
 	checkLanding()
 	{
-		let checkWidth = this.player.x >= this.nextAsteroid.x - this.nextAsteroid.width * (0.5-GameplayData.CheckCollisionIntolerance) && this.player.x <= this.nextAsteroid.x + this.nextAsteroid.width * (0.5-GameplayData.CheckCollisionIntolerance);
-		//console.log(this.player.x, this.nextAsteroid.x - this.nextAsteroid.width * (0.5-GameplayData.CheckCollisionIntolerance), this.nextAsteroid.x + this.nextAsteroid.width * (0.5-GameplayData.CheckCollisionIntolerance));
+		let intolerance = 0.5-GameplayData.CheckCollisionIntolerance; // 
+		let leftBound = this.nextAsteroid.x - this.nextAsteroid.width * this.defaultAndCurSizeRatio * intolerance;
+		let rightBound =  this.nextAsteroid.x + this.nextAsteroid.width  * this.defaultAndCurSizeRatio * intolerance;
+		
+		let checkWidth = this.player.x >= leftBound && this.player.x <= rightBound;
+		
 		let output = checkWidth;
 					
 		return output;
@@ -334,24 +368,49 @@ export default class GameplaySceneController extends Phaser.Scene {
 
 	triggerLandedEvent()
 	{
+		this.sound.play("ingame_upak_lands_sfx", {volume:1});
+		
 		this.player.anims.play("player_idle");
 		this.scoreObj.addScore(100);
 		this.goalProgress += 1;
 
-		this.curAsteroid = this.asteroids[this.goalProgress-1];
+		console.log(this.offsetIndex);
 		
-		if (this.goalProgress >= this.goalTarget)
-		{
-			this.prepareVictory();
+		if (this.hasShifted)
+		{	
+			this.nextAsteroid = this.asteroids[this.offsetIndex+1];
+			this.curAsteroid = this.asteroids[this.offsetIndex];
+			//this.offsetIndex = 0;
 		}
-		else 
-		{
-			this.nextAsteroid = this.asteroids[this.goalProgress];		
-		}
+		else
+		{						
+			this.curAsteroid = this.asteroids[this.goalProgress-1];
+			this.nextAsteroid = this.asteroids[this.goalProgress];	
+			this.offsetIndex++;
+		}		
+		
+		//this.offsetIndex++;
+		
+		//if (this.stepped == 1)
+		//{
+				
+		//}
+		
+		//if (this.goalProgress >= this.goalTarget)
+		//{
+		//	this.prepareVictory();
+		//}
+		//else 
+		//{
+			//this.nextAsteroid = this.asteroids[1];		
+		//}
 	}
 
 	triggerFailedLandingEvent()
 	{
+		this.sound.play("ingame_upak_fall_sfx", {volume:1});
+		this.player.anims.play("player_destroy");
+		
 		this.prepareGameOver();
 	}
 
@@ -368,9 +427,8 @@ export default class GameplaySceneController extends Phaser.Scene {
 	prepareGameOver()
 	{
 		this.isGameOver = true;
-		this.player.anims.play("player_destroy");
-		
-		console.log("FAILED");		
+						
+		//console.log("FAILED");		
 	}
 
     gameOver = ()=>{

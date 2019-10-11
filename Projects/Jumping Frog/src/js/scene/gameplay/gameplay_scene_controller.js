@@ -205,16 +205,22 @@ export default class GameplaySceneController extends Phaser.Scene {
 
 	moveAsteroid(asteroid)
 	{
-		asteroid.x += asteroid.xSpeed * this.defaultAndCurSizeRatio;
+		let offset = 1;
 		
-		if (asteroid.x > this.ScreenUtility.GameWidth * 0.9)
+		//console.log(asteroid.displayWidth/asteroid.oriWidth, "ASAAAAAAAAAA");
+		
+		let boundPoint = 0.4 * this.defaultAndCurSizeRatio * (asteroid.displayWidth/asteroid.oriWidth);
+		
+		asteroid.x += asteroid.xSpeed * this.defaultAndCurSizeRatio;		
+		
+		if (asteroid.x > this.ScreenUtility.GameWidth - asteroid.width * boundPoint)
 		{
-			asteroid.x = this.ScreenUtility.GameWidth * 0.9 - 1;
+			asteroid.x = this.ScreenUtility.GameWidth - asteroid.width * boundPoint - offset;
 			asteroid.xSpeed = -asteroid.xSpeed;
 		}
-		else if (asteroid.x < this.ScreenUtility.GameWidth * 0.1)
+		else if (asteroid.x < asteroid.width * boundPoint)
 		{
-			asteroid.x = this.ScreenUtility.GameWidth * 0.1 + 1;
+			asteroid.x = asteroid.width * boundPoint + offset;
 			asteroid.xSpeed = -asteroid.xSpeed;
 		}
 	}
@@ -374,7 +380,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 		this.scoreObj.addScore(100);
 		this.goalProgress += 1;
 
-		console.log(this.offsetIndex);
+		//console.log(this.offsetIndex);
 		
 		if (this.hasShifted)
 		{	

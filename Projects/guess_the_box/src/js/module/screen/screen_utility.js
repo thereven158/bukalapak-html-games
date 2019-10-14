@@ -1,4 +1,4 @@
-import { DeviceHelper } from "../../helper/device_Helper";
+import { DeviceHelper } from "../../helper/device_helper.js";
 
 export default class ScreenUtility{
     /**

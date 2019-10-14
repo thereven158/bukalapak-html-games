@@ -20,7 +20,7 @@ export class DeviceHelper {
 			return navigator.userAgent.match(/IEMobile/i);
 		},
 		any: function() {
-			return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+			return (Android() || BlackBerry() || iOS() || Opera() || Windows());
 		}
 	}
 }

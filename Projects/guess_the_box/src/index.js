@@ -5,6 +5,7 @@ import LoadingScene from '../src/Js/scene/loading/loading_scene_controller';
 import TitleScene from '../src/Js/Scene/title/title_scene_controller';
 import GameplayScene from '../src/Js/Scene/gameplay/gameplay_scene_controller';
 
+
 let actualWidth = window.innerWidth < 480 ? window.innerWidth * window.devicePixelRatio : window.innerWidth;
 let actualHeight = window.innerWidth < 480 ? window.innerHeight * window.devicePixelRatio : window.innerHeight;
 let actualZoom = window.innerWidth < 480 ? 1 / window.devicePixelRatio : 1;
@@ -12,9 +13,10 @@ let isLandscape = window.innerWidth > window.innerHeight;
 if(isLandscape){
   actualWidth = actualHeight * (3/4);
 }
+let phaserType = (navigator.userAgent.match(/Mozilla/i) && (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i))) ? Phaser.AUTO: Phaser.CANVAS;
 
 var config = {
-	type: Phaser.CANVAS,
+	type: phaserType,
 	canvas: document.getElementById('game'),
 	parent: 'content',
 	scale: {

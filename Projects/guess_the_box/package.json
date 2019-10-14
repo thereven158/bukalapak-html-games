@@ -1,5 +1,5 @@
 {
-	"name": "whack-a-mole",
+	"name": "mystery-box",
 	"version": "1.0.0",
 	"description": "A Phaser Project",
 	"main": "src/index.js",

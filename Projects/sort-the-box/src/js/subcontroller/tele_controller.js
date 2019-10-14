@@ -2,6 +2,7 @@ import Image from "../module/objects/image";
 import { AnimationHelper } from "../helper/animation_helper";
 import Sprite from "../module/objects/sprite";
 import ScreenUtility from "../module/screen/screen_utility";
+import { ScaleModes } from "phaser";
 
 var teleAnimationList = {
     tele : 'tele'
@@ -24,6 +25,7 @@ export default class TeleController extends Phaser.GameObjects.Container{
         super(scene, x, y);
         this.ID = id;
 
+        this.scene = scene;
         this.ScreenUtility = ScreenUtility.getInstance();
         this.TeleportEffectAnimationList = teleAnimationList;
         this.EventList = {
@@ -66,18 +68,17 @@ export default class TeleController extends Phaser.GameObjects.Container{
             yoyo: true
         });		
 
-        this.TeleportEffect = new Sprite(this.scene, 0, this.Image.displayHeight * -0.235, 'teleport_effect', 6);
-        this.TeleportEffect.setDisplaySize(this.Image.displayWidth, this.Image.displayHeight * 0.365);
-        this.TeleportEffect.setOrigin(0.5,1);
-        this.TeleportEffect.setDepth(0.5);
-        this.TeleportEffect.setVisible(false);
-        this.add(this.TeleportEffect);
+        this.Effect = new Sprite(this.scene, 0, this.Image.displayHeight * -0.235, 'teleport_beam', 0);
+        this.Effect.setDisplaySize(this.Image.displayWidth, this.Image.displayHeight * 0.365);
+        this.Effect.setOrigin(0.5, 1);
+        this.Effect.setDepth(0.5);
+        this.add(this.Effect);
+
     }
 
     //to be initiated once by the current scene class
     static initAnimationData = (scene) =>{
-        let teleAnim = AnimationHelper.AddSequence(scene, teleAnimationList.tele, 'teleport_effect', 0, 19, 30, false)
-        teleAnim.hideOnComplete = true;
+        AnimationHelper.AddFrames(scene, 'tele', 'teleport_beam', [0, ,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,0], 24, false)
     }
 
     setEnabled = (isEnabled = true)=>{
@@ -93,17 +94,15 @@ export default class TeleController extends Phaser.GameObjects.Container{
             duration: 100,
             ease: Phaser.Math.Easing.Sine.Out,
             yoyo: true,
+            loop : false
         });	
 
-        this.TeleportEffect.setVisible(true);
-        this.TeleportEffect.setActive(true);
-        this.TeleportEffect.play(this.TeleportEffectAnimationList.tele).on('animationupdate', (anim)=>{
-            if(this.TeleportEffect.anims.currentFrame.index >= 11 && onTeleEvent != undefined){
+        this.Effect.anims.play('tele').on('animationupdate', ()=>{
+            if(this.Effect.anims.currentFrame.index >= 11 && onTeleEvent != undefined){
                 onTeleEvent();
                 onTeleEvent = undefined;
             }
         }, this);
-
     }
 
     getStandPosition = ()=>{

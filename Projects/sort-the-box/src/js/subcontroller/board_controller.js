@@ -46,13 +46,9 @@ export default class BoardController{
 
     initiateBoard = () =>{
         let teleBlue = new TeleController(this.scene, this.ScreenUtility.GameWidth * 0.25, this.ScreenUtility.GameHeight * 0.68, 0)
-        //teleBlue.setDisplayWidth(this.ScreenUtility.GameWidth * 0.28, true);
-        //teleBlue.setOrigin(0.5, 1);
         this.Teleportations.push(teleBlue);
 
         let teleRed = new TeleController(this.scene, this.ScreenUtility.GameWidth * 0.75, this.ScreenUtility.GameHeight * 0.68, 1)
-        //teleRed.setDisplayWidth(this.ScreenUtility.GameWidth * 0.28, true);
-        //teleRed.setOrigin(0.5, 1);
         this.Teleportations.push(teleRed);
 
         let roller1 = new RollerController(this.scene, this.ScreenUtility.GameWidth * -0.5, this.ScreenUtility.GameHeight * 0.75)
@@ -136,13 +132,7 @@ export default class BoardController{
                     minion1.setPosition(roller1.getStandPosition().x, roller1.getStandPosition().y);
                 }
             },
-            onComplete : ()=>{
-                if(minion1 != undefined){
-                    //minion1.playShowAnimation();
-                }
-            },
             onUpdateScope : this,
-            onCompleteScope : this
         });	
 
         /** @type {RollerController} */
@@ -186,15 +176,16 @@ export default class BoardController{
         return this.TargetMinion.ID;
     }
 
-    sendTargetMinionToTelerpotation = (onSuccessTeleportEvent)=>{
-        this.sendMinionToTeleportation(this.TargetMinion, onSuccessTeleportEvent);
+    sendTargetMinionToTelerpotation = ()=>{
+        this.sendMinionToTeleportation(this.TargetMinion);
         this.TargetMinion.playJumpAnimation();
 
         this.TargetMinion = undefined;
     }
 
     /** @param {MinionController} minion*/
-    sendMinionToTeleportation = (minion, onSuccessTeleportEvent)=>{
+    sendMinionToTeleportation = (minion)=>{
+        
         minion.setDepth(0);
 
         /** @type {TeleController} */
@@ -211,12 +202,11 @@ export default class BoardController{
             displayHeight : minionTargetHeight,
             duration: gameplaydata.RollerSpeedDuration * 0.7,
             ease: Phaser.Math.Easing.Cubic.InOut,
-            onComplete : ()=>{
+            onComplete : ()=>{       
                 minion.playTeleportAnimation();
                 tele.teleport(()=>{
                     this.dumpMinion(minion);
                 });
-                onSuccessTeleportEvent();
             },
             onCompleteScope : this,
         });	

@@ -84,7 +84,7 @@ export default class GameplaySceneController extends Phaser.Scene {
             this.win();
             return;
         }
-
+        
         this.board.produce(this.WaitForAnswerEvent)
     }
 
@@ -128,7 +128,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 
         if(id == this.board.activeMinionID()){
             //correct
-            this.board.sendTargetMinionToTelerpotation(this.successTeleportEvent);
+            this.board.sendTargetMinionToTelerpotation();
             this.Score += 1;
             this.sound.play('correct');
             this.view.setStatus(2);
@@ -139,10 +139,6 @@ export default class GameplaySceneController extends Phaser.Scene {
         }
 
         this.core();
-    }
-
-    successTeleportEvent = ()=>{
-        
     }
 
     restart = ()=>{

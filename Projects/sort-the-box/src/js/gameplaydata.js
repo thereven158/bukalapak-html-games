@@ -1,6 +1,6 @@
 
 export default {
-    GameTime : 60,
+    GameTime : 30,
     TargetPoint : 20,
 
     RollerSpeedDuration : 700,

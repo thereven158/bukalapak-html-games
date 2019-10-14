@@ -26,7 +26,7 @@ export default class LoadingGameplayController {
         this.scene.load.spritesheet('btn_blue', this.scene.CreatePath('/images/buttons/button_blue.png'), {frameWidth:884/2, frameHeight:298});
         this.scene.load.spritesheet('btn_red', this.scene.CreatePath('/images/buttons/button_red.png'), {frameWidth:884/2, frameHeight:298});
 
-        this.scene.load.spritesheet('teleport_effect', this.scene.CreatePath('/images/teleport_effect.png'), {frameWidth:3738/10, frameHeight:1066/2});
+        this.scene.load.spritesheet('teleport_beam', this.scene.CreatePath('/images/teleport_beam.png'), {frameWidth:3738/10, frameHeight:1066/2});
 
         this.scene.load.image('ui_scorebar', this.scene.CreatePath('/images/ui/UI_ScoreBar.png'));
         this.scene.load.image('ui_timesout', this.scene.CreatePath('/images/ui/TimesOut.png'));

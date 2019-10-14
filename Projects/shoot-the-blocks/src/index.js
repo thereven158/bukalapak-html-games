@@ -17,18 +17,10 @@ let isTabs = window.innerWidth / window.innerHeight >= 2/3;
 if(isTabs || window.innerWidth == 768 || window.innerWidth > 1000 || window.innerWidth == 375 / 667){
 	actualWidth = actualWidth * (3/4);
 }
-
-console.log("window inner width: " + window.innerWidth);
-console.log("actual width: " + actualWidth);
-
-console.log("window inner height: " + window.innerHeight);
-console.log("actual height: " + actualHeight);
-
-console.log(window.innerWidth / window.innerHeight)
-console.log(window.devicePixelRatio);
+let phaserType = (navigator.userAgent.match(/Mozilla/i)) ? Phaser.AUTO: Phaser.CANVAS;
 
 var config = {
-	type: Phaser.CANVAS,
+	type: phaserType,
 	canvas: document.getElementById('game'),
 	parent: 'content',
 	scale: {

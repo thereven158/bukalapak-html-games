@@ -1,0 +1,10 @@
+
+export default {
+    GameTime : 30000,
+	BaseScore : 100,
+	TargetGoal: 8,
+	CheckCollisionIntolerance:0,
+	BaseSpeed: 5,
+	SpeedIncrementScale: 0.2
+};
+ 

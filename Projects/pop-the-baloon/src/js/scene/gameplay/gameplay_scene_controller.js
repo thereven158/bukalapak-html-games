@@ -92,6 +92,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.VoucherView.OnClickClose(this.Restart);
         
         let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
+        console.log(CONFIG.VOUCHER_TYPE);
 
         if(this.IsGameWin){
             this.VoucherView.ShowVoucherCode(voucherData.Code, {
@@ -205,7 +206,6 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     destroyCreateObject = () =>{
-        console.log("called destroy")
         // this.view.baloon.destroy();
         this.view.baloon.Pop();
         this.view.createBaloon();

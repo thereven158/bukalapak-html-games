@@ -12,9 +12,10 @@ let isLandscape = window.innerWidth > window.innerHeight;
 if(isLandscape){
   actualWidth = actualHeight * (3/4);
 }
+let phaserType = (navigator.userAgent.match(/Mozilla/i)) ? Phaser.AUTO: Phaser.CANVAS;
 
 var config = {
-	type: Phaser.CANVAS,
+	type: phaserType,
 	canvas: document.getElementById('game'),
 	parent: 'content',
 	scale: {

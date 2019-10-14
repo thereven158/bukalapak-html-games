@@ -1,5 +1,10 @@
 
 export default {
+    VoucherTimeout:{
+        Title : "Coba lagi yuk",
+        Description :"Masih banyak kesempatan dapetin voucher dan kejutan lainnya di aplikasi Bukalapak."
+    },
+
     Vouchers:[
         {
             Code : "TANPAONGKIR",

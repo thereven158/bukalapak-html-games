@@ -1,4 +1,4 @@
-import { Math } from "phaser";
+import { DeviceHelper } from "../../helper/device_Helper";
 
 export default class ScreenUtility{
     /**
@@ -13,7 +13,7 @@ export default class ScreenUtility{
     };
 
     /**@param {Phaser.Scene} scene */
-    Init(scene)
+    init(scene)
     {
         this.scene = scene;
         this.GameDefaultWidth = 1080;
@@ -30,7 +30,11 @@ export default class ScreenUtility{
 
     static ResetGameScreen(){
         window.focus();
-        window.scrollTo(0, document.body.scrollHeight);
+        if(DeviceHelper.Env.iOS()){
+            window.scrollTo(0, document.body.scrollHeight);
+        }else{
+            window.scrollTo(0, 0);
+        }
     }
 
     

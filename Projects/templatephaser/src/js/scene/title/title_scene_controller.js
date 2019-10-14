@@ -13,59 +13,35 @@ export default class TitleSceneController extends Phaser.Scene {
     init(data){
         console.log('title screen')
 
-        this.InitTitle();
-        this.InitTitleData(data);
-        this.InitAudio();
+        this.initTitle();
+        this.initTitleData(data);
+        this.initAudio();
     }
 
-    InitTitle(){
+    initTitle = ()=>{
         ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
     }
 
-    InitTitleData(data){
+    initTitleData(data){
 
     }
 
-    InitAudio(){
+    initAudio = ()=>{
 
     }
 
-    create(){
-        this.view = new TitleSceneView(this);
-        this.view.create();
-
-        this.view.onClickPlay(this.OnClickPlay);
-
-        //add voucher script
-        this.VoucherView = new VoucherView(this);
-        let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
-
-        this.VoucherView.ShowVoucherCode(voucherData.Code, {
-            titleInfo :  voucherData.InfoTitle,
-            description : voucherData.InfoDescription,
-            expireDate : voucherData.ExpireDate,
-            minTransactionInfo : voucherData.MinimalTransactionInfo,
-            onlyAppliesInfo : voucherData.OnlyAppliesInfo,
-            termsandconditions : voucherData.TermsAndConditions,
-        });
-
-        this.VoucherView.SetDescription('voucher_headerwin', 
-            "Voucher", 
-            voucherData.Title, 
-            voucherData.Description
-        );
-        
-        this.VoucherView.OnClickMainLagi(this.OnClickPlay);
-
-        this.VoucherView.Open();
-    }
-
-    update(){
+    create = ()=>{
+        this.view = new TitleSceneView(this).create();
+        this.view.OnClickPlay(this.clickPlay);
 
     }
 
-    OnClickPlay = ()=>{
+    update = ()=>{
+
+    }
+
+    clickPlay = ()=>{
         this.scene.start('GameScene')
     }
 }

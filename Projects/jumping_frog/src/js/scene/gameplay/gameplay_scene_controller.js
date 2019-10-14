@@ -149,7 +149,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 		let asteroid = this.view.createAsteroid();
 		
 		//this.deltaPoint = this.ScreenUtility.GameHeight / this.nPosts;
-		this.deltaPoint = asteroid.height * this.defaultAndCurSizeRatio;
+		this.deltaPoint = asteroid.displayHeight * 1.05;// * 1.1 * this.defaultAndCurSizeRatio;
 		asteroid.destroy();
 		
 		this.asteroids = [];
@@ -180,7 +180,7 @@ export default class GameplaySceneController extends Phaser.Scene {
 	initAsteroidPiece(asteroid, index)
 	{
 		let speed = (Math.random()>0.5?this.defaultSpeed:-this.defaultSpeed);
-		let speedIncrementScale = GameplayData.SpeedIncrementScale;
+		let speedIncrementScale = GameplayData.SpeedIncrementScale * this.defaultAndCurSizeRatio;
 		
 		asteroid.xSpeed = speed + (speed * speedIncrementScale * index);
 				
@@ -209,18 +209,22 @@ export default class GameplaySceneController extends Phaser.Scene {
 		
 		//console.log(asteroid.displayWidth/asteroid.oriWidth, "ASAAAAAAAAAA");
 		
-		let boundPoint = 0.4 * this.defaultAndCurSizeRatio * (asteroid.displayWidth/asteroid.oriWidth);
+		//console.log(asteroid.displayWidth/asteroid.oriWidth);
+		
+		let boundPoint = 0.4 / this.defaultAndCurSizeRatio * (asteroid.displayWidth/asteroid.oriWidth);
 		
 		asteroid.x += asteroid.xSpeed * this.defaultAndCurSizeRatio;		
 		
-		if (asteroid.x > this.ScreenUtility.GameWidth - asteroid.width * boundPoint)
+		if (asteroid.x > this.ScreenUtility.GameWidth - asteroid.displayWidth * boundPoint)
 		{
-			asteroid.x = this.ScreenUtility.GameWidth - asteroid.width * boundPoint - offset;
+			asteroid.x = this.ScreenUtility.GameWidth - asteroid.displayWidth * boundPoint - offset;
 			asteroid.xSpeed = -asteroid.xSpeed;
 		}
-		else if (asteroid.x < asteroid.width * boundPoint)
+		else if (asteroid.x < asteroid.displayWidth * boundPoint)
 		{
-			asteroid.x = asteroid.width * boundPoint + offset;
+			//console.log(asteroid.width, boundPoint, offset, asteroid.width * boundPoint + offset);
+			
+			asteroid.x = asteroid.displayWidth * boundPoint + offset;
 			asteroid.xSpeed = -asteroid.xSpeed;
 		}
 	}
@@ -362,8 +366,8 @@ export default class GameplaySceneController extends Phaser.Scene {
 	checkLanding()
 	{
 		let intolerance = 0.5-GameplayData.CheckCollisionIntolerance; // 
-		let leftBound = this.nextAsteroid.x - this.nextAsteroid.width * this.defaultAndCurSizeRatio * intolerance;
-		let rightBound =  this.nextAsteroid.x + this.nextAsteroid.width  * this.defaultAndCurSizeRatio * intolerance;
+		let leftBound = this.nextAsteroid.x - this.nextAsteroid.displayWidth * this.defaultAndCurSizeRatio * intolerance;
+		let rightBound =  this.nextAsteroid.x + this.nextAsteroid.displayWidth  * this.defaultAndCurSizeRatio * intolerance;
 		
 		let checkWidth = this.player.x >= leftBound && this.player.x <= rightBound;
 		

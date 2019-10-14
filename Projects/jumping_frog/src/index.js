@@ -13,8 +13,9 @@ if(isLandscape){
   actualWidth = actualHeight * (3/4);
 }
 
-//let type = (navigator.userAgent.match(/Mozilla/i) && (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i))) ? Phaser.AUTO: Phaser.CANVAS;
-let type = Phaser.CANVAS;
+//console.log(navigator.userAgent.match(/Windows/i));
+let type = (navigator.userAgent.match(/Mozilla/i) && (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i))) ? Phaser.AUTO: Phaser.CANVAS;
+//let type = Phaser.CANVAS;
 
 var config = {
 	type: type,

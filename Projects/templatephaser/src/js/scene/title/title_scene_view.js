@@ -11,17 +11,17 @@ export default class TitleSceneView {
     }
 
     /** @return {TitleSceneView} */
-    create(){
-        this.InitScreen();
+    create = ()=>{
+        this.initScreen();
         
         return this;
     }
 
-    InitScreen(){
+    initScreen = ()=>{
         this.logo = new Button(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'logo');
     }
 
-    OnClickPlay(event){
+    OnClickPlay = (event) =>{
         this.logo.onClick(event);
     }
 };

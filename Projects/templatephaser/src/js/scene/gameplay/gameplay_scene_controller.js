@@ -9,38 +9,38 @@ export default class GameplaySceneController extends Phaser.Scene {
         
     }
 
-    init(){
+    init = ()=>{
         console.log('game screen')
 
-        this.InitGame();
-        this.InitGameData();
-        this.InitAudio();
+        this.initGame();
+        this.initGameData();
+        this.initAudio();
     }
 
-    InitGame(){
+    initGame = ()=>{
         ScreenUtility.ResetGameScreen();
         this.ScreenUtility = ScreenUtility.getInstance();
     }
 
-    InitGameData(){
+    initGameData = ()=>{
         this.IsGameStarted = false;
         this.IsGameWin = true;
     }
 
-    InitAudio(){
+    initAudio = ()=>{
 
     }
 
-    create(){
+    create = ()=>{
         this.view = new GameplaySceneView(this).create();
 
-        this.StartGame();
+        this.startGame();
     }
 
-    StartGame(){
+    startGame = ()=>{
         this.IsGameStarted = true;
 
-        this.GameOver();
+        this.gameOver();
     }
 
     update(timestep, delta){
@@ -51,28 +51,28 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     gameUpdate(timestep, delta){
-
+        
     }
 
-    GameOver(){
+    gameOver = ()=>{
         this.IsGameStarted = false;
 
-        this.ShowResult();
+        this.showResult();
     }
 
-    Restart = ()=>{
+    restart = ()=>{
         this.scene.restart();
     }
 
-    BackToTitle = ()=>{
+    backToTitle = ()=>{
         this.scene.launch('TitleScene');
         this.scene.stop();
     }
 
-    ShowResult = ()=>{
+    showResult = ()=>{
         this.VoucherView = new VoucherView(this);
-        this.VoucherView.OnClickMainLagi(this.Restart);
-        this.VoucherView.OnClickClose(this.BackToTitle);
+        this.VoucherView.OnClickMainLagi(this.restart);
+        this.VoucherView.OnClickClose(this.backToTitle);
         
         let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
 

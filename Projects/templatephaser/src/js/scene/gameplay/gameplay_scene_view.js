@@ -10,16 +10,16 @@ export default class GameplaySceneView {
 
     /** @return {GameplaySceneView} */
     create(){
-        this.InitScreen();
+        this.initScreen();
         
         return this;
     }
     
-    InitScreen(){
+    initScreen = ()=>{
 
     }
 
-    update(){
+    update = ()=>{
       
     }
 };

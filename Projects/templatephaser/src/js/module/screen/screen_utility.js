@@ -1,4 +1,3 @@
-import { Math } from "phaser";
 import { DeviceHelper } from "../../helper/device_Helper";
 
 export default class ScreenUtility{
@@ -14,7 +13,7 @@ export default class ScreenUtility{
     };
 
     /**@param {Phaser.Scene} scene */
-    Init(scene)
+    init(scene)
     {
         this.scene = scene;
         this.GameDefaultWidth = 1080;

@@ -80,10 +80,6 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.StartGame();
     }
 
-    InitiateGame(){
-        this.StartGame();
-    }
-
     StartGame(){
         this.IsGameStarted = true;
     }

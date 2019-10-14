@@ -69,7 +69,7 @@ export default class TitleSceneView {
         });		
      }
 
-     onClickPlay(event){
+     OnClickPlay(event){
         this.ButtonPlay.OnClick(event);
      }
      

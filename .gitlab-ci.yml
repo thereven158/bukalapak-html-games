@@ -3,7 +3,7 @@ stages:
 
 #=================== Sonar Stage ===================
 # Sonar Template
-.sonar-template: &sonar-definition
+.sonar-template: #&sonar-definition
   stage: sonar
   tags:
     - docker
@@ -34,7 +34,8 @@ stages:
 
 # Job Sonar Template
 .inline-sonar-template:
-  <<: *sonar-definition
+#  <<: *sonar-definition
+  extends: .sonar-template
   variables:
     REPORT_ENV: "sonar-gategit-report"
     REPORT_DISABLE: "sonar.gitlab.disable_global_comment"
@@ -52,7 +53,8 @@ stages:
       - Dockerfile*
 
 .global-sonar-template:
-  <<: *sonar-definition
+#  <<: *sonar-definition
+  extends: .sonar-template
   variables:
     REPORT_ENV: "sonar-sonarqube-report"
     REPORT_ALLISSUE: "true"

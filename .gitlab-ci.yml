@@ -85,3 +85,201 @@ ftc-sonar-global:
       - .gitlab-ci.yml
       - Dockerfile*
       - Projects/feed_the_cat
+
+glt-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "galaxy_tower"
+  except: *branch-inline-sonar-definition
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/galaxy_tower
+
+glt-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "galaxy_tower"
+  only:
+    refs: *branch-global-sonar-definition
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/galaxy_tower
+
+gtb-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "guess_the_box"
+  except: *branch-inline-sonar-definition
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/guess_the_box
+
+gtb-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "guess_the_box"
+  only:
+    refs: *branch-global-sonar-definition
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/guess_the_box
+
+jmf-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "jumping_frog"
+  except: *branch-inline-sonar-definition
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/jumping_frog
+
+jmf-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "jumping_frog"
+  only:
+    refs: *branch-global-sonar-definition
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/jumping_frog
+
+mtc-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "match_the_card"
+  except: *branch-inline-sonar-definition
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/match_the_card
+
+mtc-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "match_the_card"
+  only:
+    refs: *branch-global-sonar-definition
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/match_the_card
+
+ptb-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "pop_the_baloon"
+  except: *branch-inline-sonar-definition
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/pop_the_baloon
+
+ptb-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "pop_the_baloon"
+  only:
+    refs: *branch-global-sonar-definition
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/pop_the_baloon
+
+shtb-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "shoot_the_blocks"
+  except: *branch-inline-sonar-definition
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/shoot_the_blocks
+
+shtb-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "shoot_the_blocks"
+  only:
+    refs: *branch-global-sonar-definition
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/shoot_the_blocks
+
+srtb-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "sort_the_box"
+  except: *branch-inline-sonar-definition
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/sort_the_box
+
+srtb-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "sort_the_box"
+  only:
+    refs: *branch-global-sonar-definition
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/sort_the_box
+
+stc-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "star_catcher"
+  except: *branch-inline-sonar-definition
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/star_catcher
+
+stc-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "star_catcher"
+  only:
+    refs: *branch-global-sonar-definition
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/star_catcher
+
+wam-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "whack_a_mole"
+  except: *branch-inline-sonar-definition
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/whack_a_mole
+
+wam-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_SUBNAME: "whack_a_mole"
+  only:
+    refs: *branch-global-sonar-definition
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+      - Projects/whack_a_mole

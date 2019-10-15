@@ -3,7 +3,7 @@ stages:
 
 #=================== Sonar Stage ===================
 # Sonar Template
-.sonar-template: #&sonar-definition
+.sonar-template: &sonar-definition
   stage: sonar
   tags:
     - docker
@@ -34,46 +34,45 @@ stages:
 
 # Job Sonar Template
 .inline-sonar-template:
-#  <<: *sonar-definition
-  extends: .sonar-template
+  <<: *sonar-definition
   variables:
     REPORT_ENV: "sonar-gategit-report"
     REPORT_DISABLE: "sonar.gitlab.disable_global_comment"
     REPORT_ALLISSUE: "false"
     REPORT_REF_NAME: "$CI_COMMIT_REF_NAME"
-  except:
+
+.global-sonar-template:
+  <<: *sonar-definition
+  variables:
+    REPORT_ENV: "sonar-sonarqube-report"
+    REPORT_ALLISSUE: "true"
+    REPORT_REF_NAME: "$CI_COMMIT_REF_NAME"
+
+#Branch Refs Template
+.branch-inline-sonar-template:
+  except: &branch-inline-sonar-definition
     refs:
       - develop
       - sandbox
       - staging
       - master
-  only:
-    changes:
-      - .gitlab-ci.yml
-      - Dockerfile*
 
-.global-sonar-template:
-#  <<: *sonar-definition
-  extends: .sonar-template
-  variables:
-    REPORT_ENV: "sonar-sonarqube-report"
-    REPORT_ALLISSUE: "true"
-    REPORT_REF_NAME: "$CI_COMMIT_REF_NAME"
+.branch-global-sonar-template:
   only:
-    refs:
+    refs: &branch-global-sonar-definition
       - develop
       - master
-    changes:
-      - .gitlab-ci.yml
-      - Dockerfile*
 
 # Define Job
 ftc-sonar-inline:
   extends: .inline-sonar-template
   variables:
     SONAR_PROJ_NAME: "feed_the_cat"
+  except: *branch-inline-sonar-definition
   only:
     changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
       - Projects/feed_the_cat
 
 ftc-sonar-global:
@@ -81,5 +80,8 @@ ftc-sonar-global:
   variables:
     SONAR_PROJ_NAME: "feed_the_cat"
   only:
+    refs: *branch-global-sonar-definition
     changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
       - Projects/feed_the_cat

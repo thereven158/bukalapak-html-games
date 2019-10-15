@@ -56,12 +56,14 @@ stages:
       - sandbox
       - staging
       - master
+      - 73-setup-sonarqube-integration
 
 .branch-global-sonar-template:
   only:
     refs: &branch-global-sonar-definition
       - develop
       - master
+      - 73-setup-sonarqube-integration
 
 # Define Job
 ftc-sonar-inline:

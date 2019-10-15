@@ -1,0 +1,83 @@
+stages: 
+- sonar
+
+#=================== Sonar Stage ===================
+# Sonar Template
+.sonar-template: &sonar-definition
+  stage: sonar
+  tags:
+    - docker
+  when: always
+  before_script:
+    - cp -R /home/repository/binaries.sonarsource.com/sonar-scanner-cli/$SONAR_CLI_VER Projects/$SONAR_PROJ_NAME/sonar-scanner
+  script: 
+    - |
+      docker build \
+      --build-arg DOCK_JDK_VER="$DOCK_JDK_VER" \
+      --build-arg SONAR_PROJ_NAME="$SONAR_PROJ_NAME" \
+      --build-arg SONAR_HOST_URL="$SONAR_HOST_URL" \
+      --build-arg SONAR_AUTH_TOKEN="$SONAR_AUTH_TOKEN" \
+      --build-arg SONAR_SCANNER_OPTS="$SONAR_SCANNER_OPTS" \
+      --build-arg SONAR_RUNNER_HOME="$SONAR_RUNNER_HOME" \
+      --build-arg SONAR_AUTH_KEY="$CI_PROJECT_PATH_SLUG" \
+      --build-arg SONAR_PROJ_NAME="$CI_PROJECT_PATH" \
+      --build-arg CI_COMMIT_SHA="$CI_COMMIT_SHA" \
+      --build-arg CI_COMMIT_REF_NAME="$REPORT_REF_NAME" \
+      --build-arg CI_PROJECT_ID="$CI_PROJECT_ID" \
+      --build-arg CI_DISABLE_REPORT="$REPORT_DISABLE" \
+      --build-arg CI_ALLISSUE_REPORT="$REPORT_ALLISSUE" \
+      --build-arg CI_MERGE_REQUEST_IID="$CI_MERGE_REQUEST_IID" \
+      -f Dockerfile.$REPORT_ENV \
+      -t $REPORT_ENV .
+    - docker image rm -f $REPORT_ENV
+    - echo "$REPORT_ENV DONE"
+
+# Job Sonar Template
+.inline-sonar-template:
+  <<: *sonar-definition
+  variables:
+    REPORT_ENV: "sonar-gategit-report"
+    REPORT_DISABLE: "sonar.gitlab.disable_global_comment"
+    REPORT_ALLISSUE: "false"
+    REPORT_REF_NAME: "$CI_COMMIT_REF_NAME"
+  except:
+    refs:
+      - develop
+      - sandbox
+      - staging
+      - master
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+
+.global-sonar-template:
+  <<: *sonar-definition
+  variables:
+    REPORT_ENV: "sonar-sonarqube-report"
+    REPORT_ALLISSUE: "true"
+    REPORT_REF_NAME: "$CI_COMMIT_REF_NAME"
+  only:
+    refs:
+      - develop
+      - master
+    changes:
+      - .gitlab-ci.yml
+      - Dockerfile*
+
+# Define Job
+ftc-sonar-inline:
+  extends: .inline-sonar-template
+  variables:
+    SONAR_PROJ_NAME: "feed_the_cat"
+  only:
+    changes:
+      - Projects/feed_the_cat
+
+ftc-sonar-global:
+  extends: .global-sonar-template
+  variables:
+    SONAR_PROJ_NAME: "feed_the_cat"
+  only:
+    changes:
+      - Projects/feed_the_cat

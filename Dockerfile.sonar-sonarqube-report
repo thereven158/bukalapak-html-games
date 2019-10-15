@@ -30,7 +30,7 @@ ENV SONAR_WORKDIR=/sonar-scanner
 
 #Copy Proj to WORKDIR
 WORKDIR ${SONAR_WORKDIR}
-COPY Projects/${SONAR_PROJ_SUBNAME}/* ./
+COPY . ./
 
 #Install Sonarscanner
 RUN mkdir ${SONAR_RUNNER_HOME} && \
@@ -42,7 +42,7 @@ RUN sonar-scanner \
     -Dsonar.projectKey="${SONAR_AUTH_KEY}-${SONAR_PROJ_SUBNAME}" \
     -Dsonar.projectName="${SONAR_PROJ_NAME}/${SONAR_PROJ_SUBNAME}" \
     -Dsonar.login="${SONAR_AUTH_TOKEN}" \
-    -Dsonar.sources="${SONAR_WORKDIR}" \
+    -Dsonar.sources="${SONAR_WORKDIR}/Projects/${SONAR_PROJ_SUBNAME}/*" \
     -Dsonar.verbose=false \
     -Dsonar.sourceEncoding=UTF-8 \
     -Dsonar.gitlab.commit_sha="${CI_COMMIT_SHA}" \

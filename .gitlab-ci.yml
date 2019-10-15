@@ -9,7 +9,7 @@ stages:
     - docker
   when: always
   before_script:
-    - cp -R /home/repository/binaries.sonarsource.com/sonar-scanner-cli/$SONAR_CLI_VER Projects/$SONAR_PROJ_SUBNAME/sonar-scanner
+    - cp -R /home/repository/binaries.sonarsource.com/sonar-scanner-cli/$SONAR_CLI_VER sonar-scanner
   script: 
     - |
       docker build \

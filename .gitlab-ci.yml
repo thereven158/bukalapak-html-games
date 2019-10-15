@@ -9,18 +9,18 @@ stages:
     - docker
   when: always
   before_script:
-    - cp -R /home/repository/binaries.sonarsource.com/sonar-scanner-cli/$SONAR_CLI_VER Projects/$SONAR_PROJ_NAME/sonar-scanner
+    - cp -R /home/repository/binaries.sonarsource.com/sonar-scanner-cli/$SONAR_CLI_VER Projects/$SONAR_PROJ_SUBNAME/sonar-scanner
   script: 
     - |
       docker build \
       --build-arg DOCK_JDK_VER="$DOCK_JDK_VER" \
-      --build-arg SONAR_PROJ_NAME="$SONAR_PROJ_NAME" \
       --build-arg SONAR_HOST_URL="$SONAR_HOST_URL" \
       --build-arg SONAR_AUTH_TOKEN="$SONAR_AUTH_TOKEN" \
       --build-arg SONAR_SCANNER_OPTS="$SONAR_SCANNER_OPTS" \
       --build-arg SONAR_RUNNER_HOME="$SONAR_RUNNER_HOME" \
       --build-arg SONAR_AUTH_KEY="$CI_PROJECT_PATH_SLUG" \
       --build-arg SONAR_PROJ_NAME="$CI_PROJECT_PATH" \
+      --build-arg SONAR_PROJ_SUBNAME="$SONAR_PROJ_SUBNAME" \
       --build-arg CI_COMMIT_SHA="$CI_COMMIT_SHA" \
       --build-arg CI_COMMIT_REF_NAME="$REPORT_REF_NAME" \
       --build-arg CI_PROJECT_ID="$CI_PROJECT_ID" \
@@ -67,7 +67,7 @@ stages:
 ftc-sonar-inline:
   extends: .inline-sonar-template
   variables:
-    SONAR_PROJ_NAME: "feed_the_cat"
+    SONAR_PROJ_SUBNAME: "feed_the_cat"
   except: *branch-inline-sonar-definition
   only:
     changes:
@@ -78,7 +78,7 @@ ftc-sonar-inline:
 ftc-sonar-global:
   extends: .global-sonar-template
   variables:
-    SONAR_PROJ_NAME: "feed_the_cat"
+    SONAR_PROJ_SUBNAME: "feed_the_cat"
   only:
     refs: *branch-global-sonar-definition
     changes:

@@ -18,11 +18,11 @@ ARG CI_COMMIT_REF_NAME
 ARG CI_PROJECT_ID
 ARG CI_DISABLE_REPORT
 ARG CI_ALLISSUE_REPORT
-ARG SONAR_PROJ_NAME
 ARG SONAR_HOST_URL
 ARG SONAR_AUTH_KEY
 ARG SONAR_AUTH_TOKEN
 ARG SONAR_PROJ_NAME
+ARG SONAR_PROJ_SUBNAME
 ARG SONAR_SCANNER_OPTS
 ARG SONAR_RUNNER_HOME
 ENV PATH="$PATH:${SONAR_RUNNER_HOME}/bin"
@@ -30,7 +30,7 @@ ENV SONAR_WORKDIR=/sonar-scanner
 
 #Copy Proj to WORKDIR
 WORKDIR ${SONAR_WORKDIR}
-COPY Projects/${SONAR_PROJ_NAME}/* ./
+COPY Projects/${SONAR_PROJ_SUBNAME}/* ./
 
 #Install Sonarscanner
 RUN mkdir ${SONAR_RUNNER_HOME} && \
@@ -39,8 +39,8 @@ RUN mkdir ${SONAR_RUNNER_HOME} && \
 #Run Scan and Analysis
 RUN sonar-scanner \
     -Dsonar.host.url="${SONAR_HOST_URL}" \
-    -Dsonar.projectKey="${SONAR_AUTH_KEY}-${SONAR_PROJ_NAME}" \
-    -Dsonar.projectName="${SONAR_PROJ_NAME}/${SONAR_PROJ_NAME}" \
+    -Dsonar.projectKey="${SONAR_AUTH_KEY}-${SONAR_PROJ_SUBNAME}" \
+    -Dsonar.projectName="${SONAR_PROJ_NAME}/${SONAR_PROJ_SUBNAME}" \
     -Dsonar.login="${SONAR_AUTH_TOKEN}" \
     -Dsonar.sources="${SONAR_WORKDIR}" \
     -Dsonar.verbose=false \

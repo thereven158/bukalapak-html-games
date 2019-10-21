@@ -271,8 +271,8 @@ StateTitle.prototype = {
 		Global.screenUtility.proportionalScale(this.titleLogoImg, "x", Game, 0.85);
         this.titleLogoImg.position.set(Game.width * 0.5, Game.height * 0.075);		
 		
-		Global.screenUtility.proportionalScale(this.groundImg, "x", Game, 1, false);
-        this.groundImg.position.set(Game.width * 0.5, Game.height);			
+		Global.screenUtility.proportionalScale(this.groundImg, "x", Game, 1, -1, false);
+        this.groundImg.position.set(Game.width * 0.5, Game.height);		
 		
 		Global.screenUtility.proportionalScale(this.rightBuildingTowerDecorImg, "x", Game, 0.65);
         this.rightBuildingTowerDecorImg.position.set(Game.width * 1.2, this.groundImg.y - this.groundImg.height * 0.42);					

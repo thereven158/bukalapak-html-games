@@ -1,5 +1,6 @@
 import { AnimationHelper } from "../helper/animation_helper";
 import ScreenUtility from "../module/screen/screen_utility";
+import Sprite from "../module/objects/sprite";
 
 var Animations = {
     Jump:'jump',
@@ -7,7 +8,7 @@ var Animations = {
     FallingHurt:'FallingHurt',
 }
 
-export default class Minion extends Phaser.GameObjects.Sprite{
+export default class MinionController extends Sprite{
         /** @param {Phaser.Scene} scene */
     constructor(scene, x, y){
         super(scene, x, y, 'minion',0);
@@ -16,20 +17,19 @@ export default class Minion extends Phaser.GameObjects.Sprite{
         this.ScreenUtility = ScreenUtility.getInstance();
         this.Animations = Animations;
 
-        this.InitImage();
+        this.InitSprite();
         this.InitData();
     
         this.scene.add.existing(this);
     }
 
-    InitImage(){
+    InitSprite(){
         this.setOrigin(0.5, 1);
         this.setInteractive();
-
+        
         this.on('pointerdown', this.Hit, this);
 
-        this.displayWidth = this.ScreenUtility.GameWidth * 0.2;
-        this.displayHeight = this.displayWidth * (this.height / this.width);
+        this.setDisplayWidth(this.ScreenUtility.GameWidth * 0.2, true);
 
         this.setVisible(false);
     }

@@ -1,9 +1,9 @@
-export default class ScreenUtility{
+import { DeviceHelper } from "../../helper/device_Helper";
 
+export default class ScreenUtility{
     /**
 	 * @returns {ScreenUtility}
 	 */
-    
 	static getInstance = () => {
 		if (!ScreenUtility.instance) {
             ScreenUtility.instance = new ScreenUtility();
@@ -13,7 +13,7 @@ export default class ScreenUtility{
     };
 
     /**@param {Phaser.Scene} scene */
-    Init(scene)
+    init(scene)
     {
         this.scene = scene;
         this.GameDefaultWidth = 1080;
@@ -25,10 +25,17 @@ export default class ScreenUtility{
         this.CenterY = this.GameHeight * 0.5;
 
         this.ScalePercentage = this.GameWidth / this.GameDefaultWidth;
+        this.InverseScalePercentage = Phaser.Math.Difference(this.ScalePercentage, 1);
     }
 
     static ResetGameScreen(){
         window.focus();
-        window.scrollTo(0, document.body.scrollHeight);
+        if(DeviceHelper.Env.iOS()){
+            window.scrollTo(0, document.body.scrollHeight);
+        }else{
+            window.scrollTo(0, 0);
+        }
     }
+
+    
 }

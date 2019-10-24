@@ -1,9 +1,11 @@
 import ScreenUtility from '../../module/screen/screen_utility';
 import gameplaydata from '../../gameplaydata';
+import VoucherView from '../../view/popup_voucher_view';
+import VoucherData from '../../voucherdata';
 
 import GameplaySceneView from './gameplay_scene_view';
-import BoardController from '../../subcontrollers/board/board_controller';
-import Minion from '../../gameobjects/minion';
+import BoardController from '../../subcontrollers/board_controller';
+import MinionController from '../../subcontrollers/minion_controller';
 import TapEffect from '../../view/tap_effect';
 
 
@@ -33,7 +35,7 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.Score = 0;
         this.Timer = gameplaydata.GameTime;
         this.IsGameStarted = false;
-        this.IsWinning = false;
+        this.IsGameWin = false;
 
         this.ShowTimer = 0;
         this.NextShowTime = 0;
@@ -43,7 +45,7 @@ export default class GameplaySceneController extends Phaser.Scene {
     }
 
     InitAnimationData(){
-        Minion.InitAnimationData(this);
+        MinionController.InitAnimationData(this);
         TapEffect.InitAnimationData(this);
     
     }
@@ -65,7 +67,6 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.view.create();
 
         this.Board = new BoardController(this, this.ScreenUtility.GameWidth * 0.5, this.ScreenUtility.GameHeight * 0.6);
-        this.Board.create();
 
         this.Board.OnTargetHit(this.OnTargetHit);
 
@@ -84,18 +85,18 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.IsGameStarted = true;
     }
     
-    update(timestep, dt){
+    update(timestep, delta){
         if(this.IsGameStarted){
-            this.GameUpdate(timestep, dt);
+            this.GameUpdate(timestep, delta);
         }
 
-        this.Board.update(timestep, dt);
-        this.view.update();
+        this.Board.update(timestep, delta);
+        this.viewUpdate(timestep, delta);
     }
 
-    GameUpdate(timestep, dt){
-        this.Timer -= (1 * dt) / 1000;
-        this.ShowTimer += (1 * dt) / 1000;
+    GameUpdate(timestep, delta){
+        this.Timer -= (1 * delta) / 1000;
+        this.ShowTimer += (1 * delta) / 1000;
 
         //validate phase
         if(this.CurrentPhaseIdx < gameplaydata.Phases.length - 1){
@@ -124,10 +125,15 @@ export default class GameplaySceneController extends Phaser.Scene {
         //Isgameover
         if(this.Timer <= 0){       
             this.Timer = 0;
-            this.Timesout();
+            this.timesout();
         }else if(this.TotalHit >= gameplaydata.VoucherWinPoint){
-            this.Win();
+            this.win();
         }
+    }
+
+    viewUpdate(timestep, delta){
+        this.view.setTimerText(this.Timer);
+        this.view.setScoreText(this.Score);
     }
 
     OnTargetHit = ()=>{ 
@@ -137,17 +143,17 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.TotalHit += 1;
         this.Score += gameplaydata.ScorePoint;
 
-        this.IsWinning = this.TotalHit >= gameplaydata.VoucherWinPoint;
+        this.IsGameWin = this.TotalHit >= gameplaydata.VoucherWinPoint;
 
     }
 
-    Timesout(){
-        this.view.TimesUp();
-        this.EndGame();
+    timesout = ()=>{
+        this.view.timesout();
+        this.endGame();
 
         this.time.addEvent({ 
             delay: 3000, 
-            callback: this.BackToTitle, 
+            callback: this.showResult, 
             callbackScope: this, 
             loop: false 
         });
@@ -155,38 +161,59 @@ export default class GameplaySceneController extends Phaser.Scene {
         this.game.sound.play('timeout');
     }
 
-    Win(){
-        this.EndGame();
-        this.BackToTitle();
+    win = ()=>{
+        this.endGame();
+        this.showResult();
     }
 
-    EndGame(){
+    endGame = ()=>{
         this.IsGameStarted = false;
         this.Board.Disable();
-        
-
-        
-        //this.BackToTitle();
     }
 
-    Restart(){
-        this.Reset();
-        this.InitGameData();
-        this.InitiateGame();
-    }
-
-    Reset(){
-        this.Board.Reset();
+    restart = ()=>{
+        this.scene.restart();
     }
     
-    BackToTitle = ()=>{
+    backToTitle = ()=>{
         this.Bgm.stop();
-        this.scene.launch('TitleScene', {
-            isAfterGame: true,
-            isGameWin: this.IsWinning
 
-        });
-
+        this.scene.launch('TitleScene');
         this.scene.stop();
+    }
+
+    showResult = ()=>{
+        this.VoucherView = new VoucherView(this);
+        this.VoucherView.OnClickMainLagi(this.restart);
+        this.VoucherView.OnClickClose(this.backToTitle);
+        
+        let voucherData = VoucherData.Vouchers[CONFIG.VOUCHER_TYPE];
+
+        if(this.IsGameWin){
+            this.VoucherView.ShowVoucherCode(voucherData.Code, {
+                titleInfo :  voucherData.InfoTitle,
+                description : voucherData.InfoDescription,
+                expireDate : voucherData.ExpireDate,
+                minTransactionInfo : voucherData.MinimalTransactionInfo,
+                onlyAppliesInfo : voucherData.OnlyAppliesInfo,
+                termsandconditions : voucherData.TermsAndConditions,
+            });
+
+            this.VoucherView.SetDescription('voucher_headerwin', 
+                "Voucher", 
+                voucherData.Title, 
+                voucherData.Description
+            );
+        }else{
+            this.VoucherView.DisableVoucherCode()
+            this.VoucherView.SetDescription('voucher_headertimeout', 
+                "Timeout", 
+                VoucherData.VoucherTimeout.Title, 
+                VoucherData.VoucherTimeout.Description
+            );
+        }
+        
+        this.VoucherView.Open();
+        this.sound.play('transition');
     }
 }

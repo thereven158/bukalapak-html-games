@@ -2,7 +2,7 @@
 export default {
     GameTime : 60,
     ScorePoint :1,
-    VoucherWinPoint : 20,
+    VoucherWinPoint : 1,
     MaxTargetPooled : 4,
 
     Phases:[

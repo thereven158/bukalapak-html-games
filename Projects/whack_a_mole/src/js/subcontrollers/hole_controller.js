@@ -1,8 +1,8 @@
 import ScreenUtility from "../module/screen/screen_utility";
-import { AnimationHelper } from "../helper/animation_helper";
-import Minion from "./minion";
+import Minion from "./minion_controller";
+import Image from "../module/objects/image";
 
-export default class Hole {
+export default class HoleController {
 
     /** @param {Phaser.Scene} scene */
     constructor(scene, x, y, texture, depth){
@@ -14,16 +14,20 @@ export default class Hole {
         this.Depth = depth;
         this.HoleTexture = texture;
 
-        this.InitData();
-        this.InitView();
+        this.init();
     }
 
-    InitData(){
+    init = ()=>{
+        this.initData();
+        this.initView();
+    }
+
+    initData = ()=>{
         this.IsUsed = false;
 
     }
 
-    InitView(){
+    initView = ()=>{
         let maskWidth = this.ScreenUtility.GameWidth * 0.3;
         this.MaskShape = this.scene.add.graphics();
         this.MaskShape.fillStyle('0x1aC83C', 0);
@@ -31,9 +35,8 @@ export default class Hole {
         
         this.Mask = this.MaskShape.createGeometryMask();
 
-        this.Hole = this.scene.add.image(this.x, this.y, this.HoleTexture);
-        this.Hole.displayWidth = this.ScreenUtility.GameWidth * 0.28;
-        this.Hole.displayHeight = this.Hole.displayWidth * (this.Hole.height / this.Hole.width)
+        this.Hole = new Image(this.scene, this.x, this.y, this.HoleTexture);
+        this.Hole.setDisplayWidth(this.ScreenUtility.GameWidth * 0.28, true);
     }
 
     /** @param {Minion} target */
@@ -46,13 +49,5 @@ export default class Hole {
 
     JumpFinish = ()=>{
         this.IsUsed = false;
-    }
-
-    Disable(){
-        
-    }
-
-    Reset(){
-       
     }
 }

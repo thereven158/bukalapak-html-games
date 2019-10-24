@@ -1,7 +1,7 @@
-import ScreenUtility from "../../module/screen/screen_utility";
-import Hole from "../../gameobjects/hole";
-import Minion from "../../gameobjects/minion";
-import gameplaydata from "../../gameplaydata";
+import ScreenUtility from "../module/screen/screen_utility";
+import Hole from "./hole_controller";
+import Minion from "./minion_controller";
+import gameplaydata from "../gameplaydata";
 
 export default class BoardController  extends Phaser.GameObjects.Container{
 
@@ -12,34 +12,27 @@ export default class BoardController  extends Phaser.GameObjects.Container{
         this.scene = scene;
         this.ScreenUtility = ScreenUtility.getInstance();
 
-        this.TotalColumn = 3;
-        this.TotalRow = 3;
-
         this.Event = new Phaser.Events.EventEmitter();
         this.EventList = {
             OnTargetHit: "OnTargetHit",
         }
 
+        this.init();
+
+        scene.add.existing(this);  
+    }
+
+    init = ()=>{
+        this.initData();
+        this.InitiateBoard();
+    }
+
+    initData = ()=>{
         /** @type {(Hole|Array)}  */
         this.Holes = [];
         /** @type {(Minion|Array)}  */
         this.Minions = [];
-        
-        scene.add.existing(this);  
-    }
 
-    InitData(){
-
-    }
-
-    create(){
-        this.InitiateBoard();
-
-
-    }
-
-    update(timestep, dt){
-        
     }
 
     InitiateBoard(){
@@ -124,14 +117,6 @@ export default class BoardController  extends Phaser.GameObjects.Container{
 
     TargetHit = ()=>{
         this.Event.emit(this.EventList.OnTargetHit);
-    }
-
-    JumpFinish(){
-
-    }
-
-    Reset(){
-
     }
 
     /** @return {(Minion|Array)}  */

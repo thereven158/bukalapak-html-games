@@ -1,6 +1,7 @@
 import TitleSceneController from "./title_scene_controller";
 
 import Button from "../../module/objects/button";
+import Image from "../../module/objects/image";
 
 export default class TitleSceneView {
     /** @param {TitleSceneController} scene */
@@ -10,49 +11,44 @@ export default class TitleSceneView {
 
      }
 
+     /** @return {TitleSceneView} */
      create(){
         this.InitScreen();
-      
+
+        return this;
      }
 
      InitScreen(){
-        this.Background = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'bg_title');
-        this.Background.displayWidth = this.ScreenUtility.GameWidth;
-        this.Background.displayHeight =this.ScreenUtility.GameHeight;
+        let background = new Image(this.scene, this.ScreenUtility.CenterX, 0, 'bg_title');
+        background.setMinPreferredDisplaySize(this.ScreenUtility.GameWidth, this.ScreenUtility.GameHeight);
+        background.setOrigin(0.5,0);
 
-        this.Light = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'title_light');
-        this.Light.displayWidth = this.ScreenUtility.GameWidth * 0.45;
-        this.Light.displayHeight = this.Light.displayWidth * (this.Light.height/this.Light.width);
-        this.Light.setScale(this.ScreenUtility.ScalePercentage);
+        let light = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.55, 'title_light');
+        light.setMaxPreferredDisplaySize(this.ScreenUtility.GameWidth * 0.9, this.ScreenUtility.GameHeight * 0.7);
 
-        this.Character = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.CenterY, 'title_character');
-        this.Character.displayWidth = this.ScreenUtility.GameWidth * 0.6;
-        this.Character.displayHeight = this.Character.displayWidth * (this.Character.height/this.Character.width);
-        this.Character.setScale(this.ScreenUtility.ScalePercentage); 
+        let character = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.55, 'title_character');
+        character.setMaxPreferredDisplaySize(this.ScreenUtility.GameWidth * 0.5, this.ScreenUtility.GameHeight * 0.4);
 
-        this.Moon = this.scene.add.image(this.ScreenUtility.GameWidth, 0, 'bg_moon');
-        this.Moon.setScale(this.ScreenUtility.ScalePercentage);
-        this.Moon.setOrigin(1,0);
+        let moon = new Image(this.scene, this.ScreenUtility.GameWidth, 0, 'bg_moon');
+        moon.setOrigin(1,0);
 
-        this.Land = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight, 'bg_titleland');
-        this.Land.setScale(this.ScreenUtility.ScalePercentage);
-        this.Land.setOrigin(0.5,1);
+        let land = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight, 'bg_titleland');
+        land.setOrigin(0.5,1);
 
-        let gameLogoPosY = this.Character.y - (this.ScreenUtility.CenterY + this.Character.displayHeight * 0.5) * 0.5;
-        this.GameLogo = this.scene.add.image(this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.6, 'logo_game');
-        this.GameLogo.displayWidth = this.ScreenUtility.GameWidth * 0.6;
-        this.GameLogo.displayHeight = this.GameLogo.displayWidth * (this.GameLogo.height/this.GameLogo.width);
-        //this.GameLogo.setOrigin(0.5,1);
-        this.GameLogo.setAlpha(0.5);
-        let gamelogoScaleX = this.GameLogo.scaleX;
-        this.GameLogo.scaleX = 0;
 
-        this.ButtonPlay = new Button(this.scene, this.ScreenUtility.CenterX,  this.Character.y  + (this.ScreenUtility.CenterY + this.Character.displayHeight * 0.5) * 0.5, 'btn_play');
-        this.ButtonPlay.Image.setScale(this.ScreenUtility.ScalePercentage * 0.8)
+        let gameLogo = new Image(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.2, 'logo_game');
+        gameLogo.setMaxPreferredDisplaySize(this.ScreenUtility.GameWidth * 0.8, this.ScreenUtility.GameHeight * 0.4);
+        gameLogo.setAlpha(0.5);
+        let gameLogoPosY = gameLogo.y;
+        let gamelogoScaleX = gameLogo.scaleX;
+        gameLogo.scaleX = 0;
+
+        this.ButtonPlay = new Button(this.scene, this.ScreenUtility.CenterX, this.ScreenUtility.GameHeight * 0.85, 'btn_play');
+        this.ButtonPlay.setDisplayWidth(this.ScreenUtility.GameWidth * 0.5, true);
         this.ButtonPlay.setAudioActive(false);
 
         this.scene.tweens.add({
-            targets:  this.GameLogo,
+            targets:  gameLogo,
             y: gameLogoPosY,
             alpha: 1,
             scaleX: gamelogoScaleX,
@@ -61,7 +57,7 @@ export default class TitleSceneView {
         });	
         
         this.scene.tweens.add({
-            targets:  this.Light,
+            targets:  light,
             angle: 360,
             duration: 7000,
             ease: Phaser.Math.Easing.Linear.Linear,
@@ -70,7 +66,7 @@ export default class TitleSceneView {
      }
 
      OnClickPlay(event){
-        this.ButtonPlay.OnClick(event);
+        this.ButtonPlay.onClick(event);
      }
      
 };

@@ -1,7 +1,6 @@
 import LoaderController from '../../module/loader/loader_controller';
 import ScreenUtility from '../../module/screen/screen_utility';
-import { DeviceHelper } from '../../helper/device_Helper';
-import { CANVAS } from 'phaser';
+import AudioController from '../../module/audio/audio_controller';
 
 
 export default class BootSceneController extends Phaser.Scene{
@@ -14,9 +13,12 @@ export default class BootSceneController extends Phaser.Scene{
     init(){
         //console.log('boot screen');
 
-        this.InitScreen();
-        this.InitAudio();
-    
+        ScreenUtility.getInstance().init(this);
+        ScreenUtility.ResetGameScreen();
+
+        AudioController.getInstance().init(this, false);
+
+
     }
  
     preload(){
@@ -39,29 +41,4 @@ export default class BootSceneController extends Phaser.Scene{
             console.log(err);
         })
     }
-
-    InitScreen(){
-        ScreenUtility.ResetGameScreen();
-   
-    }
-    
-    InitAudio(){
-        this.sound.mute = !this.IsAudioOn;
-
-        this.game.events.on('hidden', () =>{
-            this.sound.mute = true;
-            console.log("test");
-        },this)
-
-        this.game.events.on('visible', () =>{
-            if(this.IsAudioOn)
-                this.sound.mute = false;
-        },this)
-    }
-
-    SetAudioOn(on){
-        this.IsAudioOn = on;
-        this.sound.mute = !on;
-    }
-
 }
